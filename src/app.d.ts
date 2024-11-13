@@ -10,4 +10,18 @@ declare global {
   }
 }
 
+interface ImportMeta {
+  readonly ENV: {
+    SERVER_HOST: string;
+    SERVER_PORT: number;
+  };
+
+  readonly GIT: {
+    branch: string;
+    date: Date;
+    hash: string;
+    tag: string;
+  };
+}
+
 export {};

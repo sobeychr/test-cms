@@ -1,16 +1,11 @@
+/* loosely based on https://necolas.github.io/normalize.css/latest/normalize.css */
+
 html, body {
   background: var(--background-color);
   color: var(--text-color);
   font-family: Ubuntu, Arial, sans-serif;
-}
-
-body, body.dark {
-  --background-color: #191919;
-
-  --link-color: #2ca33f;
-  --link-hover: #40d659;
-
-  --text-color: #dddddd;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -21,4 +16,9 @@ a {
     color: var(--link-hover);
     text-decoration: underline;
   }
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+  padding: 0;
 }

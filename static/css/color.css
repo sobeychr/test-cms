@@ -1,0 +1,17 @@
+body, body.dark {
+  --background-color: #191919;
+
+  --border-white: 1px solid rgba(255,255,255, 0.5);
+
+  --link-color: #2ca33f;
+  --link-hover: #40d659;
+
+  --highlight-color: #3098b5;
+  --highlight-hover: #45b4d3;
+
+  --text-color: #dddddd;
+}
+
+body.light {
+
+}
