@@ -1,0 +1,13 @@
+root=true
+
+[*]
+charset = utf-8
+end_of_file = lf
+indent_size = 2
+indent_style = space
+insert_final_line = true
+max_line_length = 120
+trim_trailing_whitespace = true
+
+[*.{html,json,md}]
+insert_final_line = false

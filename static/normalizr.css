@@ -1,0 +1,24 @@
+html, body {
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: Ubuntu, Arial, sans-serif;
+}
+
+body, body.dark {
+  --background-color: #191919;
+
+  --link-color: #2ca33f;
+  --link-hover: #40d659;
+
+  --text-color: #dddddd;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+}
