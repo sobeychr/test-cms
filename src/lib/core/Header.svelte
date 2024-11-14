@@ -32,11 +32,12 @@
 
   .hover {
     background: var(--background-color);
+    border-radius: var(--border-radius);
     border: var(--border-white);
     display: none;
     font-size: 0.8rem;
     left: 3rem;
-    padding: 0.3rem;
+    padding: 0.4rem;
     position: absolute;
     top: 2.5rem;
 
@@ -45,12 +46,12 @@
     }
 
     p:not(:last-child) {
-      margin-bottom: 0.3rem;
+      margin-bottom: var(--p-space);
     }
 
     span {
       color: var(--highlight-color);
-      margin-right: 0.2rem;
+      margin-right: var(--p-space);
 
       &::after {
         content: ': ';

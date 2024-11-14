@@ -1,6 +1,7 @@
 body, body.dark {
   --background-color: #191919;
 
+  --border-radius: 0.4rem;
   --border-white: 1px solid rgba(255,255,255, 0.5);
 
   --link-color: #2ca33f;
@@ -8,6 +9,8 @@ body, body.dark {
 
   --highlight-color: #3098b5;
   --highlight-hover: #45b4d3;
+
+  --p-space: 0.3rem;
 
   --text-color: #dddddd;
 }
