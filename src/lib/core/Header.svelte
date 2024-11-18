@@ -1,5 +1,7 @@
-<script lang='ts'>
-  import { GIT, VERSION } from '$lib/util/config';
+<script>
+  import { CONFIG, GIT, VERSION } from '$lib/util/config';
+
+  const { PAGE_LOGIN, PAGE_LOGOUT } = CONFIG;
 </script>
 
 <header>
@@ -14,7 +16,7 @@
   </div>
 
   <div>
-    <a href='/logout'>Logout</a>
+    <a data-sveltekit-preload-data='tap' href={`${PAGE_LOGIN}?${PAGE_LOGOUT}`}>Logout</a>
   </div>
 </header>
 

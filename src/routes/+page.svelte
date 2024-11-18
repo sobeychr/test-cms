@@ -1,5 +1,1 @@
-<script>
-  import Header from '$lib/core/Header.svelte';
-</script>
-
-<Header />
+<h1>page</h1>

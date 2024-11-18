@@ -1,5 +1,3 @@
-/* loosely based on https://necolas.github.io/normalize.css/latest/normalize.css */
-
 html, body {
   background: var(--background-color);
   color: var(--text-color);
@@ -16,6 +14,10 @@ a {
     color: var(--link-hover);
     text-decoration: underline;
   }
+}
+
+button, label[for] {
+  cursor: pointer;
 }
 
 h1, h2, h3, h4, p {

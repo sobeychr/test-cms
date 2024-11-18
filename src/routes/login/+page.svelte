@@ -1,21 +1,20 @@
 <script>
   import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
   import Header from '$lib/core/Header.svelte';
 
   let hasError = $state(false);
 
   const onEnhance = () => {
-    return async ({ result, update }) => {
+    return async ({ result, update, ...rest }) => {
       hasError = result?.data?.hasError || false;
 
       if(result.type === 'redirect') {
-        window.location = result.location;
+        goto(result.location);
       }
     };
   };
 </script>
-
-<Header />
 
 <main>
   <form action='?/login' method='post' use:enhance={onEnhance}>
