@@ -6,6 +6,10 @@ html, body {
   padding: 0;
 }
 
+body {
+  min-width: 550px;
+}
+
 a {
   color: var(--link-color);
   text-decoration: none;
@@ -20,7 +24,54 @@ button, label[for] {
   cursor: pointer;
 }
 
+button[type='submit'] {
+  --color: var(--submit-color);
+
+  align-items: center;
+  background: var(--submit-background);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--submit-color);
+  color: var(--color);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  padding: 0.5rem 1rem;
+
+  &:hover {
+    --color: var(--submit-hover);
+
+    background: var(--submit-background-hover);
+  }
+
+  &:after {
+    aspect-ratio: 1;
+    background: var(--color);
+    content: '';
+    display: block;
+    mask-size: contain;
+    mask: url('/icon/rightarrow-double.svg') top left no-repeat;
+    margin-left: var(--p-space);
+    width: 1rem;
+  }
+}
+
 h1, h2, h3, h4, p {
   margin: 0;
   padding: 0;
+}
+
+input[type='password'],
+input[type='text'],
+textarea {
+  background: var(--input-background);
+  border-radius: var(--border-radius);
+  border: var(--input-border);
+  color: var(--input-color);
+  outline: none;
+  padding: var(--p-space);
+
+  &:focus {
+    border-color: var(--input-focus);
+    color: var(--input-focus);
+  }
 }

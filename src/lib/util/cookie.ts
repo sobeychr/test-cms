@@ -16,7 +16,6 @@ export const deleteCookie = (cookieObj, name, opts = {}) => {
   cookieObj.delete(name, options);
 };
 
-
 export const setCookie = (cookieObj, name, value, opts = {}) => {
   if(!cookieObj.set) {
     throw new Error('[$lib/util/cookie:setCookie()] Invalid cookie object. It must be server > event.cookies');

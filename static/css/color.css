@@ -4,6 +4,14 @@ body, body.dark {
   --border-radius: 0.4rem;
   --border-white: 1px solid rgba(255,255,255, 0.5);
 
+  --error-color: #a83526;
+  --error-hover: #ff2407;
+
+  --input-background: #131313;
+  --input-border: 1px solid var(--input-color);
+  --input-color: #3098b5;
+  --input-focus: #4dc2e2;
+
   --link-color: #2ca33f;
   --link-hover: #40d659;
 
@@ -11,6 +19,11 @@ body, body.dark {
   --highlight-hover: #45b4d3;
 
   --p-space: 0.3rem;
+
+  --submit-background: #000000;
+  --submit-background-hover: #131313;
+  --submit-color: #37b74c;
+  --submit-hover: #4be565;
 
   --text-color: #dddddd;
 }

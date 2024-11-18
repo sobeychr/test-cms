@@ -24,13 +24,6 @@ const onLogin = async event => {
 
   if(username === LOGIN_USERNAME && password === LOGIN_PASSWORD) {
     setCookie(event.cookies, COOKIE_TOKEN, createToken());
-    event.cookies.set(COOKIE_TOKEN, createToken(), {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: false,
-      path: '/',
-      maxAge: 60 * 60 * 24 * 1,
-    });
     return redirect(301, PAGE_HOME);
   }
 
