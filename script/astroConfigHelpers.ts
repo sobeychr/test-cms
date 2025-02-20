@@ -1,7 +1,7 @@
 type getDetailsReturn = {
   nodeVersion: string;
   npmVersion: string;
-  osName: 'Linux' | 'Windows' | '!invalid';
+  osName: 'Linux' | 'Mac' | 'Windows' | '!invalid';
 };
 
 export const getDetails = (userAgent: string): getDetailsReturn => {
@@ -14,6 +14,7 @@ export const getDetails = (userAgent: string): getDetailsReturn => {
   const npmVersion = npmValue[1] || '!invalid';
 
   const isLinux = lower.includes(' linux');
+  // const isMac = false; // TODO: validate MacOS
   const isWindows = lower.includes(' win');
 
   return {

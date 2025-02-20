@@ -1,5 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
-import { writeFileSync } from 'fs';
+// import { writeFileSync } from 'fs';
 
 export const endMiddleware = defineMiddleware(async (context, next) => {
   const response = await next();
