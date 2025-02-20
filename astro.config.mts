@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import { loadEnv } from 'vite';
 import node from '@astrojs/node';
 
-const envConfigs = loadEnv(process?.env?.NODE_ENV, process.cwd(), '');
+const envConfigs = loadEnv('', process.cwd(), '');
 
 export default defineConfig({
   adapter: node({

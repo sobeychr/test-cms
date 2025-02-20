@@ -4,13 +4,18 @@ import Header from '@components/header/Header.astro';
 ---
 <html lang='en'>
 	<head>
-		<meta charset='UTF-8' />
+		<meta charset='utf-8' />
 		<meta name='viewport' content='width=device-width' />
-		<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+		<!-- <link rel='icon' type='image/svg+xml' href='/favicon.svg' /> -->
 		<meta name='generator' content={Astro.generator} />
+		<link rel='stylesheet' href='./styles/normalize.css' />
 		<link rel='stylesheet' href='./styles/normalizr.scss' />
 		<link rel='stylesheet' href='./styles/themes.scss' />
 		<title>Test-CMS</title>
+    <style>
+      /* https://fonts.google.com/selection/embed */
+      @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    </style>
 	</head>
 	<body>
     <Header />

@@ -1,15 +1,11 @@
+html {
+  color-scheme: dark light;
+}
+
 html, body {
-  background: #262626;
-  color: #ddd;
-  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Ubuntu', Arial, Helvetica, sans-serif;
   margin: 0;
-  width: 100%;
-
-  a {
-    color: #0a0;
-
-    &:hover {
-      color: #0f0;
-    }
-  }
+  padding: 0;
 }
