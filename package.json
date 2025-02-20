@@ -3,11 +3,16 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "astro": "astro",
     "build": "astro build",
+    "dev": "astro dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "public": "node script/public.js",
     "preview": "astro preview",
-    "astro": "astro"
+    "stylelint": "stylelint **/*.{css,scss}",
+    "stylelint:fix": "stylelint **/*.{css,scss} --fix",
+    "test": "running unit tests"
   },
   "dependencies": {
     "@astrojs/node": "9.1.0",
@@ -17,6 +22,10 @@
   "devDependencies": {
     "@astrojs/ts-plugin": "1.10.4",
     "@types/node": "22.13.4",
+    "eslint": "9.20.1",
+    "stylelint": "16.14.1",
+    "stylelint-config-alphabetical-order": "1.0.0",
+    "stylelint-config-standard-scss": "^14.0.0",
     "vite": "6.1.1"
   }
 }

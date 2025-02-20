@@ -1,0 +1,16 @@
+services:
+  web:
+    image: "node:22.14.0-alpine3.20"
+    build:
+      context: .
+    working_dir: /home/node/app
+
+    env_file: .env
+    hostname: ${SERVER_HOST}
+    ports:
+      - $SERVER_PORT:$SERVER_PORT
+
+    volumes:
+      - .:/home/node/app
+    command: npm run dev
+    # command: sleep infinity # allows to debug the image while running idle

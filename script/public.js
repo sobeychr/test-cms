@@ -19,12 +19,11 @@ await dir.forEach(async filename => {
   const extension = filename.substring(filename.lastIndexOf('.'));
   const dest_dir = DEST[extension];
 
-
-
   if(!dest_dir) {
     console.log(`! unable to compress "${path}"\n`);
   } else {
-    const dest = resolve(dest_dir, filename);
+    const newFilename = filename.replace(extension, `.min${extension}`);
+    const dest = resolve(dest_dir, newFilename);
     const original = readFileSync(path, FILE_OPTIONS);
 
     let compressed;
@@ -46,7 +45,7 @@ await dir.forEach(async filename => {
       const optimization = (100 - (compressed.length / original.length * 100)).toFixed(2);
 
       const logs = [
-        `Finished file "${filename}"`,
+        `Finished file "${filename}" > "${newFilename}"`,
         `- Original size: ${(original.length / 1024).toFixed(2)} KB`,
         `- Original number of lines: ${originalLines}`,
         `> compressed size: ${(compressed.length / 1024).toFixed(2)} KB`,
