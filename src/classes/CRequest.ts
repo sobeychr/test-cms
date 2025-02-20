@@ -1,5 +1,5 @@
 import type { APIContext, AstroCookies } from 'astro';
-import { PAGE_LOGIN } from '@utils/configs';
+import { API_PREFIX, PAGE_LOGIN } from '@utils/configs';
 
 export class CRequest {
   _end: number = 0;
@@ -13,6 +13,7 @@ export class CRequest {
   isPost: boolean;
   pathname: string;
 
+  isApiRequest: boolean;
   isPageLogin: boolean;
 
   constructor(context: APIContext) {
@@ -25,6 +26,7 @@ export class CRequest {
     this.isPost = context.request.method === 'POST';
     this.pathname = context?.url?.pathname;
 
+    this.isApiRequest = this.pathname.startsWith(API_PREFIX);
     this.isPageLogin = this.pathname === PAGE_LOGIN;
   }
 

@@ -1,3 +1,7 @@
+.avatar {
+  grid-area: avatar;
+}
+
 .details {
   background: var(--color-bg);
   border-radius: 1rem;
@@ -30,7 +34,19 @@
 }
 
 .loggedin {
-  display: flex;
+  display: grid;
+  grid-template-areas:
+    "avatar name"
+    "avatar logout"
+  ;
+}
+
+.logout {
+  grid-area: logout;
+}
+
+.name {
+  grid-area: name;
 }
 
 .title {
