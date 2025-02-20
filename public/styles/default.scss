@@ -2,7 +2,8 @@ html {
   color-scheme: dark light;
 }
 
-html, body {
+html,
+body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: Ubuntu, Arial, Helvetica, sans-serif;
@@ -10,7 +11,21 @@ html, body {
   padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0 0 0.5rem;
   padding: 0;
 }

@@ -10,6 +10,6 @@ export class CUser {
     // this.isLoggedIn = request.cookies.get('auth') === '1';
     this.isLoggedIn = request.cookies.has('auth');
 
-
+    this.name = request.cookies.get('auth')?.value || 'lorem-ipsum';
   }
 }

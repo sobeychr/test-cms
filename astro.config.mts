@@ -1,4 +1,4 @@
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import { loadEnv } from 'vite';
 import node from '@astrojs/node';
 import { getDetails, getGitLog } from './script/astroConfigHelpers';

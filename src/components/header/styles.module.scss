@@ -1,5 +1,40 @@
+.details {
+  background: var(--color-bg);
+  border-radius: 1rem;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  display: none;
+  font-size: 0.8rem;
+  left: 10rem;
+  padding: 0.5rem;
+  position: absolute;
+  top: 2.5rem;
+
+  span {
+    color: var(--color-highlight);
+    font-weight: bold;
+    margin-right: 0.2rem;
+
+    &::after {
+      content: ': ';
+    }
+  }
+}
+
 .header {
-  background: #f00;
-  height: 50px;
-  width: 100vw;
+  background: var(--color-bg);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  padding: 0.85rem;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.loggedin {}
+
+.title {
+  &:hover {
+    &+.details {
+      display: block;
+    }
+  }
 }

@@ -1,13 +1,35 @@
 ---
 import { GIT, VERSION } from '@utils/configs';
 import styles from './styles.module.scss';
+
+const user = Astro.locals.user;
+const avatarUrl =
+  user.isLoggedIn &&
+  `https://api.dicebear.com/9.x/lorelei/svg?flip=false&seed=${user.name}&size=50`;
+
+const date = new Date(GIT.timestamp * 1000);
 ---
 
 <header class={styles.header}>
-  <h1>Test-CMS</h1>
-  <p>
-    {JSON.stringify(GIT, null, 2)}
-    <br />
-    {VERSION}
-  </p>
+  <h1 class={styles.title}>Test-CMS</h1>
+  <div class={styles.details}>
+    <p><span>Version</span>{VERSION}</p>
+    <p><span>Hash</span>{GIT.shortHash}</p>
+    <p><span>Tag</span>{GIT.tag}</p>
+    <p><span>Committed</span>{date.toISOString()}</p>
+  </div>
+
+  {
+    user.isLoggedIn && (
+      <div class={styles.loggedin}>
+        <p>
+          <img alt="avatar" src={avatarUrl} />
+          {user.name}
+        </p>
+        <form>
+          <button type="submit">log out</button>
+        </form>
+      </div>
+    )
+  }
 </header>

@@ -5,8 +5,6 @@ declare namespace App {
   interface Locals {
     request: CRequest;
     user: CUser;
-
-    alpha: string;
   }
 }
 
