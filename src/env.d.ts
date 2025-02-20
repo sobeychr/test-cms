@@ -18,8 +18,16 @@ declare global {
   }
 }
 
+interface GitInterface {
+  readonly shortHash: string;
+  readonly tag: string;
+  readonly timestamp: number;
+}
+
 interface ImportMetaEnv {
+  readonly GIT: GitInterface;
   readonly NODE_ENV: string;
   readonly SERVER_HOST: string;
   readonly SERVER_PORT: number;
+  readonly VERSION: string;
 }

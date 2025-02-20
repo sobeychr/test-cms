@@ -1,8 +1,13 @@
 ---
+import { GIT, VERSION } from '@utils/configs';
 import styles from './styles.module.scss';
-
 ---
 
 <header class={styles.header}>
   <h1>Test-CMS</h1>
+  <p>
+    {JSON.stringify(GIT, null, 2)}
+    <br />
+    {VERSION}
+  </p>
 </header>
