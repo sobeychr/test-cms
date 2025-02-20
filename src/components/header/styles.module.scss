@@ -1,7 +1,7 @@
 .details {
   background: var(--color-bg);
   border-radius: 1rem;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
   display: none;
   font-size: 0.8rem;
   left: 10rem;
@@ -22,14 +22,16 @@
 
 .header {
   background: var(--color-bg);
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   padding: 0.85rem;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
-.loggedin {}
+.loggedin {
+  display: flex;
+}
 
 .title {
   &:hover {
