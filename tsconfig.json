@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "jsx": "preserve",
     "paths": {
       "@actions/*": ["src/actions/*"],
       "@api/*": ["src/api/*"],
+      "@classes/*": ["src/classes/*"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
       "@middlewares/*": ["src/middlewares/*"],
       "@pages/*": ["src/pages/*"],
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
-    }
+    },
+    "plugins": [{"name": "@astrojs/ts-plugin"}],
   },
   "exclude": ["dist"],
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"]
+  "include": [".astro/types.d.ts", "**/*"],
 }

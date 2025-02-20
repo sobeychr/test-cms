@@ -6,6 +6,7 @@ dist/
 node_modules/
 
 .env
+./logs/
 
 docker-compose.yaml
 
