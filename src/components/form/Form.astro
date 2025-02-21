@@ -1,0 +1,55 @@
+---
+import { v4 as uuid } from 'uuid';
+
+const { action, id = `form-${uuid()}`, method = 'post', submitFunc, ...rest } = Astro.props;
+
+const scriptVars = { id, submitFunc };
+---
+
+<form action={action} id={id} method={method} {...rest}>
+  <slot />
+</form>
+
+<script define:vars={scriptVars}>
+  const form = document.getElementById(id);
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    form.classList.add('loading');
+    const formData = new FormData(form);
+
+    const onSubmit = window[submitFunc];
+
+    let response;
+
+    if (typeof onSubmit !== 'function') {
+      console.error(`[Form.astro] unable to call onSubmit "${submitFunc}"`);
+    } else {
+      response = await onSubmit({
+        formData,
+        event,
+        id: form.getAttribute('id'),
+        method: form.getAttribute('method'),
+        url: form.getAttribute('action'),
+      });
+    }
+
+    form.classList.remove('loading');
+    if (response.actions.includes('reload')) {
+      window.location.reload();
+    }
+  });
+</script>
+
+<style>
+  form.loading {
+    cursor: progress;
+
+    button,
+    input,
+    select,
+    textarea {
+      pointer-events: none;
+    }
+  }
+</style>

@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 const user = Astro.locals.user;
 const avatarUrl =
   user.isLoggedIn &&
-  `https://api.dicebear.com/9.x/lorelei/svg?flip=false&seed=${user.name}&size=64`;
+  `https://api.dicebear.com/9.x/lorelei/svg?flip=false&seed=${user.email}&size=64`;
 
 const date = new Date(GIT.timestamp * 1000);
 const formUrl = `${API_PREFIX}v1/logout`;
@@ -24,7 +24,7 @@ const formUrl = `${API_PREFIX}v1/logout`;
     user.isLoggedIn && (
       <div class={styles.loggedin}>
         <img alt="avatar" class={styles.avatar} src={avatarUrl} />
-        <p class={styles.name}>{user.name}</p>
+        <p class={styles.name}>{user.email}</p>
         <form action={formUrl} class={styles.logout} id="logout" method="post">
           <input type="hidden" name="logout" value="1" />
           <button type="submit">log out</button>
@@ -36,7 +36,7 @@ const formUrl = `${API_PREFIX}v1/logout`;
 
 <script>
   import { deleteCookie } from '@utils/cookie';
-  import { COOKIE_AUTH } from '@utils/configs';
+  import { COOKIE_AUTH_NAME } from '@utils/configs';
   import { useRequest } from '@utils/request';
 
   const form = document.getElementById('logout') as HTMLFormElement;
@@ -49,7 +49,7 @@ const formUrl = `${API_PREFIX}v1/logout`;
     });
 
     if (action === 'delete') {
-      deleteCookie(COOKIE_AUTH);
+      deleteCookie(COOKIE_AUTH_NAME);
       window.location.reload();
     }
   });

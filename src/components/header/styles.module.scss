@@ -4,19 +4,19 @@
 
 .details {
   background: var(--color-bg);
-  border-radius: 1rem;
+  border-radius: 1em;
   box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
   display: none;
   font-size: 0.8rem;
   left: 10rem;
-  padding: 0.5rem;
+  padding: 0.5em;
   position: absolute;
   top: 2.5rem;
 
   span {
     color: var(--color-highlight);
     font-weight: bold;
-    margin-right: 0.2rem;
+    margin-right: 0.2em;
 
     &::after {
       content: ': ';

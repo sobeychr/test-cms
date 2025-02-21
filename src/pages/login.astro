@@ -1,8 +1,104 @@
 ---
+import { API_PREFIX } from '@utils/configs';
 import DefaultLayout from '@layouts/Default.astro';
+import Form from '@components/form/Form.astro';
 
+const formUrl = `${API_PREFIX}v1/login`;
 ---
 
 <DefaultLayout>
-    <h1>login</h1>
+  <main>
+    <h1>Login page</h1>
+    <Form action={formUrl} autocomplete="off" submitFunc="onLogin">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="test@email.com" />
+      <label>Password</label>
+      <input type="password" name="password" placeholder={'*'.repeat(8)} />
+      <button class="submit" type="submit">Login</button>
+    </Form>
+  </main>
 </DefaultLayout>
+
+<script>
+  import { formDataToObj } from '@utils/data';
+  import { useRequest } from '@utils/request';
+
+  (function () {
+    const onLogin = ({ formData, method, url }) =>
+      useRequest({
+        postData: formDataToObj(formData),
+        method,
+        url,
+      });
+
+    window.onLogin = onLogin;
+  })();
+</script>
+
+<style>
+  main {
+    margin: 10rem auto 0;
+    max-width: 350px;
+    width: 80vw;
+
+    h1 {
+      text-align: center;
+    }
+  }
+
+  @keyframes loadingAnim {
+    0% {
+      rotate: 0deg;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }
+
+  form {
+    border-radius: 1em;
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
+    display: flex;
+    flex-flow: column nowrap;
+    margin-top: 1rem;
+    padding: 0.85rem;
+
+    .submit {
+      align-items: center;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+
+      &::after {
+        aspect-ratio: 1;
+        background-size: cover;
+        background: #fff;
+        mask: no-repeat top left;
+        mask-size: cover;
+        content: '';
+        display: inline-block;
+        height: 1.5em;
+      }
+    }
+
+    input {
+      display: block;
+      margin-bottom: 0.5em;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.2em;
+    }
+
+    &:not(.loading) .submit::after {
+      mask-image: url('./icons/rightArrow.svg');
+    }
+
+    &.loading .submit::after {
+      animation: loadingAnim 1.5s linear 0s infinite;
+      mask-image: url('./icons/spin.svg');
+      margin-left: 0.5em;
+    }
+  }
+</style>

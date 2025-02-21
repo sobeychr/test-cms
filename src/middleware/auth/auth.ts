@@ -4,12 +4,14 @@ import { defineMiddleware } from 'astro:middleware';
 export const authMiddleware = defineMiddleware((context, next) => {
   const { request, user } = context.locals;
 
-  if (!user.isLoggedIn && !request.isPageLogin) {
-    return context.redirect(PAGE_LOGIN);
-  }
+  if (!request.isApiRequest) {
+    if (!user.isLoggedIn && !request.isPageLogin) {
+      return context.redirect(PAGE_LOGIN);
+    }
 
-  if (user.isLoggedIn && request.isPageLogin) {
-    return context.redirect(PAGE_HOME);
+    if (user.isLoggedIn && request.isPageLogin) {
+      return context.redirect(PAGE_HOME);
+    }
   }
 
   return next();
