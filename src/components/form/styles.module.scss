@@ -1,0 +1,10 @@
+form.loading {
+  cursor: progress;
+
+  button,
+  input,
+  select,
+  textarea {
+    pointer-events: none;
+  }
+}

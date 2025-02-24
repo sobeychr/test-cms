@@ -1,7 +1,7 @@
 ---
 import { API_PREFIX } from '@utils/configs';
 import DefaultLayout from '@layouts/Default.astro';
-import Form from '@components/form/Form.astro';
+import { Form } from '@components/form/Form.tsx';
 
 const formUrl = `${API_PREFIX}v1/login`;
 ---
@@ -9,7 +9,7 @@ const formUrl = `${API_PREFIX}v1/login`;
 <DefaultLayout>
   <main>
     <h1>Login page</h1>
-    <Form action={formUrl} autocomplete="off" submitFunc="onLogin">
+    <Form action={formUrl} autocomplete="off" client:visible="solid-js" defaultRequest>
       <label>Email</label>
       <input type="email" name="email" placeholder="test@email.com" />
       <label>Password</label>
@@ -18,22 +18,6 @@ const formUrl = `${API_PREFIX}v1/login`;
     </Form>
   </main>
 </DefaultLayout>
-
-<script>
-  import { formDataToObj } from '@utils/data';
-  import { useRequest } from '@utils/request';
-
-  (function () {
-    const onLogin = ({ formData, method, url }) =>
-      useRequest({
-        postData: formDataToObj(formData),
-        method,
-        url,
-      });
-
-    window.onLogin = onLogin;
-  })();
-</script>
 
 <style>
   main {

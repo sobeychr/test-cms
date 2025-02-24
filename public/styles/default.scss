@@ -30,6 +30,10 @@ textarea {
     color: var(--input-focus);
     outline: 2px solid var(--input-focus);
   }
+
+  label:has(+&:focus) {
+    color: var(--input-focus);
+  }
 }
 
 h1,

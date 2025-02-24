@@ -8,7 +8,10 @@ export const POST: APIRoute = async ({ cookies, request }) => {
   cookies.set(COOKIE_AUTH_NAME, token, { maxAge: COOKIE_AUTH_DURATION, path: '/' });
 
   return new Response(JSON.stringify({
-    actions: ['reload'],
+    actions: [{
+      command: 'redirect',
+      param: '/',
+    }],
     success: true,
   }));
 };

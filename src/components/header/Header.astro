@@ -1,4 +1,5 @@
 ---
+import { Form } from '@components/form/Form.tsx';
 import { API_PREFIX, GIT, VERSION } from '@utils/configs';
 import styles from './styles.module.scss';
 
@@ -25,32 +26,11 @@ const formUrl = `${API_PREFIX}v1/logout`;
       <div class={styles.loggedin}>
         <img alt="avatar" class={styles.avatar} src={avatarUrl} />
         <p class={styles.name}>{user.email}</p>
-        <form action={formUrl} class={styles.logout} id="logout" method="post">
+        <Form action={formUrl} client:only="solid-js" defaultRequest>
           <input type="hidden" name="logout" value="1" />
           <button type="submit">log out</button>
-        </form>
+        </Form>
       </div>
     )
   }
 </header>
-
-<script>
-  import { deleteCookie } from '@utils/cookie';
-  import { COOKIE_AUTH_NAME } from '@utils/configs';
-  import { useRequest } from '@utils/request';
-
-  const form = document.getElementById('logout') as HTMLFormElement;
-  form?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const { action } = await useRequest({
-      method: form.method,
-      url: form.action,
-    });
-
-    if (action === 'delete') {
-      deleteCookie(COOKIE_AUTH_NAME);
-      window.location.reload();
-    }
-  });
-</script>

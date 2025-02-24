@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import { loadEnv } from 'vite';
 import node from '@astrojs/node';
+import solidJs from '@astrojs/solid-js';
 import { getDetails, getGitLog } from './script/astroConfigHelpers';
 import packageJson from './package.json';
 
@@ -34,6 +35,7 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  integrations: [solidJs()],
   output: 'server',
   server: {
     host: SERVER_HOST,
