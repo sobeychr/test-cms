@@ -5,6 +5,7 @@ import { parseJwt } from '@utils/data';
 export class CUser {
   _id: string;
 
+  displayName: string;
   email: string;
   isLoggedIn: boolean = false;
 
@@ -13,6 +14,8 @@ export class CUser {
     const { email } = parseJwt(authToken) || {};
 
     if (!!email) {
+      const cutEmail = /(\w+)\@/.exec(email) || [];
+      this.displayName = cutEmail[1] || email;
       this.email = email;
       this.isLoggedIn = true;
     }

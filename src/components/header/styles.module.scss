@@ -47,6 +47,10 @@
 
 .name {
   grid-area: name;
+  max-width: 5.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .title {

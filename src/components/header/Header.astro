@@ -4,9 +4,9 @@ import { API_PREFIX, GIT, VERSION } from '@utils/configs';
 import styles from './styles.module.scss';
 
 const user = Astro.locals.user;
+const { displayName, email, isLoggedIn } = user;
 const avatarUrl =
-  user.isLoggedIn &&
-  `https://api.dicebear.com/9.x/lorelei/svg?flip=false&seed=${user.email}&size=64`;
+  isLoggedIn && `https://api.dicebear.com/9.x/lorelei/svg?flip=false&seed=${displayName}&size=64`;
 
 const date = new Date(GIT.timestamp * 1000);
 const formUrl = `${API_PREFIX}v1/logout`;
@@ -22,10 +22,12 @@ const formUrl = `${API_PREFIX}v1/logout`;
   </div>
 
   {
-    user.isLoggedIn && (
+    isLoggedIn && (
       <div class={styles.loggedin}>
         <img alt="avatar" class={styles.avatar} src={avatarUrl} />
-        <p class={styles.name}>{user.email}</p>
+        <p class={styles.name} title={email}>
+          {displayName}
+        </p>
         <Form action={formUrl} client:only="solid-js" defaultRequest>
           <input type="hidden" name="logout" value="1" />
           <button type="submit">log out</button>
