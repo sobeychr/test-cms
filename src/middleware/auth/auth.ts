@@ -1,5 +1,5 @@
-import { PAGE_HOME, PAGE_LOGIN } from '@utils/configs';
 import { defineMiddleware } from 'astro:middleware';
+import { PAGE_HOME, PAGE_LOGIN } from '@utils/configs';
 
 export const authMiddleware = defineMiddleware((context, next) => {
   const { request, user } = context.locals;

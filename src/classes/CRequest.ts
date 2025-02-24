@@ -36,10 +36,10 @@ export class CRequest {
 
   public toJson() {
     const data = {
-      pathname: this.pathname,
       delay: this._end - this._start,
-      start: new Date(this._start).toISOString(),
       method: this._request?.method,
+      pathname: this.pathname,
+      start: new Date(this._start).toISOString(),
     };
     return JSON.stringify(data);
   }

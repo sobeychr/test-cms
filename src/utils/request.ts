@@ -31,10 +31,10 @@ export const useRequest = async (params: useRequestParam) => {
 
   const options = {
     body: JSON.stringify(postData),
-    method,
     headers: {
       'Content-Type': 'application/json',
     },
+    method,
     signal: control.signal,
   };
 
