@@ -1,8 +1,10 @@
 {
-  "id": 1,
-  "name": "default",
+  "id": 3,
+  "name": "english only",
   "country": null,
-  "lang": null,
+  "lang": [
+    "english"
+  ],
   "starttime": null,
   "endtime": null,
   "region": null

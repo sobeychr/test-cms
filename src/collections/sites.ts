@@ -7,12 +7,12 @@ export const sites = defineCollection({
     pattern: '*.json',
   }),
   schema: z.object({
-    country: z.nullable(z.string()),
+    country: z.nullable(z.array(z.string())),
     endtime: z.nullable(z.number()),
     id: z.number(),
-    lang: z.nullable(z.string()),
+    lang: z.nullable(z.array(z.string())),
     name: z.string(),
+    region: z.nullable(z.array(z.string())),
     starttime: z.nullable(z.number()),
-    state: z.nullable(z.string()),
   }),
 });
