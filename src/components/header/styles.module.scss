@@ -5,7 +5,7 @@
 .details {
   background: var(--color-bg);
   border-radius: 1em;
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
+  box-shadow: 0 0 0 2px var(--color-shadow);
   display: none;
   font-size: 0.8rem;
   left: 10rem;
@@ -22,15 +22,6 @@
       content: ': ';
     }
   }
-}
-
-.header {
-  background: var(--color-bg);
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  padding: 0.85rem;
 }
 
 .loggedin {
@@ -59,4 +50,15 @@
       display: block;
     }
   }
+}
+
+.wrapper {
+  background: var(--color-bg-dark);
+  box-shadow: 0 0 0 2px var(--color-shadow);
+  display: flex;
+  flex-flow: row nowrap;
+  height: var(--header-height);
+  justify-content: space-between;
+  padding: var(--height-padding);
+  width: 100%;
 }

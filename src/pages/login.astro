@@ -7,30 +7,18 @@ const formUrl = `${API_PREFIX}v1/login`;
 ---
 
 <DefaultLayout>
-  <main>
+  <Form action={formUrl} autocomplete="off" client:visible="solid-js" defaultRequest>
     <h1>Login page</h1>
-    <Form action={formUrl} autocomplete="off" client:visible="solid-js" defaultRequest>
-      <label>Email</label>
-      <input type="email" name="email" placeholder="test@email.com" />
-      <label>Password</label>
-      <input type="password" name="password" placeholder={'*'.repeat(8)} />
-      <button class="submit" type="submit">Login</button>
-    </Form>
-  </main>
+    <label>Email</label>
+    <input type="email" name="email" placeholder="test@email.com" />
+    <label>Password</label>
+    <input type="password" name="password" placeholder={'*'.repeat(8)} />
+    <button class="after-icon submit" type="submit">Login</button>
+  </Form>
 </DefaultLayout>
 
 <style>
-  main {
-    margin: 10rem auto 0;
-    max-width: 350px;
-    width: 80vw;
-
-    h1 {
-      text-align: center;
-    }
-  }
-
-  @keyframes loadingAnim {
+  @keyframes animLoading {
     0% {
       rotate: 0deg;
     }
@@ -41,28 +29,24 @@ const formUrl = `${API_PREFIX}v1/login`;
 
   form {
     border-radius: 1em;
-    box-shadow: 0 0 0 2px rgb(255 255 255 / 50%);
+    box-shadow: 0 0 0 2px var(--color-shadow);
     display: flex;
     flex-flow: column nowrap;
     margin-top: 1rem;
+    margin: 10rem auto 0;
+    max-width: 350px;
     padding: 0.85rem;
+    width: 80vw;
 
     .submit {
       align-items: center;
       display: flex;
       flex-flow: row nowrap;
       justify-content: center;
+    }
 
-      &::after {
-        aspect-ratio: 1;
-        background-size: cover;
-        background: #fff;
-        mask: no-repeat top left;
-        mask-size: cover;
-        content: '';
-        display: inline-block;
-        height: 1.5em;
-      }
+    h1 {
+      text-align: center;
     }
 
     input {
@@ -80,7 +64,7 @@ const formUrl = `${API_PREFIX}v1/login`;
     }
 
     &.loading .submit::after {
-      animation: loadingAnim 1.5s linear 0s infinite;
+      animation: animLoading 1.5s linear 0s infinite;
       mask-image: url('./icons/spin.svg');
       margin-left: 0.5em;
     }

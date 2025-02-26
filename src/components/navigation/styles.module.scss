@@ -1,3 +1,111 @@
-.navigation {
-  background: #0f0;
+@property --nav-width-close {
+  inherits: false;
+  initial-value: 40px;
+  syntax: "<length>";
+}
+
+@property --nav-width-open {
+  inherits: false;
+  initial-value: 180px;
+  syntax: "<length>";
+}
+
+.body {
+  margin: 1rem 0;
+
+  span {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    max-height: 100%;
+    overflow: hidden;
+    padding: 0;
+  }
+}
+
+.body-toggle {
+  --before-icon-height: 1em;
+
+  &::after {
+    --after-icon-height: 1.5em;
+
+    mask-image: url('./icons/rightArrow.svg');
+    rotate: -90deg;
+    transition: scale 0.2s ease-out;
+  }
+
+  &::before {
+    margin-right: 0.25em;
+  }
+
+  &:has(input:checked)::after {
+    scale: -1;
+  }
+
+  &:has(input:checked)+ul {
+    display: none;
+  }
+}
+
+.nav-toggle {
+  justify-content: center;
+
+  &::after {
+    --after-icon-height: 1.5em;
+
+    mask-image: url('./icons/rightArrow.svg');
+    transition: scale 0.2s ease-out;
+  }
+
+  span {
+    transition: opacity 0.2s ease-out;
+  }
+}
+
+.contents::before {
+  mask-image: url('./icons/cart.svg');
+}
+
+.dev-tools::before {
+  mask-image: url('./icons/gear.svg');
+}
+
+.pages::before {
+  mask-image: url('./icons/page.svg');
+}
+
+.sites::before {
+  mask-image: url('./icons/site.svg');
+}
+
+.wrapper {
+  box-shadow: 0 2px 0 2px var(--color-shadow);
+  height: calc(100vh - var(--header-height) - 2 * var(--height-padding));
+  padding: 0.5rem;
+  transition: width 0.2s ease-out;
+  width: var(--nav-width-open);
+
+  &:has(input[name='nav-toggle']:checked) {
+    width: var(--nav-width-close);
+
+    .body-toggle span {
+      display: none;
+      opacity: 0;
+    }
+
+    .nav-toggle {
+      &::after {
+        scale: -1;
+      }
+
+      & span {
+        display: none;
+        opacity: 0;
+      }
+    }
+  }
 }

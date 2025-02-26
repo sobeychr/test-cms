@@ -1,0 +1,27 @@
+---
+const { class: classStr, defaultChecked = false, id, label, name } = Astro.props;
+
+const attributes = {
+  checked: defaultChecked,
+  id,
+  name,
+};
+---
+
+<label class={classStr} for={id}>
+  <span>{label}</span>
+  <input type="checkbox" {...attributes} />
+</label>
+
+<style>
+  input {
+    display: none;
+  }
+  label {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-flow: row nowrap;
+    user-select: none;
+  }
+</style>

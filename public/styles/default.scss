@@ -11,6 +11,11 @@ body {
   padding: 0;
 }
 
+body {
+  display: flex;
+  flex-flow: row wrap;
+}
+
 button {
   cursor: pointer;
 }
@@ -46,7 +51,31 @@ h6 {
   padding: 0;
 }
 
+main {
+  padding: 0.85rem;
+}
+
 p {
   margin: 0 0 0.5em;
   padding: 0;
+}
+
+.after-icon::after {
+  aspect-ratio: 1;
+  background: var(--color-text);
+  content: '';
+  display: inline-block;
+  height: var(--after-icon-height, 1em);
+  mask: no-repeat top left;
+  mask-size: cover;
+}
+
+.before-icon::before {
+  aspect-ratio: 1;
+  background: var(--color-text);
+  content: '';
+  display: inline-block;
+  height: var(--before-icon-height, 1em);
+  mask: no-repeat top left;
+  mask-size: cover;
 }

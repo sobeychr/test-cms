@@ -47,5 +47,10 @@ export default defineConfig({
       'import.meta.env.GIT': JSON.stringify(gitLog),
       'import.meta.env.VERSION': JSON.stringify(version),
     },
+    resolve: {
+      alias: {
+        '@styles/': './src/styles/',
+      },
+    },
   },
 });
