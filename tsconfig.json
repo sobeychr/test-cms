@@ -40,6 +40,7 @@
         "name": "@astrojs/ts-plugin"
       }
     ],
+    "strictNullChecks": true
   },
   "exclude": [
     "dist"
