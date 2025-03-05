@@ -51,7 +51,12 @@ h6 {
   padding: 0;
 }
 
+label[for] {
+  cursor: pointer;
+}
+
 main {
+  flex: 1 0 auto;
   padding: 0.85rem;
 }
 

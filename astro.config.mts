@@ -49,7 +49,8 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        '@styles/': './src/styles/',
+        '@t-components/': './src/components/',
+        '@t-styles/': './src/styles/',
       },
     },
   },

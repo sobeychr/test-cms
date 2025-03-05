@@ -2,71 +2,43 @@
 import { API_PREFIX } from '@utils/configs';
 import DefaultLayout from '@layouts/Default.astro';
 import { Form } from '@components/form/Form.tsx';
+import styles from '@styles/pages/login.module.scss';
 
 const formUrl = `${API_PREFIX}v1/login`;
 ---
 
 <DefaultLayout>
-  <Form action={formUrl} autocomplete="off" client:visible="solid-js" defaultRequest>
+  <Form
+    action={formUrl}
+    autocomplete="off"
+    class={styles.form}
+    client:visible="solid-js"
+    defaultRequest
+    loadingClass={styles.loading}
+  >
     <h1>Login page</h1>
-    <label>Email</label>
-    <input type="email" name="email" placeholder="test@email.com" />
-    <label>Password</label>
-    <input type="password" name="password" placeholder={'*'.repeat(8)} />
-    <button class="after-icon submit" type="submit">Login</button>
+    <label for="email">Email</label>
+    <input
+      type="email"
+      autofocus
+      id="email"
+      minlength="6"
+      maxlength="32"
+      name="email"
+      placeholder="test@email.com"
+      required
+      value=""
+    />
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      minlength="6"
+      maxlength="32"
+      name="password"
+      placeholder={'*'.repeat(8)}
+      required
+    />
+    <button class={`${styles.submit} after-icon`} type="submit">Login</button>
   </Form>
 </DefaultLayout>
-
-<style>
-  @keyframes animLoading {
-    0% {
-      rotate: 0deg;
-    }
-    100% {
-      rotate: 360deg;
-    }
-  }
-
-  form {
-    border-radius: 1em;
-    box-shadow: 0 0 0 2px var(--color-shadow);
-    display: flex;
-    flex-flow: column nowrap;
-    margin-top: 1rem;
-    margin: 10rem auto 0;
-    max-width: 350px;
-    padding: 0.85rem;
-    width: 80vw;
-
-    .submit {
-      align-items: center;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: center;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    input {
-      display: block;
-      margin-bottom: 0.5em;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.2em;
-    }
-
-    &:not(.loading) .submit::after {
-      mask-image: url('./icons/rightArrow.svg');
-    }
-
-    &.loading .submit::after {
-      animation: animLoading 1.5s linear 0s infinite;
-      mask-image: url('./icons/spin.svg');
-      margin-left: 0.5em;
-    }
-  }
-</style>

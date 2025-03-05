@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { createSignal } from 'solid-js';
 import { deleteCookie } from '@utils/cookie';
-import { formDataToObj } from '@utils/data';
+import { iteratorToObj } from '@utils/data';
 import { useRequest } from '@utils/request';
 import styles from './styles.module.scss';
 
@@ -12,6 +12,7 @@ export const Form = props => {
     class: classStr = '',
     defaultRequest = true,
     id = `form-${uuid()}`,
+    loadingClass = 'loading',
     method = 'post',
     ...rest
   } = props;
@@ -21,6 +22,7 @@ export const Form = props => {
   const classList = () => ({
     [classStr]: true,
     [styles.loading]: isLoading(),
+    [loadingClass]: isLoading(),
   });
 
   const onSubmit = async event => {
@@ -28,7 +30,7 @@ export const Form = props => {
     setIsLoading(true);
 
     const formData = new FormData(event?.target);
-    const postData = formDataToObj(formData);
+    const postData = iteratorToObj(formData);
 
     const result = defaultRequest && await useRequest({
       postData,
