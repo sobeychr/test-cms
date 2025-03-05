@@ -10,6 +10,9 @@
   syntax: "<length>";
 }
 
+$TRANS_DURATION: .2s;
+$TRANS_FUNCTION: ease-out;
+
 .body {
   margin: 1rem 0;
 
@@ -35,7 +38,7 @@
 
     mask-image: url('./icons/rightArrow.svg');
     rotate: -90deg;
-    transition: scale 0.2s ease-out;
+    transition: scale $TRANS_DURATION $TRANS_FUNCTION;
   }
 
   &::before {
@@ -58,11 +61,7 @@
     --after-icon-height: 1.5em;
 
     mask-image: url('./icons/rightArrow.svg');
-    transition: scale 0.2s ease-out;
-  }
-
-  span {
-    transition: opacity 0.2s ease-out;
+    transition: scale $TRANS_DURATION $TRANS_FUNCTION;
   }
 }
 
@@ -86,26 +85,19 @@
   box-shadow: 0 2px 0 2px var(--color-shadow);
   height: calc(100vh - var(--header-height) - 2 * var(--height-padding));
   padding: 0.5rem;
-  transition: width 0.2s ease-out;
+  transition: width $TRANS_DURATION $TRANS_FUNCTION;
   width: var(--nav-width-open);
 
   &:has(input[name='nav-toggle']:checked) {
     width: var(--nav-width-close);
 
-    .body-toggle span {
+    .body-toggle span,
+    .nav-toggle span {
       display: none;
-      opacity: 0;
     }
 
-    .nav-toggle {
-      &::after {
-        scale: -1;
-      }
-
-      & span {
-        display: none;
-        opacity: 0;
-      }
+    .nav-toggle::after {
+      scale: -1;
     }
   }
 }

@@ -1,4 +1,4 @@
-@keyframes anim-loading {
+@keyframes animLoading {
   0% {
     rotate: 0deg;
   }
@@ -44,7 +44,7 @@
   }
 
   &.loading .submit::after {
-    animation: anim-loading 1.5s linear 0s infinite;
+    animation: animLoading 1.5s linear 0s infinite;
     margin-left: 0.5em;
     mask-image: url('./icons/spin.svg');
   }
