@@ -1,4 +1,5 @@
 export const GIT = import.meta.env.GIT;
+export const LOGS_DIR = import.meta.env.LOGS_DIR;
 export const VERSION = import.meta.env.VERSION;
 
 export const API_PREFIX = '/api/';
