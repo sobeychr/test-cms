@@ -1,0 +1,13 @@
+.link {
+  color: var(--link-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+}
+
+.span {
+  color: hsl(from var(--link-color) h s l / 60%);
+}

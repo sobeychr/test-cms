@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getParsedCollection } from '@utils/data';
+import { getParsedCollection } from '@utils/collection';
 import { getApiDateParam } from '@utils/date';
 
 export const GET: APIRoute = async ({ url }) => {

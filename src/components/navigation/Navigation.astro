@@ -1,6 +1,8 @@
 ---
 import Toggle from '@components/toggle/Toggle.astro';
 import styles from './styles.module.scss';
+
+import Link from '@components/link/Link.astro';
 ---
 
 <nav class={styles.wrapper}>
@@ -20,11 +22,13 @@ import styles from './styles.module.scss';
       id="site-toggle"
       label="Sites"
     />
-    <ul>
-      <li>aaa</li>
-      <li>bbb</li>
-      <li>ccc</li>
-    </ul>
+    <div>
+      <ul>
+        <li>aaa</li>
+        <li>bbb</li>
+        <li>ccc</li>
+      </ul>
+    </div>
   </div>
 
   <div class={styles.body}>
@@ -34,11 +38,13 @@ import styles from './styles.module.scss';
       id="page-toggle"
       label="Pages"
     />
-    <ul>
-      <li>aaa</li>
-      <li>bbb</li>
-      <li>ccc</li>
-    </ul>
+    <div>
+      <ul>
+        <li>aaa</li>
+        <li>bbb</li>
+        <li>ccc</li>
+      </ul>
+    </div>
   </div>
 
   <div class={styles.body}>
@@ -48,11 +54,13 @@ import styles from './styles.module.scss';
       id="content-toggle"
       label="Contents"
     />
-    <ul>
-      <li>aaa</li>
-      <li>bbb</li>
-      <li>ccc</li>
-    </ul>
+    <div>
+      <ul>
+        <li>aaa</li>
+        <li>bbb</li>
+        <li>ccc</li>
+      </ul>
+    </div>
   </div>
 
   <div class={styles.body}>
@@ -62,10 +70,12 @@ import styles from './styles.module.scss';
       id="dev-tools-toggle"
       label="Dev Tools"
     />
-    <ul>
-      <li>aaa</li>
-      <li>bbb</li>
-      <li>ccc</li>
-    </ul>
+    <div>
+      <ul>
+        <li><Link href="/introduction">Introduction</Link></li>
+        <li><Link href="/userconfigs">User Configs</Link></li>
+        <li><Link href="/logs">Logs</Link></li>
+      </ul>
+    </div>
   </div>
 </nav>

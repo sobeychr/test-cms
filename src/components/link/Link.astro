@@ -1,0 +1,21 @@
+---
+import styles from './styles.module.scss';
+
+const CRequest = Astro.locals.request;
+
+const { href } = Astro.props;
+
+const isSameLink = CRequest.pathname === href;
+---
+
+{
+  isSameLink ? (
+    <span class={styles.span}>
+      <slot />
+    </span>
+  ) : (
+    <a class={styles.link} href={href}>
+      <slot />
+    </a>
+  )
+}

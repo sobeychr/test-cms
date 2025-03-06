@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getParsedCollection } from '@utils/data';
+import { getParsedCollection } from '@utils/collection';
 
 const FIELDS = ['cca2', 'cca3', 'id', 'name', 'region'];
 

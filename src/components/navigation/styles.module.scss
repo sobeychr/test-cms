@@ -10,13 +10,27 @@
   syntax: "<length>";
 }
 
-$TRANS_DURATION: .2s;
+@keyframes slideUp {
+  from {
+    display: block
+  }
+
+  to {
+    translate: 0 -100%;
+  }
+}
+
+$TRANS_DURATION: 0.2s;
 $TRANS_FUNCTION: ease-out;
 
 .body {
   margin: 1rem 0;
 
-  span {
+  div {
+    overflow: hidden;
+  }
+
+  label {
     font-size: 1.2rem;
     font-weight: bold;
   }
@@ -27,6 +41,7 @@ $TRANS_FUNCTION: ease-out;
     max-height: 100%;
     overflow: hidden;
     padding: 0;
+    transition: line-height $TRANS_DURATION $TRANS_FUNCTION, translate $TRANS_DURATION $TRANS_FUNCTION;
   }
 }
 
@@ -49,8 +64,10 @@ $TRANS_FUNCTION: ease-out;
     scale: -1;
   }
 
-  &:has(input:checked)+ul {
-    display: none;
+  &:has(input:checked)+div ul {
+    line-height: 0;
+    transition: line-height $TRANS_DURATION $TRANS_FUNCTION $TRANS_DURATION, translate $TRANS_DURATION $TRANS_FUNCTION;
+    translate: 0 -100%;
   }
 }
 
@@ -86,14 +103,23 @@ $TRANS_FUNCTION: ease-out;
   height: calc(100vh - var(--header-height) - 2 * var(--height-padding));
   padding: 0.5rem;
   transition: width $TRANS_DURATION $TRANS_FUNCTION;
+  white-space: nowrap;
   width: var(--nav-width-open);
+
+  .body-toggle span,
+  .nav-toggle span {
+    max-width: 100%;
+    transition: max-width $TRANS_DURATION $TRANS_FUNCTION, opacity 0s $TRANS_DURATION;
+  }
 
   &:has(input[name='nav-toggle']:checked) {
     width: var(--nav-width-close);
 
     .body-toggle span,
     .nav-toggle span {
-      display: none;
+      max-width: 0;
+      opacity: 0;
+      transition-property: max-width;
     }
 
     .nav-toggle::after {
