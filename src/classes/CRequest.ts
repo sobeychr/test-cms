@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid';
 import type { APIContext, AstroCookies } from 'astro';
+import { v4 as uuid } from 'uuid';
 import { API_PREFIX, PAGE_LOGIN } from '@utils/configs';
 import { isHtml, isJson } from '@utils/string';
 

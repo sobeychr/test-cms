@@ -22,6 +22,12 @@ export default {
   rules: {
     'color-named': 'never',
     'keyframes-name-pattern': CAMEL_CASE_CONFIG,
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['global'],
+      },
+    ],
     'scss/dollar-variable-pattern': UPPER_CASE_CONFIG,
   },
 };

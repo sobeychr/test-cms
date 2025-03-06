@@ -1,13 +1,42 @@
 .link {
-  color: var(--link-color);
+  --color: var(--link-color);
+
+  color: var(--color);
   text-decoration: none;
+  transition: color var(--transiton-duration) var(--transition-function);
+  user-select: none;
 
   &:hover {
-    color: var(--link-hover);
+    --color: var(--link-hover);
+
     text-decoration: underline;
+  }
+
+  &:global(.after-icon),
+  &:global(.before-icon) {
+    align-items: center;
+    display: flex;
+  }
+
+  &:global(.after-icon)::after {
+    background: var(--color);
+  }
+
+  &:global(.before-icon)::before {
+    background: var(--color);
   }
 }
 
 .span {
-  color: hsl(from var(--link-color) h s l / 60%);
+  --color: hsl(from var(--link-color) h s l / 60%);
+
+  color: var(--color);
+
+  &:global(.after-icon)::after {
+    opacity: 0;
+  }
+
+  &:global(.before-icon)::before {
+    opacity: 0;
+  }
 }

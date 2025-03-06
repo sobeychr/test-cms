@@ -20,9 +20,6 @@
   }
 }
 
-$TRANS_DURATION: 0.2s;
-$TRANS_FUNCTION: ease-out;
-
 .body {
   margin: 1rem 0;
 
@@ -33,6 +30,7 @@ $TRANS_FUNCTION: ease-out;
   label {
     font-size: 1.2rem;
     font-weight: bold;
+    transition: font-size var(--transition-duration) var(--transition-function);
   }
 
   ul {
@@ -41,7 +39,14 @@ $TRANS_FUNCTION: ease-out;
     max-height: 100%;
     overflow: hidden;
     padding: 0;
-    transition: line-height $TRANS_DURATION $TRANS_FUNCTION, translate $TRANS_DURATION $TRANS_FUNCTION;
+    transition: line-height var(--transition-duration) var(--transition-function), translate var(--transition-duration) var(--transition-function);
+
+    a,
+    span {
+      &::before {
+        mask-image: url('./icons/rightArrow.svg');
+      }
+    }
   }
 }
 
@@ -53,7 +58,7 @@ $TRANS_FUNCTION: ease-out;
 
     mask-image: url('./icons/rightArrow.svg');
     rotate: -90deg;
-    transition: scale $TRANS_DURATION $TRANS_FUNCTION;
+    transition: scale var(--transition-duration) var(--transition-function);
   }
 
   &::before {
@@ -66,7 +71,7 @@ $TRANS_FUNCTION: ease-out;
 
   &:has(input:checked)+div ul {
     line-height: 0;
-    transition: line-height $TRANS_DURATION $TRANS_FUNCTION $TRANS_DURATION, translate $TRANS_DURATION $TRANS_FUNCTION;
+    transition: line-height var(--transition-duration) var(--transition-function) var(--transition-duration), translate var(--transition-duration) var(--transition-function);
     translate: 0 -100%;
   }
 }
@@ -78,7 +83,7 @@ $TRANS_FUNCTION: ease-out;
     --after-icon-height: 1.5em;
 
     mask-image: url('./icons/rightArrow.svg');
-    transition: scale $TRANS_DURATION $TRANS_FUNCTION;
+    transition: scale var(--transition-duration) var(--transition-function);
   }
 }
 
@@ -102,14 +107,14 @@ $TRANS_FUNCTION: ease-out;
   box-shadow: 0 2px 0 2px var(--color-shadow);
   height: calc(100vh - var(--header-height) - 2 * var(--height-padding));
   padding: 0.5rem;
-  transition: width $TRANS_DURATION $TRANS_FUNCTION;
+  transition: width var(--transition-duration) var(--transition-function);
   white-space: nowrap;
   width: var(--nav-width-open);
 
   .body-toggle span,
   .nav-toggle span {
     max-width: 100%;
-    transition: max-width $TRANS_DURATION $TRANS_FUNCTION, opacity 0s $TRANS_DURATION;
+    transition: max-width var(--transition-duration) var(--transition-function), opacity 0s var(--transition-duration);
   }
 
   &:has(input[name='nav-toggle']:checked) {
@@ -124,6 +129,10 @@ $TRANS_FUNCTION: ease-out;
 
     .nav-toggle::after {
       scale: -1;
+    }
+
+    label {
+      font-size: 0.85rem;
     }
   }
 }
