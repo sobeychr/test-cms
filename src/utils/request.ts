@@ -1,8 +1,8 @@
 type useRequestParam = {
-  asJson: boolean;
-  getData: object;
+  asJson?: boolean;
+  getData?: object;
   method: 'get' | 'post';
-  postData: object;
+  postData?: object;
   postDelay?: number;
   preDelay?: number;
   timeout?: number;

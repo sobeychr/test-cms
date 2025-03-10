@@ -1,11 +1,30 @@
 import { v4 as uuid } from 'uuid';
 import { createSignal } from 'solid-js';
-import { deleteCookie } from '@utils/cookie';
 import { iteratorToObj } from '@utils/data';
 import { useRequest } from '@utils/request';
 import styles from './styles.module.scss';
 
-export const Form = props => {
+type FormParam = {
+  action: string;
+  children: HTMLElement;
+  class: string;
+  defaultRequest?: boolean;
+  id?: string;
+  loadingClass?: string;
+  method?: 'get' | 'post';
+};
+
+type ActionResponse = {
+  command: 'redirect' | 'reload';
+  param: number | object | string;
+};
+
+type DefaultRequestResponse = {
+  actions: Array<ActionResponse>;
+  success: boolean;
+};
+
+export const Form = (props: FormParam) => {
   const {
     action,
     children,
@@ -25,7 +44,7 @@ export const Form = props => {
     [loadingClass]: isLoading(),
   });
 
-  const onSubmit = async event => {
+  const onSubmit = async (event: Event) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -36,7 +55,7 @@ export const Form = props => {
       postData,
       method,
       url: action,
-    });
+    }) as DefaultRequestResponse;
 
     setIsLoading(false);
     const { actions, success = false } = result || {};
@@ -45,9 +64,7 @@ export const Form = props => {
       console.log(`[Form.tsx] error in result`, result);
     } else {
       actions.forEach(({ command, param }) => {
-        if (command === 'deleteCookie') {
-          deleteCookie(param);
-        } else if (command === 'redirect') {
+        if (command === 'redirect') {
           window.location = param;
         } else if (command === 'reload') {
           window.location.reload();

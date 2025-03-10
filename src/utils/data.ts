@@ -1,4 +1,4 @@
-export const iteratorToObj = (data: Iterator) => {
+export const iteratorToObj = (data: Iterator): object => {
   const obj = {};
   data.forEach((value, key) => obj[key] = value);
   return obj;

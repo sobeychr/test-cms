@@ -1,8 +1,8 @@
-const DUR_HOUR = 60 * 60;
-const DUR_DAY = DUR_HOUR * 24;
-const DUR_WEEK = DUR_DAY * 7;
-const DUR_MONTH = DUR_DAY * 30;
-const DUR_YEAR = DUR_DAY * 365;
+export const DUR_HOUR = 60 * 60;
+export const DUR_DAY = DUR_HOUR * 24;
+export const DUR_WEEK = DUR_DAY * 7;
+export const DUR_MONTH = DUR_DAY * 30;
+export const DUR_YEAR = DUR_DAY * 365;
 
 const DURATIONS = {
   d: DUR_DAY,

@@ -28,9 +28,19 @@ export const setCookie = (cookieName: string, value: number | string, opts: opts
     opts.expires && `expires=${opts.expires}`,
     opts.maxAge && `max-age=${opts.maxAge}`,
     `path=${opts.path || '/'}`,
-  ];
+  ].filter(Boolean);
 
-  document.cookie = `${cookieName}=${value};${options.join(';')};`;
+  const newStr = `${cookieName}=${value};${options.join(';')};`;
+  /*
+  console.log('[setCookie]', {
+    cookieName,
+    newStr,
+    options,
+    opts,
+    value,
+  });
+  */
+  document.cookie = newStr;
   if (parsedCookies.has(cookieName)) {
     parsedCookies.delete(cookieName);
   }

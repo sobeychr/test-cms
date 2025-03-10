@@ -1,11 +1,18 @@
 ---
 import Header from '@components/header/Header.astro';
 import Navigation from '@components/navigation/Navigation.astro';
+import { COOKIE_DARK_NAME } from '@utils/configs';
 
 const { isLoggedIn } = Astro.locals.user;
+
+const isLight = Astro.cookies.get(COOKIE_DARK_NAME)?.value === '0';
+
+const htmlClasses = {
+  light: isLight,
+};
 ---
 
-<html lang="en">
+<html class:list={htmlClasses} lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />

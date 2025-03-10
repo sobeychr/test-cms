@@ -1,0 +1,30 @@
+.toggleslide {
+  --center-color: #346d25;
+  --out-color: hsl(from var(--center-color) h s l / 20%);
+
+  display: flex;
+
+  &::after {
+    align-items: center;
+    aspect-ratio: 1;
+    background: radial-gradient(var(--center-color) 40%, var(--out-color) 45%);
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 1em;
+    justify-content: center;
+    margin-left: 0.3em;
+  }
+
+  &:has(input:checked)::after {
+    --center-color: #52e02a;
+  }
+
+  input[type='checkbox'] {
+    display: none;
+  }
+
+  label {
+    user-select: none;
+  }
+}
