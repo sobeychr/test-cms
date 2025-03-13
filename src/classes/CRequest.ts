@@ -3,14 +3,18 @@ import { v4 as uuid } from 'uuid';
 import { API_PREFIX, PAGE_LOGIN } from '@utils/configs';
 import { isHtml, isJson } from '@utils/string';
 
+const RESTRICTED_APIS = ['logs'];
+const RESTRICTED_REGEXP = new RegExp(`^\/api\/v\\d+\/(${RESTRICTED_APIS.join('|')})$`);
+
 export class CRequest {
   _uuid: string;
   _end: number = 0;
   _start: number;
 
+  _error: object | null = null;
   _logs: Array<string> = [];
   _request: Request;
-  _responseText: string = '';
+  _response: Response | null = null;
   _url: URL;
 
   cookies: AstroCookies;
@@ -19,6 +23,7 @@ export class CRequest {
   pathname: string;
 
   isApiRequest: boolean;
+  isApiRestricted: boolean;
   isPageLogin: boolean;
 
   constructor(context: APIContext) {
@@ -33,6 +38,7 @@ export class CRequest {
     this.pathname = context?.url?.pathname;
 
     this.isApiRequest = this.pathname.startsWith(API_PREFIX);
+    this.isApiRestricted = RESTRICTED_REGEXP.test(this.pathname);
     this.isPageLogin = this.pathname === PAGE_LOGIN;
   }
 
@@ -40,18 +46,48 @@ export class CRequest {
     this._logs.push(data);
   }
 
-  public setEnd(responseText: string) {
+  public getError(): Response | null {
+    return this._error && new Response(JSON.stringify({
+      error: this._error.error,
+      errorCode: this._error.errorCode,
+      message: this._error.message,
+    }), {
+      status: this._error.status,
+      statusText: this._error.statusText,
+    });
+  }
+
+  public hasError(): boolean {
+    return !!this._error;
+  }
+
+  public setEnd(response: Response) {
     this._end = Date.now();
-    this._responseText = responseText;
+    this._response = response;
+  }
+
+  public setError(obj) {
+    this._error = obj;
+  }
+
+  public toError() {
+    const data = {
+      error: this._error,
+      uuid: this._uuid,
+    };
+    return this._error ? JSON.stringify(data) : '';
   }
 
   public async toJson() {
-    const resp = this._responseText;
-    const format = isHtml(resp) && 'html'
-      || isJson(resp) && 'json'
+    const responseText = (await this._response?.text().catch(() => '')) || '';
+
+    const format = isHtml(responseText) && 'html'
+      || isJson(responseText) && 'json'
       || '!undefined';
 
     const postData = this.isPost && await this._request.json() || {};
+
+    const status = this._response?.status;
 
     const data = {
       delay: this._end - this._start,
@@ -62,12 +98,14 @@ export class CRequest {
       postData,
       response: {
         format,
-        size: resp.toString().length,
+        size: responseText.toString().length,
+        status,
       },
       search: this._url?.search || '',
       start: new Date(this._start).toISOString(),
       uuid: this._uuid,
     };
+
     return JSON.stringify(data);
   }
 
@@ -78,4 +116,4 @@ export class CRequest {
     };
     return this._logs.length > 0 ? JSON.stringify(data) : '';
   };
-}
+};

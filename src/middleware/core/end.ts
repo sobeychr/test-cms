@@ -2,19 +2,26 @@ import { defineMiddleware } from 'astro:middleware';
 import { writeFileSync } from 'fs';
 import { LOGS_DIR } from '@utils/configs';
 
+const OPTIONS = { encoding: 'utf8', flag: 'a' };
+
 export const endMiddleware = defineMiddleware(async (context, next) => {
-  const response = await next();
   const request = context.locals.request;
+  const response = request.getError() || await next();
 
-  const responseText = (await response.clone().text()) || '';
-  request.setEnd(responseText);
+  request.setEnd(response.clone());
 
-  const requestLog = await request.toJson() + '\n';
-  writeFileSync(`${LOGS_DIR}/request.log`, requestLog, { encoding: 'utf8', flag: 'a' });
+  const requestLog = await request.toJson();
+  writeFileSync(`${LOGS_DIR}request.log`, requestLog + '\n', OPTIONS);
 
   const detailLog = request.toLogs();
   if (detailLog) {
-    writeFileSync(`${LOGS_DIR}/info.log`, detailLog + '\n', { encoding: 'utf8', flag: 'a' });
+    writeFileSync(`${LOGS_DIR}info.log`, detailLog + '\n', OPTIONS);
+  }
+
+  const errorLog = request.toError();
+  console.log('err', errorLog);
+  if (errorLog) {
+    writeFileSync(`${LOGS_DIR}error.log`, errorLog + '\n', OPTIONS);
   }
 
   return response;
