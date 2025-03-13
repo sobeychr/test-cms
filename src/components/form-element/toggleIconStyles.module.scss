@@ -1,13 +1,15 @@
+$RADIAL_SPLIT: 40%;
+
 .toggleslide {
-  --center-color: #346d25;
-  --out-color: hsl(from var(--center-color) h s l / 20%);
+  --background-color: #e02a2d;
+  --border-color: hsl(from var(--background-color) h s l / 40%);
 
   display: flex;
 
   &::after {
     align-items: center;
     aspect-ratio: 1;
-    background: radial-gradient(var(--center-color) 40%, var(--out-color) 45%);
+    background: radial-gradient(var(--background-color) $RADIAL_SPLIT, var(--border-color) ($RADIAL_SPLIT + 5%));
     border-radius: 50%;
     content: '';
     display: block;
@@ -17,7 +19,8 @@
   }
 
   &:has(input:checked)::after {
-    --center-color: #52e02a;
+    --background-color: #52e02a;
+    --border-color: hsl(from var(--background-color) h s l / 40%);
   }
 
   input[type='checkbox'] {

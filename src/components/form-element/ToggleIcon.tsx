@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import styles from './styles.module.scss';
+import styles from './toggleIconStyles.module.scss';
 
-export const ToggleSlide = props => {
+export const ToggleIcon = props => {
   const {
     defaultChecked = false,
     id: idProp,
