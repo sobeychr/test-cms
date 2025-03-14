@@ -1,6 +1,7 @@
 import { DUR_MONTH, DUR_WEEK } from './date';
 
 export const GIT = import.meta.env.GIT;
+export const IS_DEV = import.meta.env.DEV;
 export const LOGS_DIR = import.meta.env.LOGS_DIR;
 export const VERSION = import.meta.env.VERSION;
 

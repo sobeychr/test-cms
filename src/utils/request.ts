@@ -41,7 +41,7 @@ export const useRequest = async (params: useRequestParam) => {
   const response = await new Promise(resolve => setTimeout(() => resolve(true), preDelay))
     .then(() => fetch(newUrl, options))
     .then(resp => new Promise(resolve => setTimeout(() => resolve(resp), postDelay)))
-    .catch(err => err);
+    .catch(err => err) as Response;
 
   const respJson = await response?.json().catch(() => null);
   const respText = await response?.text().catch(() => null);

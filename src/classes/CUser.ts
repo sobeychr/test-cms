@@ -3,10 +3,10 @@ import { COOKIE_AUTH_NAME } from '@utils/configs';
 import { parseJwt } from '@utils/data';
 
 export class CUser {
-  _id: string;
+  _id: string = '';
 
-  displayName: string;
-  email: string;
+  displayName: string = '';
+  email: string = '';
   isLoggedIn: boolean = false;
 
   constructor(request: CRequest) {
@@ -19,5 +19,7 @@ export class CUser {
       this.email = email;
       this.isLoggedIn = true;
     }
+
+    Object.freeze(this);
   }
 }

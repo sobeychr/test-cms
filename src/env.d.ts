@@ -1,8 +1,11 @@
+
 declare namespace App {
+  import type { CLogger } from '@classes/CLogger';
   import type { CRequest } from '@classes/CRequest';
   import type { CUser } from '@classes/CUser';
 
   interface Locals {
+    logger: CLogger;
     request: CRequest;
     user: CUser;
   }
