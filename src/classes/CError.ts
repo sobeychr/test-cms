@@ -48,4 +48,41 @@ export class CError implements CErrorParam {
     const meta = { status: this.status, statusText: STATUS_TEXT[this.status] };
     return new Response(JSON.stringify(data), meta);
   }
+
+  static _getStack(error: Error): string {
+    const stack = error.stack || '';
+    return stack.split('\n').map(line => line.trim()).slice(0, 5).join(' ');
+  }
+
+  static baseErrorToLog(error: Error, uuid: string): string {
+    const data = {
+      columnNumber: error.columnNumber,
+      fileName: error.fileName,
+      lineNumber: error.lineNumber,
+      message: error.message,
+      name: error.name,
+      stack: this._getStack(error),
+      uuid,
+    };
+    return JSON.stringify(data);
+  }
+
+  static baseErrorToResponse(error: Error, uuid: string): Response {
+    const data = {
+      code: 500,
+      message: error.message,
+      name: error.name,
+    };
+
+    if (IS_DEV) {
+      data.columnNumber = error.columnNumber;
+      data.fileName = error.fileName;
+      data.lineNumber = error.lineNumber;
+      data.stack = this._getStack(error);
+      data.uuid = uuid;
+    }
+
+    const meta = { status: 500, statusText: STATUS_TEXT[500] };
+    return new Response(JSON.stringify(data), meta);
+  }
 };

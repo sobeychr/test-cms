@@ -1,9 +1,9 @@
-import { writeFileSync } from 'fs';
-import type { CError } from '@classes/CError';
+import { writeFileSync, type ObjectEncodingOptions } from 'fs';
+import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';
 import { LOGS_DIR } from '@utils/configs';
 
-const OPTIONS = { encoding: 'utf8', flag: 'a' };
+const OPTIONS = { encoding: 'utf8', flag: 'a' } as ObjectEncodingOptions;
 
 export class CLogger {
   _request: CRequest;
@@ -12,20 +12,25 @@ export class CLogger {
     this._request = request;
   }
 
-  async writeLogs(response: Response, error: CError): void {
+  _writeLog(filename: string, data: string) {
+    writeFileSync(`${LOGS_DIR}${filename}.log`, data + '\n', OPTIONS);
+  }
+
+  async writeLogs(response: Response, error: CError | Error): Promise<void> {
     this._request.setEnd(response?.clone?.());
 
     const requestLog = await this._request.toJson();
-    writeFileSync(`${LOGS_DIR}request.log`, requestLog + '\n', OPTIONS);
+    this._writeLog('request', requestLog);
 
-    const detailLog = this._request.toDetails();
-    if (detailLog) {
-      writeFileSync(`${LOGS_DIR}info.log`, detailLog + '\n', OPTIONS);
+    const infoLog = this._request.toDetails();
+    if (infoLog) {
+      this._writeLog('info', infoLog);
     }
 
     if (error) {
-      const errorLog = error.toLog(this._request.uuid);
-      writeFileSync(`${LOGS_DIR}error.log`, errorLog + '\n', OPTIONS);
+      const errorLog = error.toLog?.(this._request.uuid)
+        || CError.baseErrorToLog(error, this._request.uuid);
+      this._writeLog('error', errorLog);
     }
   }
 }

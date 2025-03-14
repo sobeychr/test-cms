@@ -7,10 +7,11 @@ export const errorMiddleware = defineMiddleware(async (context, next) => {
   const error = result instanceof CError && result
     || result instanceof Error && result;
 
+  const { logger, request } = context.locals;
+
   if (error) {
-    const logger = context.locals.logger;
     await logger.writeLogs(null, error);
   }
 
-  return response || error?.toResponse?.() || new Response('base error', { status: 500 });
+  return response || error?.toResponse?.() || CError.baseErrorToResponse(error, request.uuid);
 });
