@@ -1,4 +1,4 @@
-import { writeFileSync, type ObjectEncodingOptions } from 'fs';
+import { type ObjectEncodingOptions,writeFileSync } from 'fs';
 import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';
 import { LOGS_DIR } from '@utils/configs';
