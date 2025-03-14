@@ -29,5 +29,6 @@ export default {
       },
     ],
     'scss/dollar-variable-pattern': UPPER_CASE_CONFIG,
+    'scss/at-mixin-pattern': CAMEL_CASE_CONFIG,
   },
 };

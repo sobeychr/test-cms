@@ -1,9 +1,12 @@
-import { type ObjectEncodingOptions,writeFileSync } from 'fs';
+import { type ObjectEncodingOptions, writeFileSync } from 'fs';
+import { spawnSync } from 'node:child_process';
 import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';
 import { LOGS_DIR } from '@utils/configs';
+import { isJson } from '@utils/string';
 
-const OPTIONS = { encoding: 'utf8', flag: 'a' } as ObjectEncodingOptions;
+const OPTS_READ = { encoding: 'utf-8', timeout: 250 };
+const OPTS_WRITE = { encoding: 'utf8', flag: 'a' } as ObjectEncodingOptions;
 
 export class CLogger {
   _request: CRequest;
@@ -12,8 +15,8 @@ export class CLogger {
     this._request = request;
   }
 
-  _writeLog(filename: string, data: string) {
-    writeFileSync(`${LOGS_DIR}${filename}.log`, data + '\n', OPTIONS);
+  _writeLog(filename: string, data: string): void {
+    writeFileSync(`${LOGS_DIR}${filename}.log`, data + '\n', OPTS_WRITE);
   }
 
   async writeLogs(response: Response, error: CError | Error): Promise<void> {
@@ -32,5 +35,12 @@ export class CLogger {
         || CError.baseErrorToLog(error, this._request.uuid);
       this._writeLog('error', errorLog);
     }
+  }
+
+  static getLogs(filename: string, limit: number): Array<string> {
+    const params = [`-n ${limit}`, '-f', `${LOGS_DIR}${filename}.log`];
+    const data = spawnSync('tail', params, OPTS_READ);
+    const dataStr = (data?.stdout || '');
+    return dataStr.split('\n').filter(isJson).map(line => JSON.parse(line));
   }
 }

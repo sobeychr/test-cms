@@ -30,13 +30,15 @@ export const useRequest = async (params: useRequestParam) => {
   const newUrl = url.concat(queryString);
 
   const options = {
-    body: JSON.stringify(postData),
     headers: {
       'Content-Type': 'application/json',
     },
     method,
     signal: control.signal,
   };
+  if (method === 'post') {
+    options.body = JSON.stringify(postData);
+  }
 
   const response = await new Promise(resolve => setTimeout(() => resolve(true), preDelay))
     .then(() => fetch(newUrl, options))

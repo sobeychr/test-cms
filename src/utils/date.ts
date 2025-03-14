@@ -28,3 +28,17 @@ export const getApiDateParam = (value: number | string | null) => {
 
   return nowValue || regValue || numValue;
 };
+
+export const dateToDateString = (date: Date) => [
+  date.getFullYear(),
+  date.getMonth().toString().padStart(2, '0'),
+  date.getDate().toString().padStart(2, '0'),
+].join('-');
+
+export const dateToFullString = (date: Date) => dateToDateString(date) + ' ' + dateToTimeString(date);
+
+export const dateToTimeString = (date: Date) => [
+  date.getHours().toString().padStart(2, '0'),
+  date.getMinutes().toString().padStart(2, '0'),
+  date.getSeconds().toString().padStart(2, '0'),
+].join(':');

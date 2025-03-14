@@ -4,6 +4,7 @@ import node from '@astrojs/node';
 import solidJs from '@astrojs/solid-js';
 import { getDetails, getGitLog } from './script/astroConfigHelpers';
 import packageJson from './package.json';
+import { resolve } from 'path';
 
 const envConfigs = loadEnv('', process.cwd(), '');
 
@@ -16,6 +17,8 @@ const {
 const { npmVersion, nodeVersion, osName } = getDetails(userAgent);
 const gitLog = getGitLog();
 const { version = '0.0.1' } = packageJson;
+
+const SRC_DIR = resolve(process.cwd(), './src/') + '/';
 
 const details = [
   `on ${osName}`,
@@ -49,8 +52,8 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        '@t-components/': './src/components/',
-        '@t-styles/': './src/styles/',
+        '@t-components/': `${SRC_DIR}components/`,
+        '@t-styles/': `${SRC_DIR}styles/`,
       },
     },
   },
