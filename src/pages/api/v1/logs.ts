@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { CLogger } from '@classes/CLogger';
+import { CResponse } from '@classes/CResponse';
 
 export const GET: APIRoute = async ({ url }) => {
   const getLimit = parseInt(url.searchParams?.get('limit'), 10) || 10;
@@ -9,9 +10,9 @@ export const GET: APIRoute = async ({ url }) => {
   const infos = CLogger.getLogs('info', limit);
   const requests = CLogger.getLogs('request', limit);
 
-  return new Response(JSON.stringify({
+  return CResponse.quickJson({
     errors,
     infos,
     requests,
-  }));
+  });
 };;

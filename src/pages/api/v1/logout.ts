@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { CResponse } from '@classes/CResponse';
 import { COOKIE_AUTH_NAME, PAGE_LOGIN } from '@utils/configs';
 import { parseJwt } from '@utils/data';
 
@@ -11,12 +12,12 @@ export const POST: APIRoute = async ({ cookies, locals }) => {
   const CRequest = locals.request;
   CRequest.addLog(`[LOGOUT,success] logged out "${email}"`);
 
-  return new Response(JSON.stringify({
+  return CResponse.quickJson({
     actions: [
       {
         command: 'redirect',
         param: PAGE_LOGIN,
       }],
     success: true,
-  }));
+  });
 };

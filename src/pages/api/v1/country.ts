@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { CResponse } from '@classes/CResponse';
 import { getParsedCollection } from '@utils/collection';
 
 const FIELDS = ['cca2', 'cca3', 'id', 'name', 'region'];
@@ -23,5 +24,5 @@ export const GET: APIRoute = async ({ url }) => {
   const limit = parseInt(url.searchParams?.get('limit') || 0, 0);
   const limitList = limit === 0 ? searched : searched.slice(0, limit);
 
-  return new Response(JSON.stringify(limitList));
+  return CResponse.quickJson(limitList);
 };

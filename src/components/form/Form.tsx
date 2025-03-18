@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { CID } from '@classes/CID';
 import { createSignal } from 'solid-js';
 import { iteratorToObj } from '@utils/data';
 import { useRequest } from '@utils/request';
@@ -30,7 +30,7 @@ export const Form = (props: FormParam) => {
     children,
     class: classStr = '',
     defaultRequest = true,
-    id = `form-${uuid()}`,
+    id = `form-${CID.shortHash()}`,
     loadingClass = 'loading',
     method = 'post',
     ...rest

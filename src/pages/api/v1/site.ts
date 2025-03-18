@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { CResponse } from '@classes/CResponse';
 import { getParsedCollection } from '@utils/collection';
 import { getApiDateParam } from '@utils/date';
 
@@ -31,5 +32,5 @@ export const GET: APIRoute = async ({ url }) => {
     || entry.endtime < start
   );
 
-  return new Response(JSON.stringify(filterByEnd));
+  return CResponse.quickJson(filterByEnd);
 };

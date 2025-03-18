@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { CID } from '@classes/CID';
 import styles from './toggleIconStyles.module.scss';
 
 export const ToggleIcon = props => {
@@ -13,7 +13,7 @@ export const ToggleIcon = props => {
 
   let inputElement;
 
-  const id = idProp || name || uuid();
+  const id = idProp || name || CID.shortHash();
 
   const onChange = (event: Event) => {
     const afterValue = inputElement?.checked || false;

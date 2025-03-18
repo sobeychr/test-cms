@@ -1,9 +1,9 @@
-import { type ObjectEncodingOptions, writeFileSync } from 'fs';
+import { type ObjectEncodingOptions, readFileSync, writeFileSync } from 'fs';
 import { spawnSync } from 'node:child_process';
 import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';
 import { LOGS_DIR } from '@utils/configs';
-import { isJson } from '@utils/string';
+import { logStrToArray } from '@utils/data';
 
 const OPTS_READ = { encoding: 'utf-8', timeout: 250 };
 const OPTS_WRITE = { encoding: 'utf8', flag: 'a' } as ObjectEncodingOptions;
@@ -37,10 +37,15 @@ export class CLogger {
     }
   }
 
+  static getAllLogs(filename: string) {
+    const requestStr = readFileSync(`${LOGS_DIR}${filename}.log`, OPTS_READ);
+    return logStrToArray(requestStr);
+  }
+
   static getLogs(filename: string, limit: number): Array<string> {
     const params = [`-n ${limit}`, '-f', `${LOGS_DIR}${filename}.log`];
     const data = spawnSync('tail', params, OPTS_READ);
     const dataStr = (data?.stdout || '');
-    return dataStr.split('\n').filter(isJson).map(line => JSON.parse(line));
+    return logStrToArray(dataStr);
   }
 }

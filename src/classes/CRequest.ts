@@ -1,7 +1,9 @@
 import type { APIContext, AstroCookies } from 'astro';
-import { v4 as uuid } from 'uuid';
+import { CID } from '@classes/CID';
 import { API_PREFIX, PAGE_LOGIN } from '@utils/configs';
 import { isHtml, isJson } from '@utils/string';
+
+const PROTECTED_POST = ['password'];
 
 export class CRequest {
   uuid: string;
@@ -26,7 +28,7 @@ export class CRequest {
     this._start = Date.now();
     this._request = context?.request.clone();
     this._url = context?.url;
-    this.uuid = uuid();
+    this.uuid = CID.uuid();
 
     this.cookies = context?.cookies;
     this.isGet = this._request.method === 'GET';
@@ -62,6 +64,7 @@ export class CRequest {
       || '!undefined';
 
     const postData = this.isPost && await this._request.json() || {};
+    PROTECTED_POST.filter(field => !!postData[field]).forEach(field => { postData[field] = '!secret'; });
 
     const status = this._response?.status;
 

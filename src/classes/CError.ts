@@ -1,5 +1,6 @@
 import { IS_DEV } from '@utils/configs';
-import { STATUS_TEXT } from '@utils/error';
+import { STATUS_TEXT } from '@utils/status';
+import { CResponse } from './CResponse';
 
 type CErrorParam = {
   code: number;
@@ -44,9 +45,7 @@ export class CError implements CErrorParam {
     if (IS_DEV) {
       data.details = this.details;
     }
-
-    const meta = { status: this.status, statusText: STATUS_TEXT[this.status] };
-    return new Response(JSON.stringify(data), meta);
+    return CResponse.quickJson(data, this.status);
   }
 
   static _getStack(error: Error): string {

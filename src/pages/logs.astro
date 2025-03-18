@@ -27,23 +27,27 @@ import styles from '@styles/pages/logs.module.scss';
 
 <script>
   import { API_PREFIX } from '@utils/configs';
-  import { dateToFullString } from '@utils/date';
-  import { populateTemplate } from '@utils/dom';
+  // import { dateToFullString } from '@utils/date';
+  // import { populateTemplate } from '@utils/dom';
   import { useRequest } from '@utils/request';
 
   (function () {
-    const DELAY_LOW = 300;
-    const DELAY_MEDIUM = 700;
-    const DELAY_HIGH = 1200;
+    // const DELAY_LOW = 300;
+    // const DELAY_MEDIUM = 700;
+    // const DELAY_HIGH = 1200;
 
     const callRequest = async () => {
-      const resp = await useRequest({
-        url: `${API_PREFIX}v1/logs`,
+      // const resp = await useRequest({
+      await useRequest({
+        url: `${API_PREFIX}v2/logs`,
       });
 
-      populateLogs(resp);
+      // populateLogs(resp);
     };
 
+    callRequest();
+
+    /*
     const init = () => {
       callRequest();
 
@@ -90,5 +94,6 @@ import styles from '@styles/pages/logs.module.scss';
     };
 
     init();
+    */
   })();
 </script>
