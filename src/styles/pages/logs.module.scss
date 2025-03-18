@@ -1,109 +1,58 @@
-@use '@t-styles/templates.scss' as tTemplates;
-
-$GAP: 0.8rem;
-
-@keyframes animLoading {
-  0% {
-    rotate: 0deg;
-  }
-
-  100% {
-    rotate: 360deg;
-  }
-}
-
+$COLOR_LOW: #0f0;
+$COLOR_MEDIUM: #ff0;
+$COLOR_HIGH: #f00;
 
 .body {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 $GAP;
+  font-size: 0.7rem;
+}
+
+:global {
+  .low {
+    color: $COLOR_LOW;
+  }
+
+  .medium {
+    color: $COLOR_MEDIUM;
+  }
+
+  .high {
+    color: $COLOR_HIGH;
+  }
 }
 
 .entry {
-  display: grid;
-  font-size: 0.8rem;
-  grid-template-areas:
-    'uuid uuid uuid'
-    'pathname pathname pathname'
-    'delay start end';
-  margin-top: $GAP;
+  padding: 1em;
 
-  p {
-    margin-bottom: 0.3em;
+  &:hover {
+    background-color: var(--color-bg-dark);
   }
 
-  .delay {
-    grid-area: delay;
-
-    .value::after {
-      content: 'ms';
-    }
-  }
-
-  .start {
-    grid-area: start;
-  }
-
-  .end {
-    grid-area: end;
-  }
-
-  .pathname {
-    color: #7b4ae2;
-    grid-area: pathname;
-  }
-
-  .value {
-    margin-left: 0.3em;
-
-    &:global(.low) {
-      color: #4ae28a;
-    }
-
-    &:global(.medium) {
-      color: #ede61a;
-    }
-
-    &:global(.high) {
-      color: #ed1a1d;
-    }
-  }
-
-  .uuid {
-    // color: #4ad1e2;
-    color: #6791d3;
-    grid-area: uuid;
-  }
-}
-
-.section {
-  margin: 1.2rem;
-}
-
-section {
-  header span {
-    font-size: 0.7em;
-    font-style: italic;
-    font-weight: normal;
-    margin-left: 0.5em;
-  }
-}
-
-section:global(#requests) {
-  header {
-    cursor: pointer;
-  }
-
-  &:not(:has(ul:empty)) header span::after {
+  input[type='checkbox'] {
     display: none;
   }
 
-  &:has(ul:empty) header {
-    pointer-events: none;
-    user-select: none;
-
-    span::after {
-      @include tTemplates.animationLoading;
-    }
+  header {
+    display: grid;
+    grid-template: 1fr / 50px 150px 1fr;
   }
+}
+
+.method {
+  font-weight: bold;
+
+  &[data-method='GET'] {
+    color: #47b0d3;
+  }
+
+  &[data-method='POST'] {
+    color: #6751d6;
+  }
+}
+
+.pathname {
+  color: #476fd3;
+}
+
+.uuid {
+  color: #a947d3;
 }

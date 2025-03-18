@@ -5,95 +5,63 @@ import styles from '@styles/pages/logs.module.scss';
 
 <DefaultLayout>
   <h1>Logs</h1>
-  <section class={styles.section} id="requests">
-    <header>
-      <h2>Requests<span class="total after-icon"></span></h2>
-    </header>
-    <ul class={styles.body}></ul>
+  <section>
+    <div class={styles.body} id="logs-body"></div>
   </section>
 
   <template id="entry">
-    <li class={styles.entry}>
-      <p class={styles.uuid}>{'{uuid}'}</p>
-      <p class={styles.pathname}>{'{pathname}'}</p>
-      <p class={styles.delay}>
-        Delay<span class={styles.value} data-delay="{delay}">{'{delay}'}</span>
-      </p>
-      <p class={styles.start}>Start<span class={styles.value} data-date="{start}"></span></p>
-      <p class={styles.end}>End<span class={styles.value} data-date="{end}"></span></p>
-    </li>
+    <article class={styles.entry}>
+      <input type="checkbox" name="isApiRequest" readonly value="1" />
+
+      <header>
+        <span class={styles.method} data-method="{method}">{'{method}'}</span>
+        <span class={styles.pathname}>{'{pathname}'}</span>
+        <span class={styles.uuid}>{'{uuid}'}</span>
+        <span data-time="{delay}">{'{delay}'}ms</span>
+        <span>{'{start}'}</span>
+        <span>{'{end}'}</span>
+      </header>
+    </article>
   </template>
 </DefaultLayout>
 
 <script>
   import { API_PREFIX } from '@utils/configs';
   // import { dateToFullString } from '@utils/date';
-  // import { populateTemplate } from '@utils/dom';
+  import { populateTemplate } from '@utils/dom';
   import { useRequest } from '@utils/request';
 
   (function () {
-    // const DELAY_LOW = 300;
-    // const DELAY_MEDIUM = 700;
-    // const DELAY_HIGH = 1200;
+    const DELAY_LOW = 300;
+    const DELAY_MEDIUM = 700;
+    const DELAY_HIGH = 1200;
 
     const callRequest = async () => {
-      // const resp = await useRequest({
-      await useRequest({
+      const resp = await useRequest({
         url: `${API_PREFIX}v2/logs`,
       });
 
-      // populateLogs(resp);
-    };
-
-    callRequest();
-
-    /*
-    const init = () => {
-      callRequest();
-
-      document.querySelector('#requests header').addEventListener('click', () => {
-        document.querySelector('#requests .total').innerHTML = '';
-        document.querySelector('#requests ul').innerHTML = '';
-        callRequest();
-      });
-    };
-
-    const prettyLogs = () => {
-      const quantity = document.querySelectorAll('#requests ul li').length;
-      document.querySelector('#requests .total').textContent = quantity;
-
-      document.querySelectorAll('#requests ul span[data-delay]').forEach((entry) => {
-        const delay = parseInt(entry.getAttribute('data-delay'), 10) || 0;
-        const className =
-          (delay < DELAY_LOW && 'low') ||
-          (delay > DELAY_HIGH && 'high') ||
-          (delay > DELAY_MEDIUM && 'medium') ||
-          '';
-        entry.classList.add(className);
-      });
-
-      document.querySelectorAll('#requests ul span[data-date]').forEach((entry) => {
-        const dateStr = entry.getAttribute('data-date') || '';
-        const date = new Date(dateStr);
-
-        entry.textContent = dateToFullString(date);
-        entry.setAttribute('title', date.toISOString());
-      });
+      populateLogs(resp);
     };
 
     const populateLogs = (logs) => {
-      const { requests = [] } = logs;
-
       populateTemplate(
         document.querySelector('#entry') as HTMLTemplateElement,
-        document.querySelector('#requests ul') as HTMLElement,
-        requests,
+        document.querySelector('#logs-body') as HTMLElement,
+        logs,
       );
 
-      prettyLogs();
-    };
+      document.querySelectorAll('#logs-body span[data-time]').forEach((entry) => {
+        const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
+        const className =
+          (time < DELAY_LOW && 'low') ||
+          (time > DELAY_HIGH && 'high') ||
+          (time > DELAY_MEDIUM && 'medium') ||
+          '';
 
-    init();
-    */
+        entry.classList.add(className);
+      });
+    };
+    callRequest();
   })();
 </script>
