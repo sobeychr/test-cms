@@ -10,13 +10,42 @@ import styles from '@styles/pages/logs.module.scss';
     <header>
       <form autocomplete="off" id="filters">
         <p>
-          <button type="reset">Clear filters</button>
+          <button type="reset">Reset filters</button>
         </p>
         <div class={styles['form-row']}>
           <span>Method:</span>
           <ToggleIcon label="Get" name="method" id="get" value="GET" />
           <ToggleIcon label="Post" name="method" id="post" value="POST" />
         </div>
+        <p class={styles['form-row']}>
+          <span>Delays (ms):</span>
+          <label for="delay-min">min</label>
+          <input
+            type="number"
+            id="delay-min"
+            name="delay-min"
+            min="0"
+            max="9999"
+            maxlength="4"
+            size="4"
+            step="1"
+          />
+          <label for="delay-max">max</label>
+          <input
+            type="number"
+            id="delay-max"
+            name="delay-max"
+            min="0"
+            max="9999"
+            maxlength="4"
+            size="4"
+            step="1"
+          />
+        </p>
+        <p class={styles['form-row']}>
+          <label for="path">Path:</label>
+          <input type="text" id="path" name="path" />
+        </p>
         <div class={styles['form-row']}>
           <span>Response size (KB):</span>
           <label for="response-min">min</label>
@@ -26,6 +55,7 @@ import styles from '@styles/pages/logs.module.scss';
             min="0"
             max="9999"
             maxlength="4"
+            name="response-min"
             size="4"
             step="1"
           />
@@ -36,35 +66,27 @@ import styles from '@styles/pages/logs.module.scss';
             min="0"
             max="9999"
             maxlength="4"
+            name="response-max"
             size="4"
             step="1"
           />
         </div>
         <div class={styles['form-row']}>
-          <span>Response type:</span>
-          <ToggleIcon label="JSON" name="json" />
-          <ToggleIcon label="HTML" name="HTML" />
-          <ToggleIcon label="Undefined" name="undefined" />
+          <span>Response format:</span>
+          <ToggleIcon label="JSON" name="format" id="json" value="json" />
+          <ToggleIcon label="HTML" name="format" id="html" value="html" />
+          <ToggleIcon label="Undefined" name="format" id="undefined" value="!undefined" />
         </div>
-        <p class={styles['form-row']}>
-          <span>Delays (ms):</span>
-          <label for="delay-min">min</label>
-          <input type="number" id="delay-min" min="0" max="9999" maxlength="4" size="4" step="1" />
-          <label for="delay-max">max</label>
-          <input type="number" id="delay-max" min="0" max="9999" maxlength="4" size="4" step="1" />
-        </p>
-        <p class={styles['form-row']}>
-          <label for="path">Path:</label>
-          <input type="text" id="path" />
-        </p>
       </form>
     </header>
 
     <div class={styles.body} id="logs-body"></div>
   </section>
 
+  <script id="logs-data" type="application/json"></script>
+
   <template id="entry">
-    <article class={`${styles.entry} entry`}>
+    <article class={`${styles.entry} entry`} data-uuid="{uuid}">
       <p class={styles.meta}>
         <span class={styles.method} data-method="{method}">{'{method}'}</span>
         <span class={styles.pathname}>{'{pathname}'}</span>
@@ -82,10 +104,11 @@ import styles from '@styles/pages/logs.module.scss';
 
 <script>
   import { API_PREFIX } from '@utils/configs';
-import { dateToFullString } from '@utils/date';
-import { populateTemplate } from '@utils/dom';
-import { useRequest } from '@utils/request';
-import { byteToSizeString } from '@utils/string';
+  import { dateToFullString } from '@utils/date';
+  import { populateTemplate } from '@utils/dom';
+  import { useRequest } from '@utils/request';
+  import { byteToSizeString } from '@utils/string';
+  import { KB } from '@utils/number';
 
   (function () {
     const DELAY_LOW = 300;
@@ -99,16 +122,27 @@ import { byteToSizeString } from '@utils/string';
         url: `${API_PREFIX}v2/logs`,
       });
 
+      document.querySelector('#logs-data').textContent = JSON.stringify(resp);
+
       populateLogs(resp);
     };
+
+    const getData = () => JSON.parse(document.querySelector('#logs-data')?.textContent || '{}');
 
     const init = () => {
       document.querySelector('#title')?.addEventListener('click', () => {
         document.querySelector('#logs-body').innerHTML = '';
+        document.querySelector('#logs-data').innerHTML = '';
         callRequest();
       });
 
       filterForm?.addEventListener('change', updateFilter);
+
+      filterForm?.addEventListener('reset', () => {
+        document.querySelectorAll('#logs-body .entry.hidden').forEach((entry) => {
+          entry.classList.remove('hidden');
+        });
+      });
 
       callRequest();
     };
@@ -142,22 +176,53 @@ import { byteToSizeString } from '@utils/string';
       });
     };
 
-    const updateFilter = (event) => {
-      console.log('udpateFilter', event);
-      /*
-      const formData = new FormData(filterForm);
+    const updateFilter = () => {
+      const filters = new FormData(filterForm);
+      const data = getData();
+      let newData = data;
 
-      const methods = formData.getAll('method');
-      if (methods.length === 0) {
-        document.querySelectorAll('#logs-body .entry').forEach((entry) => {
-          entry.classList.remove('hidden');
-        });
-      } else {
-        document.querySelectorAll('#logs-body .entry').forEach((entry) => {
-          entry.classList.remove('hidden');
-        });
+      const methods = filters.getAll('method') || [];
+      if (methods.length > 0) {
+        newData = newData.filter((entry) => methods.includes(entry.method));
       }
-      */
+
+      const delayMin = parseInt(filters.get('delay-min'), 10) || 0;
+      if (delayMin > 0) {
+        newData = newData.filter((entry) => entry.delay >= delayMin);
+      }
+      const delayMax = parseInt(filters.get('delay-max'), 10) || 0;
+      if (delayMax > 0) {
+        newData = newData.filter((entry) => entry.delay <= delayMax);
+      }
+
+      const path = filters.get('path') || '';
+      if (path.length > 0) {
+        newData = newData.filter((entry) => entry.pathname.includes(path));
+      }
+
+      const responseMin = (parseFloat(filters.get('response-min'), 10) || 0) * KB;
+      if (responseMin > 0) {
+        newData = newData.filter((entry) => entry.response?.size >= responseMin);
+      }
+      const responseMax = (parseFloat(filters.get('response-max'), 10) || 0) * KB;
+      if (responseMax > 0) {
+        newData = newData.filter((entry) => entry.response?.size <= responseMax);
+      }
+
+      const formats = filters.getAll('format') || [];
+      if (formats.length > 0) {
+        newData = newData.filter((entry) => formats.includes(entry.response?.format));
+      }
+
+      const showUuid = newData.map((entry) => entry.uuid);
+      const showSelector = showUuid.map((entry) => `[data-uuid="${entry}"]`);
+      document
+        .querySelectorAll(`#logs-body .entry:where(${showSelector.join(', ')})`)
+        .forEach((entry) => entry.classList.remove('hidden'));
+
+      document
+        .querySelectorAll(`#logs-body .entry:not(:where(${showSelector.join(', ')}))`)
+        .forEach((entry) => entry.classList.add('hidden'));
     };
 
     init();
