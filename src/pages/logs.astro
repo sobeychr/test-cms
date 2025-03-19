@@ -1,40 +1,98 @@
 ---
+import { ToggleIcon } from '@components/form-element/ToggleIcon';
 import DefaultLayout from '@layouts/Default.astro';
 import styles from '@styles/pages/logs.module.scss';
 ---
 
 <DefaultLayout>
-  <h1>Logs</h1>
+  <h1 class={`${styles.title} after-icon`} id="title">Logs</h1>
   <section>
+    <header>
+      <form autocomplete="off" id="filters">
+        <p>
+          <button type="reset">Clear filters</button>
+        </p>
+        <div class={styles['form-row']}>
+          <span>Method:</span>
+          <ToggleIcon label="Get" name="method" id="get" value="GET" />
+          <ToggleIcon label="Post" name="method" id="post" value="POST" />
+        </div>
+        <div class={styles['form-row']}>
+          <span>Response size (KB):</span>
+          <label for="response-min">min</label>
+          <input
+            type="number"
+            id="response-min"
+            min="0"
+            max="9999"
+            maxlength="4"
+            size="4"
+            step="1"
+          />
+          <label for="response-max">max</label>
+          <input
+            type="number"
+            id="response-max"
+            min="0"
+            max="9999"
+            maxlength="4"
+            size="4"
+            step="1"
+          />
+        </div>
+        <div class={styles['form-row']}>
+          <span>Response type:</span>
+          <ToggleIcon label="JSON" name="json" />
+          <ToggleIcon label="HTML" name="HTML" />
+          <ToggleIcon label="Undefined" name="undefined" />
+        </div>
+        <p class={styles['form-row']}>
+          <span>Delays (ms):</span>
+          <label for="delay-min">min</label>
+          <input type="number" id="delay-min" min="0" max="9999" maxlength="4" size="4" step="1" />
+          <label for="delay-max">max</label>
+          <input type="number" id="delay-max" min="0" max="9999" maxlength="4" size="4" step="1" />
+        </p>
+        <p class={styles['form-row']}>
+          <label for="path">Path:</label>
+          <input type="text" id="path" />
+        </p>
+      </form>
+    </header>
+
     <div class={styles.body} id="logs-body"></div>
   </section>
 
   <template id="entry">
-    <article class={styles.entry}>
-      <input type="checkbox" name="isApiRequest" readonly value="1" />
-
-      <header>
+    <article class={`${styles.entry} entry`}>
+      <p class={styles.meta}>
         <span class={styles.method} data-method="{method}">{'{method}'}</span>
         <span class={styles.pathname}>{'{pathname}'}</span>
         <span class={styles.uuid}>{'{uuid}'}</span>
         <span data-time="{delay}">{'{delay}'}ms</span>
-        <span>{'{start}'}</span>
-        <span>{'{end}'}</span>
-      </header>
+        <span data-date="{start}" title="{start}"></span>
+        <span data-date="{end}" title="{end}"></span>
+        <span>{'{response.status}'}</span>
+        <span>{'{response.format}'}</span>
+        <span data-size="{response.size}"></span>
+      </p>
     </article>
   </template>
 </DefaultLayout>
 
 <script>
   import { API_PREFIX } from '@utils/configs';
-  // import { dateToFullString } from '@utils/date';
-  import { populateTemplate } from '@utils/dom';
-  import { useRequest } from '@utils/request';
+import { dateToFullString } from '@utils/date';
+import { populateTemplate } from '@utils/dom';
+import { useRequest } from '@utils/request';
+import { byteToSizeString } from '@utils/string';
 
   (function () {
     const DELAY_LOW = 300;
     const DELAY_MEDIUM = 700;
     const DELAY_HIGH = 1200;
+
+    const filterForm = document.querySelector('#filters');
 
     const callRequest = async () => {
       const resp = await useRequest({
@@ -44,12 +102,33 @@ import styles from '@styles/pages/logs.module.scss';
       populateLogs(resp);
     };
 
+    const init = () => {
+      document.querySelector('#title')?.addEventListener('click', () => {
+        document.querySelector('#logs-body').innerHTML = '';
+        callRequest();
+      });
+
+      filterForm?.addEventListener('change', updateFilter);
+
+      callRequest();
+    };
+
     const populateLogs = (logs) => {
       populateTemplate(
         document.querySelector('#entry') as HTMLTemplateElement,
         document.querySelector('#logs-body') as HTMLElement,
         logs,
       );
+
+      document.querySelectorAll('#logs-body span[data-date]').forEach((entry) => {
+        const date = new Date(entry.getAttribute('data-date') || '');
+        entry.textContent = dateToFullString(date);
+      });
+
+      document.querySelectorAll('#logs-body span[data-size]').forEach((entry) => {
+        const size = parseInt(entry.getAttribute('data-size'), 10) || 0;
+        entry.textContent = byteToSizeString(size);
+      });
 
       document.querySelectorAll('#logs-body span[data-time]').forEach((entry) => {
         const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
@@ -62,6 +141,25 @@ import styles from '@styles/pages/logs.module.scss';
         entry.classList.add(className);
       });
     };
-    callRequest();
+
+    const updateFilter = (event) => {
+      console.log('udpateFilter', event);
+      /*
+      const formData = new FormData(filterForm);
+
+      const methods = formData.getAll('method');
+      if (methods.length === 0) {
+        document.querySelectorAll('#logs-body .entry').forEach((entry) => {
+          entry.classList.remove('hidden');
+        });
+      } else {
+        document.querySelectorAll('#logs-body .entry').forEach((entry) => {
+          entry.classList.remove('hidden');
+        });
+      }
+      */
+    };
+
+    init();
   })();
 </script>

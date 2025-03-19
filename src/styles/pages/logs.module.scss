@@ -1,6 +1,16 @@
+@use '@t-styles/templates.scss' as tStyles;
+
 $COLOR_LOW: #0f0;
 $COLOR_MEDIUM: #ff0;
 $COLOR_HIGH: #f00;
+
+section {
+  max-width: 650px;
+
+  header {
+    margin: 1.5rem;
+  }
+}
 
 .body {
   font-size: 0.7rem;
@@ -27,14 +37,14 @@ $COLOR_HIGH: #f00;
     background-color: var(--color-bg-dark);
   }
 
-  input[type='checkbox'] {
+  &:global(.hidden) {
     display: none;
   }
+}
 
-  header {
-    display: grid;
-    grid-template: 1fr / 50px 150px 1fr;
-  }
+.meta {
+  display: grid;
+  grid-template: 1fr / 50px 150px 1fr;
 }
 
 .method {
@@ -49,8 +59,53 @@ $COLOR_HIGH: #f00;
   }
 }
 
+.form-row {
+  align-items: center;
+  display: flex;
+  margin: 0.8rem 0;
+
+  &>label {
+    margin-right: 0.6rem;
+  }
+
+  &>span,
+  &:not(:has(span)) label {
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+
+  &>label:not(:first-of-type) {
+    margin-left: 0.6rem;
+  }
+
+  :global(.toggle-icon) {
+    margin: 0 0.6rem;
+  }
+}
+
 .pathname {
   color: #476fd3;
+}
+
+.title {
+  cursor: pointer;
+
+  &::after {
+    --after-icon-height: 0.65em;
+
+    margin-left: 0.5em;
+    opacity: 0;
+
+    @include tStyles.animationLoading;
+  }
+
+  &:has(+ section .body:empty) {
+    pointer-events: none;
+
+    &::after {
+      opacity: 1;
+    }
+  }
 }
 
 .uuid {

@@ -21,11 +21,11 @@ export const ToggleIcon = props => {
     if (typeof func === 'function') {
       func({ after: afterValue, before: !afterValue, event });
     } else {
-      console.error(`[ToggleSlide] unable to call function "window.${onChangeName}()"`);
+      console.error(`[ToggleIcon] unable to call function "window.${onChangeName}()"`);
     }
   };
 
-  return (<div class={styles.toggleslide}>
+  return (<div class={`${styles['toggle-icon']} toggle-icon`}>
     <label for={id}>{label}</label>
     <input
       checked={defaultChecked}
