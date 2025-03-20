@@ -1,19 +1,25 @@
-@use '@t-styles/templates.scss' as tStyles;
+@use '@t-styles/mixins.scss' as tMixins;
 
 $COLOR_LOW: #0f0;
 $COLOR_MEDIUM: #ff0;
+$COLOR_NORMAL: #909090;
 $COLOR_HIGH: #f00;
+$COLOR_GET: #47b0d3;
+$COLOR_POST: #6751d6;
+$COLOR_JSON: #1688e5;
+$COLOR_HTML: #e59216;
+$STATS_MAX_SIZE: 4rem;
+$SECTION_SPACE: 1.2rem;
 
 section {
+  font-size: 0.8rem;
+  margin: $SECTION_SPACE 0;
   max-width: 650px;
 
-  header {
-    margin: 1.5rem;
+  &+section {
+    border-top: 1px solid var(--color-text);
+    padding-top: calc($SECTION_SPACE * 0.5);
   }
-}
-
-.body {
-  font-size: 0.7rem;
 }
 
 :global {
@@ -25,89 +31,146 @@ section {
     color: $COLOR_MEDIUM;
   }
 
+  .normal {
+    color: $COLOR_NORMAL;
+  }
+
   .high {
     color: $COLOR_HIGH;
   }
 }
 
-.entry {
-  padding: 1em;
+:global(#filters) {
+  margin: 1.5rem;
 
-  &:hover {
-    background-color: var(--color-bg-dark);
-  }
+  .form-row {
+    align-items: center;
+    display: flex;
+    margin: 0.4em 0;
 
-  &:global(.hidden) {
-    display: none;
+    &>label {
+      margin-right: 0.6rem;
+    }
+
+    &>span,
+    &:not(:has(span)) label {
+      font-weight: bold;
+      margin-right: 1rem;
+    }
+
+    &>label:not(:first-of-type) {
+      margin-left: 0.6rem;
+    }
+
+    :global(.toggle-icon) {
+      margin: 0 0.6rem;
+    }
   }
 }
 
-.meta {
-  display: grid;
-  grid-template: 1fr / 50px 150px 1fr;
-}
+:global(#logs-body) {
+  font-size: 0.7rem;
 
-.method {
-  font-weight: bold;
+  .entry {
+    padding: 1em;
 
-  &[data-method='GET'] {
-    color: #47b0d3;
+    &:hover {
+      background-color: var(--color-bg-dark);
+    }
+
+    &:global(.hidden) {
+      display: none;
+    }
   }
 
-  &[data-method='POST'] {
-    color: #6751d6;
-  }
-}
-
-.form-row {
-  align-items: center;
-  display: flex;
-  margin: 0.8rem 0;
-
-  &>label {
-    margin-right: 0.6rem;
+  .meta {
+    display: grid;
+    grid-template: 1fr / 50px 150px 1fr;
   }
 
-  &>span,
-  &:not(:has(span)) label {
+  .method {
     font-weight: bold;
-    margin-right: 1rem;
+
+    &[data-method='GET'] {
+      color: $COLOR_GET;
+    }
+
+    &[data-method='POST'] {
+      color: $COLOR_POST;
+    }
   }
 
-  &>label:not(:first-of-type) {
-    margin-left: 0.6rem;
+  .pathname {
+    color: #476fd3;
   }
 
-  :global(.toggle-icon) {
-    margin: 0 0.6rem;
+  .uuid {
+    color: #a947d3;
   }
 }
 
-.pathname {
-  color: #476fd3;
+:global(#stats) {
+  display: flex;
+  flex-flow: row nowrap;
+
+  &>article {
+    margin: 0 $SECTION_SPACE;
+  }
+
+  :global(#stats-delay),
+  :global(#stats-format),
+  :global(#stats-method) {
+    display: inline-flex;
+    flex-flow: column nowrap;
+
+    &::after {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      content: '';
+      display: block;
+      max-width: $STATS_MAX_SIZE;
+    }
+  }
+
+  :global(#stats-delay)::after {
+    background: conic-gradient($COLOR_LOW 0%,
+        $COLOR_LOW calc((var(--low-perc, 0)) * 1%),
+        $COLOR_NORMAL calc((var(--low-perc, 0)) * 1%),
+        $COLOR_NORMAL calc(var(--low-perc, 0) * 1% + var(--normal-perc, 0) * 1%),
+        $COLOR_MEDIUM calc((var(--low-perc, 0)) * 1% + var(--normal-perc, 0) * 1%),
+        $COLOR_MEDIUM calc((var(--low-perc, 0)) * 1% + var(--normal-perc, 0) * 1% + var(--medium-perc, 0) * 1%),
+        $COLOR_HIGH calc((var(--low-perc, 0)) * 1% + var(--normal-perc, 0) * 1% + var(--medium-perc, 0) * 1%),
+        $COLOR_HIGH 100%,
+      );
+  }
+
+  :global(#stats-format)::after {
+    background: conic-gradient($COLOR_JSON calc(var(--json-perc, 0) * 1%), $COLOR_HTML calc(var(--json-perc, 0) * 1%));
+  }
+
+  :global(#stats-method)::after {
+    background: conic-gradient($COLOR_GET calc(var(--get-perc, 0) * 1%), $COLOR_POST calc(var(--get-perc, 0) * 1%));
+  }
 }
 
-.title {
+:global(#title) {
   cursor: pointer;
 
+  /* stylelint-disable-next-line no-descending-specificity */
   &::after {
     --after-icon-height: 0.65em;
 
     margin-left: 0.5em;
     opacity: 0;
 
-    @include tStyles.animationLoading;
+    @include tMixins.animationLoading;
   }
 
-  &:has(+ section .body:empty) {
+  &:has(~section :global(#logs-body):empty) {
     pointer-events: none;
 
     &::after {
       opacity: 1;
     }
   }
-}
-
-.uuid {
-  color: #a947d3;
 }

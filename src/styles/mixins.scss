@@ -1,3 +1,6 @@
+@use 'sass:map' as map;
+@use 'sass:list' as list;
+
 @keyframes animLoading {
   0% {
     rotate: 0deg;

@@ -1,4 +1,4 @@
-@use '@t-styles/templates.scss' as tTemplates;
+@use '@t-styles/mixins.scss' as tMixins;
 
 .form {
   border-radius: 1em;
@@ -38,6 +38,6 @@
   &.loading .submit::after {
     margin-left: 0.5em;
 
-    @include tTemplates.animationLoading;
+    @include tMixins.animationLoading;
   }
 }

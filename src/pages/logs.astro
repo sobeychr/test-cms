@@ -5,82 +5,103 @@ import styles from '@styles/pages/logs.module.scss';
 ---
 
 <DefaultLayout>
-  <h1 class={`${styles.title} after-icon`} id="title">Logs</h1>
+  <h1 class="after-icon" id="title">Logs</h1>
   <section>
-    <header>
-      <form autocomplete="off" id="filters">
-        <p>
-          <button type="reset">Reset filters</button>
-        </p>
-        <div class={styles['form-row']}>
-          <span>Method:</span>
-          <ToggleIcon label="Get" name="method" id="get" value="GET" />
-          <ToggleIcon label="Post" name="method" id="post" value="POST" />
-        </div>
-        <p class={styles['form-row']}>
-          <span>Delays (ms):</span>
-          <label for="delay-min">min</label>
-          <input
-            type="number"
-            id="delay-min"
-            name="delay-min"
-            min="0"
-            max="9999"
-            maxlength="4"
-            size="4"
-            step="1"
-          />
-          <label for="delay-max">max</label>
-          <input
-            type="number"
-            id="delay-max"
-            name="delay-max"
-            min="0"
-            max="9999"
-            maxlength="4"
-            size="4"
-            step="1"
-          />
-        </p>
-        <p class={styles['form-row']}>
-          <label for="path">Path:</label>
-          <input type="text" id="path" name="path" />
-        </p>
-        <div class={styles['form-row']}>
-          <span>Response size (KB):</span>
-          <label for="response-min">min</label>
-          <input
-            type="number"
-            id="response-min"
-            min="0"
-            max="9999"
-            maxlength="4"
-            name="response-min"
-            size="4"
-            step="1"
-          />
-          <label for="response-max">max</label>
-          <input
-            type="number"
-            id="response-max"
-            min="0"
-            max="9999"
-            maxlength="4"
-            name="response-max"
-            size="4"
-            step="1"
-          />
-        </div>
-        <div class={styles['form-row']}>
-          <span>Response format:</span>
-          <ToggleIcon label="JSON" name="format" id="json" value="json" />
-          <ToggleIcon label="HTML" name="format" id="html" value="html" />
-          <ToggleIcon label="Undefined" name="format" id="undefined" value="!undefined" />
-        </div>
-      </form>
-    </header>
+    <form autocomplete="off" id="filters">
+      <p>
+        <button type="reset">Reset filters</button>
+      </p>
+      <div class={styles['form-row']}>
+        <span>Method:</span>
+        <ToggleIcon label="Get" name="method" id="get" value="GET" />
+        <ToggleIcon label="Post" name="method" id="post" value="POST" />
+      </div>
+      <p class={styles['form-row']}>
+        <span>Delays (ms):</span>
+        <label for="delay-min">min</label>
+        <input
+          type="number"
+          id="delay-min"
+          name="delay-min"
+          min="0"
+          max="9999"
+          maxlength="4"
+          size="4"
+          step="1"
+        />
+        <label for="delay-max">max</label>
+        <input
+          type="number"
+          id="delay-max"
+          name="delay-max"
+          min="0"
+          max="9999"
+          maxlength="4"
+          size="4"
+          step="1"
+        />
+      </p>
+      <p class={styles['form-row']}>
+        <label for="path">Path:</label>
+        <input type="text" id="path" name="path" />
+      </p>
+      <div class={styles['form-row']}>
+        <span>Response size (KB):</span>
+        <label for="response-min">min</label>
+        <input
+          type="number"
+          id="response-min"
+          min="0"
+          max="9999"
+          maxlength="4"
+          name="response-min"
+          size="4"
+          step="1"
+        />
+        <label for="response-max">max</label>
+        <input
+          type="number"
+          id="response-max"
+          min="0"
+          max="9999"
+          maxlength="4"
+          name="response-max"
+          size="4"
+          step="1"
+        />
+      </div>
+      <div class={styles['form-row']}>
+        <span>Response format:</span>
+        <ToggleIcon label="JSON" name="format" id="json" value="json" />
+        <ToggleIcon label="HTML" name="format" id="html" value="html" />
+        <ToggleIcon label="Undefined" name="format" id="undefined" value="!undefined" />
+      </div>
+    </form>
+  </section>
 
-    <div class={styles.body} id="logs-body"></div>
+  <section>
+    <h2>Stats</h2>
+    <div id="stats">
+      <article id="stats-method">
+        <p class="get"></p>
+        <p class="post"></p>
+      </article>
+      <article id="stats-delay">
+        <p class="low"></p>
+        <p class="medium"></p>
+        <p class="normal"></p>
+        <p class="high"></p>
+      </article>
+      <article id="stats-format">
+        <p class="json"></p>
+        <p class="html"></p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Logs</h2>
+    <div id="logs-body"></div>
   </section>
 
   <script id="logs-data" type="application/json"></script>
@@ -106,11 +127,12 @@ import styles from '@styles/pages/logs.module.scss';
   import { API_PREFIX } from '@utils/configs';
   import { dateToFullString } from '@utils/date';
   import { populateTemplate } from '@utils/dom';
+  import { KB } from '@utils/number';
   import { useRequest } from '@utils/request';
   import { byteToSizeString } from '@utils/string';
-  import { KB } from '@utils/number';
 
   (function () {
+    const DECIMAL = 2;
     const DELAY_LOW = 300;
     const DELAY_MEDIUM = 700;
     const DELAY_HIGH = 1200;
@@ -125,58 +147,12 @@ import styles from '@styles/pages/logs.module.scss';
       document.querySelector('#logs-data').textContent = JSON.stringify(resp);
 
       populateLogs(resp);
+      updateStats(resp);
     };
 
     const getData = () => JSON.parse(document.querySelector('#logs-data')?.textContent || '{}');
 
-    const init = () => {
-      document.querySelector('#title')?.addEventListener('click', () => {
-        document.querySelector('#logs-body').innerHTML = '';
-        document.querySelector('#logs-data').innerHTML = '';
-        callRequest();
-      });
-
-      filterForm?.addEventListener('change', updateFilter);
-
-      filterForm?.addEventListener('reset', () => {
-        document.querySelectorAll('#logs-body .entry.hidden').forEach((entry) => {
-          entry.classList.remove('hidden');
-        });
-      });
-
-      callRequest();
-    };
-
-    const populateLogs = (logs) => {
-      populateTemplate(
-        document.querySelector('#entry') as HTMLTemplateElement,
-        document.querySelector('#logs-body') as HTMLElement,
-        logs,
-      );
-
-      document.querySelectorAll('#logs-body span[data-date]').forEach((entry) => {
-        const date = new Date(entry.getAttribute('data-date') || '');
-        entry.textContent = dateToFullString(date);
-      });
-
-      document.querySelectorAll('#logs-body span[data-size]').forEach((entry) => {
-        const size = parseInt(entry.getAttribute('data-size'), 10) || 0;
-        entry.textContent = byteToSizeString(size);
-      });
-
-      document.querySelectorAll('#logs-body span[data-time]').forEach((entry) => {
-        const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
-        const className =
-          (time < DELAY_LOW && 'low') ||
-          (time > DELAY_HIGH && 'high') ||
-          (time > DELAY_MEDIUM && 'medium') ||
-          '';
-
-        entry.classList.add(className);
-      });
-    };
-
-    const updateFilter = () => {
+    const getFilteredData = () => {
       const filters = new FormData(filterForm);
       const data = getData();
       let newData = data;
@@ -214,7 +190,68 @@ import styles from '@styles/pages/logs.module.scss';
         newData = newData.filter((entry) => formats.includes(entry.response?.format));
       }
 
-      const showUuid = newData.map((entry) => entry.uuid);
+      return newData;
+    };
+
+    const init = () => {
+      document.querySelector('#title')?.addEventListener('click', () => {
+        document.querySelector('#logs-body').innerHTML = '';
+        document.querySelector('#logs-data').innerHTML = '';
+
+        document.querySelector('#stats-delay').removeAttribute('style');
+        document.querySelector('#stats-method').removeAttribute('style');
+        document.querySelector('#stats-format').removeAttribute('style');
+        document.querySelectorAll('#stats p').forEach((entry) => (entry.textContent = ''));
+
+        callRequest();
+      });
+
+      filterForm?.addEventListener('change', () => {
+        const newData = getFilteredData();
+        updateFilter(newData);
+        updateStats(newData);
+      });
+
+      filterForm?.addEventListener('reset', () => {
+        document.querySelectorAll('#logs-body .entry.hidden').forEach((entry) => {
+          entry.classList.remove('hidden');
+        });
+      });
+
+      callRequest();
+    };
+
+    const populateLogs = (logs) => {
+      populateTemplate(
+        document.querySelector('#entry') as HTMLTemplateElement,
+        document.querySelector('#logs-body') as HTMLElement,
+        logs,
+      );
+
+      document.querySelectorAll('#logs-body span[data-date]').forEach((entry) => {
+        const date = new Date(entry.getAttribute('data-date') || '');
+        entry.textContent = dateToFullString(date);
+      });
+
+      document.querySelectorAll('#logs-body span[data-size]').forEach((entry) => {
+        const size = parseInt(entry.getAttribute('data-size'), 10) || 0;
+        entry.textContent = byteToSizeString(size);
+      });
+
+      document.querySelectorAll('#logs-body span[data-time]').forEach((entry) => {
+        const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
+        const className =
+          (time < DELAY_LOW && 'low') ||
+          (time > DELAY_HIGH && 'high') ||
+          (time > DELAY_MEDIUM && 'medium') ||
+          'normal';
+
+        entry.classList.add(className);
+      });
+    };
+
+    const updateFilter = (data) => {
+      const showUuid = data.map((entry) => entry.uuid);
       const showSelector = showUuid.map((entry) => `[data-uuid="${entry}"]`);
       document
         .querySelectorAll(`#logs-body .entry:where(${showSelector.join(', ')})`)
@@ -223,6 +260,60 @@ import styles from '@styles/pages/logs.module.scss';
       document
         .querySelectorAll(`#logs-body .entry:not(:where(${showSelector.join(', ')}))`)
         .forEach((entry) => entry.classList.add('hidden'));
+    };
+
+    const updateStats = (data) => {
+      const stats = {
+        delayHigh: 0,
+        delayLow: 0,
+        delayMedium: 0,
+        delayNormal: 0,
+        get: 0,
+        html: 0,
+        json: 0,
+        post: 0,
+      };
+
+      data.forEach((entry) => {
+        if (entry.method === 'GET') stats.get++;
+        else if (entry.method === 'POST') stats.post++;
+
+        if (entry.delay < DELAY_LOW) stats.delayLow++;
+        else if (entry.delay > DELAY_HIGH) stats.delayHigh++;
+        else if (entry.delay > DELAY_MEDIUM) stats.delayMedium++;
+        else stats.delayNormal++;
+
+        if (entry.response?.format === 'json') stats.json++;
+        else if (entry.response?.format === 'html') stats.html++;
+      });
+
+      const lowPerc = ((stats.delayLow / data.length) * 100).toFixed(DECIMAL);
+      const mediumPerc = ((stats.delayMedium / data.length) * 100).toFixed(DECIMAL);
+      const normalPerc = ((stats.delayNormal / data.length) * 100).toFixed(DECIMAL);
+      const highPerc = ((stats.delayHigh / data.length) * 100).toFixed(DECIMAL);
+      const delays = document.querySelector('#stats-delay');
+      delays.querySelector('p.low').textContent = `${stats.delayLow} lows, ${lowPerc}%`;
+      delays.querySelector('p.medium').textContent = `${stats.delayMedium} mediums, ${mediumPerc}%`;
+      delays.querySelector('p.normal').textContent = `${stats.delayNormal} normals, ${normalPerc}%`;
+      delays.querySelector('p.high').textContent = `${stats.delayHigh} highs, ${highPerc}%`;
+      delays.style.setProperty('--low-perc', lowPerc);
+      delays.style.setProperty('--medium-perc', mediumPerc);
+      delays.style.setProperty('--normal-perc', normalPerc);
+      delays.style.setProperty('--high-perc', highPerc);
+
+      const getPerc = ((stats.get / data.length) * 100).toFixed(DECIMAL);
+      const postPerc = (100 - getPerc).toFixed(DECIMAL);
+      const methods = document.querySelector('#stats-method');
+      methods.querySelector('p.get').textContent = `${stats.get} GETs, ${getPerc}%`;
+      methods.querySelector('p.post').textContent = `${stats.post} POSTs, ${postPerc}%`;
+      methods.style.setProperty('--get-perc', getPerc);
+
+      const jsonPerc = ((stats.json / data.length) * 100).toFixed(DECIMAL);
+      const htmlPerc = ((stats.html / data.length) * 100).toFixed(DECIMAL);
+      const formats = document.querySelector('#stats-format');
+      formats.querySelector('p.json').textContent = `${stats.json} JSONs, ${jsonPerc}%`;
+      formats.querySelector('p.html').textContent = `${stats.html} HTMLs, ${htmlPerc}%`;
+      formats.style.setProperty('--json-perc', jsonPerc);
     };
 
     init();
