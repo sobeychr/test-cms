@@ -6,8 +6,8 @@ const CAMEL_CASE_CONFIG = [
 ];
 
 const UPPER_CASE_CONFIG = [
-  /[A-Z\_]+/,
-  { message: 'Expected variable to be uppercased' },
+  /[A-Za-z0-9\_]+/,
+  { message: 'Expected variable to be lowercased, uppercased, numbered or with underscore' },
 ];
 
 export default {

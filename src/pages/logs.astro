@@ -82,20 +82,13 @@ import styles from '@styles/pages/logs.module.scss';
   <section>
     <h2>Stats</h2>
     <div id="stats">
-      <article id="stats-method">
-        <p class="get"></p>
-        <p class="post"></p>
+      <article id="stats-number">
+        <p class="total"></p>
       </article>
-      <article id="stats-delay">
-        <p class="low"></p>
-        <p class="medium"></p>
-        <p class="normal"></p>
-        <p class="high"></p>
-      </article>
-      <article id="stats-format">
-        <p class="json"></p>
-        <p class="html"></p>
-      </article>
+      <article id="stats-method"></article>
+      <article id="stats-delay"></article>
+      <article id="stats-format"></article>
+      <article id="stats-status"></article>
     </div>
   </section>
 
@@ -125,6 +118,7 @@ import styles from '@styles/pages/logs.module.scss';
 
 <script>
   import { API_PREFIX } from '@utils/configs';
+  import { incrementObject } from '@utils/data';
   import { dateToFullString } from '@utils/date';
   import { populateTemplate } from '@utils/dom';
   import { KB } from '@utils/number';
@@ -132,7 +126,6 @@ import styles from '@styles/pages/logs.module.scss';
   import { byteToSizeString } from '@utils/string';
 
   (function () {
-    const DECIMAL = 2;
     const DELAY_LOW = 300;
     const DELAY_MEDIUM = 700;
     const DELAY_HIGH = 1200;
@@ -148,6 +141,27 @@ import styles from '@styles/pages/logs.module.scss';
 
       populateLogs(resp);
       updateStats(resp);
+    };
+
+    const formatCircle = (total, stats, parentElement) => {
+      const backgrounds = [];
+      const entries = [];
+      let prevPercent = 0;
+
+      Object.keys(stats).forEach((key, index) => {
+        const value = stats[key];
+        const percent = ((value / total) * 100).toFixed(2);
+
+        backgrounds.push(`var(--bg-color-${index}) ${prevPercent}%`);
+        prevPercent += parseFloat(percent);
+        backgrounds.push(`var(--bg-color-${index}) ${prevPercent}%`);
+
+        entries.push(`<p class="color-${index}">${value} "${key}", ${percent}%</p>`);
+      });
+
+      parentElement.innerHTML = '';
+      parentElement.insertAdjacentHTML('beforeend', entries.join(''));
+      parentElement.style.setProperty('--conic-background', backgrounds.join(','));
     };
 
     const getData = () => JSON.parse(document.querySelector('#logs-data')?.textContent || '{}');
@@ -264,56 +278,31 @@ import styles from '@styles/pages/logs.module.scss';
 
     const updateStats = (data) => {
       const stats = {
-        delayHigh: 0,
-        delayLow: 0,
-        delayMedium: 0,
-        delayNormal: 0,
-        get: 0,
-        html: 0,
-        json: 0,
-        post: 0,
+        delays: {},
+        formats: {},
+        methods: {},
+        statuses: {},
       };
 
       data.forEach((entry) => {
-        if (entry.method === 'GET') stats.get++;
-        else if (entry.method === 'POST') stats.post++;
+        const delay = entry.delay;
+        if (delay < DELAY_LOW) incrementObject(stats.delays, 'low');
+        else if (delay > DELAY_HIGH) incrementObject(stats.delays, 'high');
+        else if (delay > DELAY_MEDIUM) incrementObject(stats.delays, 'medium');
+        else incrementObject(stats.delays, 'normal');
 
-        if (entry.delay < DELAY_LOW) stats.delayLow++;
-        else if (entry.delay > DELAY_HIGH) stats.delayHigh++;
-        else if (entry.delay > DELAY_MEDIUM) stats.delayMedium++;
-        else stats.delayNormal++;
-
-        if (entry.response?.format === 'json') stats.json++;
-        else if (entry.response?.format === 'html') stats.html++;
+        incrementObject(stats.formats, entry.response?.format);
+        incrementObject(stats.statuses, entry.response?.status);
+        incrementObject(stats.methods, entry.method);
       });
 
-      const lowPerc = ((stats.delayLow / data.length) * 100).toFixed(DECIMAL);
-      const mediumPerc = ((stats.delayMedium / data.length) * 100).toFixed(DECIMAL);
-      const normalPerc = ((stats.delayNormal / data.length) * 100).toFixed(DECIMAL);
-      const highPerc = ((stats.delayHigh / data.length) * 100).toFixed(DECIMAL);
-      const delays = document.querySelector('#stats-delay');
-      delays.querySelector('p.low').textContent = `${stats.delayLow} lows, ${lowPerc}%`;
-      delays.querySelector('p.medium').textContent = `${stats.delayMedium} mediums, ${mediumPerc}%`;
-      delays.querySelector('p.normal').textContent = `${stats.delayNormal} normals, ${normalPerc}%`;
-      delays.querySelector('p.high').textContent = `${stats.delayHigh} highs, ${highPerc}%`;
-      delays.style.setProperty('--low-perc', lowPerc);
-      delays.style.setProperty('--medium-perc', mediumPerc);
-      delays.style.setProperty('--normal-perc', normalPerc);
-      delays.style.setProperty('--high-perc', highPerc);
+      const total = data.length;
+      document.querySelector('#stats-number .total').innerHTML = `${total} total entries`;
 
-      const getPerc = ((stats.get / data.length) * 100).toFixed(DECIMAL);
-      const postPerc = (100 - getPerc).toFixed(DECIMAL);
-      const methods = document.querySelector('#stats-method');
-      methods.querySelector('p.get').textContent = `${stats.get} GETs, ${getPerc}%`;
-      methods.querySelector('p.post').textContent = `${stats.post} POSTs, ${postPerc}%`;
-      methods.style.setProperty('--get-perc', getPerc);
-
-      const jsonPerc = ((stats.json / data.length) * 100).toFixed(DECIMAL);
-      const htmlPerc = ((stats.html / data.length) * 100).toFixed(DECIMAL);
-      const formats = document.querySelector('#stats-format');
-      formats.querySelector('p.json').textContent = `${stats.json} JSONs, ${jsonPerc}%`;
-      formats.querySelector('p.html').textContent = `${stats.html} HTMLs, ${htmlPerc}%`;
-      formats.style.setProperty('--json-perc', jsonPerc);
+      formatCircle(total, stats.delays, document.querySelector('#stats-delay'));
+      formatCircle(total, stats.methods, document.querySelector('#stats-method'));
+      formatCircle(total, stats.formats, document.querySelector('#stats-format'));
+      formatCircle(total, stats.statuses, document.querySelector('#stats-status'));
     };
 
     init();

@@ -1,5 +1,14 @@
 import { isJson } from '@utils/string';
 
+export const incrementObject = (obj: object, key: string) => {
+  if (typeof obj[key] === 'number') {
+    obj[key]++;
+  }
+  else {
+    obj[key] = 1;
+  }
+};
+
 export const iteratorToObj = (data: Iterator): object => {
   const obj = {};
   data.forEach((value, key) => obj[key] = value);
