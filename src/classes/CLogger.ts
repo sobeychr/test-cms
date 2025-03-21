@@ -1,4 +1,4 @@
-import { type ObjectEncodingOptions, readFileSync, writeFileSync } from 'fs';
+import { existsSync, type ObjectEncodingOptions, readFileSync, writeFileSync } from 'fs';
 import { spawnSync } from 'node:child_process';
 import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';
@@ -37,13 +37,23 @@ export class CLogger {
     }
   }
 
-  static getAllLogs(filename: string) {
-    const requestStr = readFileSync(`${LOGS_DIR}${filename}.log`, OPTS_READ);
+  static getAllLogs(filename: string): Array<string> {
+    const path = `${LOGS_DIR}${filename}.log`;
+    if (!existsSync(path)) {
+      return [];
+    }
+
+    const requestStr = readFileSync(path, OPTS_READ);
     return logStrToArray(requestStr);
   }
 
   static getLogs(filename: string, limit: number): Array<string> {
-    const params = [`-n ${limit}`, '-f', `${LOGS_DIR}${filename}.log`];
+    const path = `${LOGS_DIR}${filename}.log`;
+    if (!existsSync(path)) {
+      return [];
+    }
+
+    const params = [`-n ${limit}`, '-f', path];
     const data = spawnSync('tail', params, OPTS_READ);
     const dataStr = (data?.stdout || '');
     return logStrToArray(dataStr);

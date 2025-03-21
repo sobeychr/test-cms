@@ -9,6 +9,7 @@ import styles from '@styles/pages/logs.module.scss';
   <section>
     <form autocomplete="off" id="filters">
       <p>
+        <button type="button" id="update">Update logs</button>
         <button type="reset">Reset filters</button>
       </p>
       <div class={styles['form-row']}>
@@ -85,6 +86,7 @@ import styles from '@styles/pages/logs.module.scss';
       <article id="stats-number">
         <p class="total"></p>
         <p class="error"></p>
+        <p class="time"></p>
       </article>
       <article id="stats-error"></article>
       <article id="stats-method"></article>
@@ -127,7 +129,7 @@ import styles from '@styles/pages/logs.module.scss';
 <script>
   import { API_PREFIX } from '@utils/configs';
   import { incrementObject, totalFromObjectValues } from '@utils/data';
-  import { dateToFullString } from '@utils/date';
+  import { dateToFullString, dateToTimeString } from '@utils/date';
   import { populateTemplate } from '@utils/dom';
   import { KB } from '@utils/number';
   import { useRequest } from '@utils/request';
@@ -222,16 +224,18 @@ import styles from '@styles/pages/logs.module.scss';
     };
 
     const init = () => {
-      document.querySelector('#title')?.addEventListener('click', () => {
-        document.querySelector('#logs-body').innerHTML = '';
-        document.querySelector('#logs-data').innerHTML = '';
+      document.querySelectorAll('#title, #update').forEach((entry) => {
+        entry.addEventListener('click', () => {
+          document.querySelector('#logs-body').innerHTML = '';
+          document.querySelector('#logs-data').innerHTML = '';
 
-        document.querySelector('#stats-delay').removeAttribute('style');
-        document.querySelector('#stats-method').removeAttribute('style');
-        document.querySelector('#stats-format').removeAttribute('style');
-        document.querySelectorAll('#stats p').forEach((entry) => (entry.textContent = ''));
+          document.querySelector('#stats-delay').removeAttribute('style');
+          document.querySelector('#stats-method').removeAttribute('style');
+          document.querySelector('#stats-format').removeAttribute('style');
+          document.querySelectorAll('#stats p').forEach((entry) => (entry.textContent = ''));
 
-        callRequest();
+          callRequest();
+        });
       });
 
       filterForm?.addEventListener('change', () => {
@@ -250,6 +254,11 @@ import styles from '@styles/pages/logs.module.scss';
     };
 
     const populateLogs = (logs) => {
+      if (logs.length === 0) {
+        document.querySelector('#logs-body').textContent = 'no entries';
+        return;
+      }
+
       populateTemplate(
         document.querySelector('#entry') as HTMLTemplateElement,
         document.querySelector('#logs-body') as HTMLElement,
@@ -316,8 +325,11 @@ import styles from '@styles/pages/logs.module.scss';
         incrementObject(stats.methods, entry.method);
       });
 
+      const date = new Date();
       const totalErrors = totalFromObjectValues(stats.errors);
       const total = data.length;
+      document.querySelector('#stats-number .time').textContent =
+        `last request: ${dateToTimeString(date)}`;
       document.querySelector('#stats-number .error').innerHTML = `${totalErrors} errors`;
       document.querySelector('#stats-number .total').innerHTML = `${total} total entries`;
 
