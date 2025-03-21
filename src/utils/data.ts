@@ -50,3 +50,5 @@ export const parseJwt = (token: string) => {
   }
   return JSON.parse(atob(payload));
 };
+
+export const totalFromObjectValues = (obj: object) => Object.values(obj).reduce((acc, value) => (acc += value), 0);

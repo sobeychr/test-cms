@@ -84,7 +84,9 @@ import styles from '@styles/pages/logs.module.scss';
     <div id="stats">
       <article id="stats-number">
         <p class="total"></p>
+        <p class="error"></p>
       </article>
+      <article id="stats-error"></article>
       <article id="stats-method"></article>
       <article id="stats-delay"></article>
       <article id="stats-format"></article>
@@ -112,23 +114,31 @@ import styles from '@styles/pages/logs.module.scss';
         <span>{'{response.format}'}</span>
         <span data-size="{response.size}"></span>
       </p>
+      <p class={styles.error}>
+        <span class={styles['error-code']}>{'{error.code}'}</span>
+        <span class={styles['error-details']}>{'{error.details}'}</span>
+        <span>{'{error.message}'}</span>
+      </p>
+      <p class={styles.info}>{'{info}'}</p>
     </article>
   </template>
 </DefaultLayout>
 
 <script>
   import { API_PREFIX } from '@utils/configs';
-  import { incrementObject } from '@utils/data';
+  import { incrementObject, totalFromObjectValues } from '@utils/data';
   import { dateToFullString } from '@utils/date';
   import { populateTemplate } from '@utils/dom';
   import { KB } from '@utils/number';
   import { useRequest } from '@utils/request';
-  import { byteToSizeString } from '@utils/string';
+  import { byteToSizeString, maxLength } from '@utils/string';
 
   (function () {
     const DELAY_LOW = 300;
     const DELAY_MEDIUM = 700;
     const DELAY_HIGH = 1200;
+
+    const MAX_LABEL = 10;
 
     const filterForm = document.querySelector('#filters');
 
@@ -143,7 +153,8 @@ import styles from '@styles/pages/logs.module.scss';
       updateStats(resp);
     };
 
-    const formatCircle = (total, stats, parentElement) => {
+    const formatCircle = (stats, parentElement) => {
+      const total = totalFromObjectValues(stats);
       const backgrounds = [];
       const entries = [];
       let prevPercent = 0;
@@ -156,7 +167,10 @@ import styles from '@styles/pages/logs.module.scss';
         prevPercent += parseFloat(percent);
         backgrounds.push(`var(--bg-color-${index}) ${prevPercent}%`);
 
-        entries.push(`<p class="color-${index}">${value} "${key}", ${percent}%</p>`);
+        const label = maxLength(key, MAX_LABEL);
+        entries.push(
+          `<p class="color-${index}" title="${key}">${value} "${label}", ${percent}%</p>`,
+        );
       });
 
       parentElement.innerHTML = '';
@@ -279,6 +293,7 @@ import styles from '@styles/pages/logs.module.scss';
     const updateStats = (data) => {
       const stats = {
         delays: {},
+        errors: {},
         formats: {},
         methods: {},
         statuses: {},
@@ -291,18 +306,26 @@ import styles from '@styles/pages/logs.module.scss';
         else if (delay > DELAY_MEDIUM) incrementObject(stats.delays, 'medium');
         else incrementObject(stats.delays, 'normal');
 
+        const errorMessage = entry.error?.message;
+        if (errorMessage) {
+          incrementObject(stats.errors, errorMessage);
+        }
+
         incrementObject(stats.formats, entry.response?.format);
         incrementObject(stats.statuses, entry.response?.status);
         incrementObject(stats.methods, entry.method);
       });
 
+      const totalErrors = totalFromObjectValues(stats.errors);
       const total = data.length;
+      document.querySelector('#stats-number .error').innerHTML = `${totalErrors} errors`;
       document.querySelector('#stats-number .total').innerHTML = `${total} total entries`;
 
-      formatCircle(total, stats.delays, document.querySelector('#stats-delay'));
-      formatCircle(total, stats.methods, document.querySelector('#stats-method'));
-      formatCircle(total, stats.formats, document.querySelector('#stats-format'));
-      formatCircle(total, stats.statuses, document.querySelector('#stats-status'));
+      formatCircle(stats.delays, document.querySelector('#stats-delay'));
+      formatCircle(stats.errors, document.querySelector('#stats-error'));
+      formatCircle(stats.methods, document.querySelector('#stats-method'));
+      formatCircle(stats.formats, document.querySelector('#stats-format'));
+      formatCircle(stats.statuses, document.querySelector('#stats-status'));
     };
 
     init();

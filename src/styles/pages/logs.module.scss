@@ -88,6 +88,22 @@ section {
     }
   }
 
+  .error {
+    color: #f00;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .info {
+    font-style: italic;
+
+    &:empty {
+      display: none;
+    }
+  }
+
   .meta {
     display: grid;
     grid-template: 1fr / 50px 150px 1fr;
@@ -115,6 +131,7 @@ section {
   }
 
   :global(#stats-delay),
+  :global(#stats-error),
   :global(#stats-format),
   :global(#stats-method),
   :global(#stats-status) {

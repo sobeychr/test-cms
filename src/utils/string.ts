@@ -28,4 +28,6 @@ export const isHtml = (text: string) => /^\</.test(text) && /\>$/.test(text);
 
 export const isJson = (text: string) => /^(\[|\{)/.test(text) && /(\]|\})$/.test(text);
 
+export const maxLength = (str: string, maxLength: number) => str.substring(0, Math.min(maxLength, str.length));
+
 export const multiReplace = (str: string, entries: object) => Object.keys(entries).reduce((acc, key) => str.replace(key, entries[key]), str);
