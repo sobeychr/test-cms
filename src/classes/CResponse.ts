@@ -1,4 +1,4 @@
-import { STATUS_TEXT } from '@utils/status';
+import { STATUS_TEXT } from '@utils/configs';
 
 export class CResponse {
   static quickJson(content: object, status: number = 200): Response {

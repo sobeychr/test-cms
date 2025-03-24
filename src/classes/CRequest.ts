@@ -63,7 +63,7 @@ export class CRequest {
       || isJson(responseText) && 'json'
       || '!undefined';
 
-    const postData = this.isPost && await this._request.json() || {};
+    const postData = (this.isPost && await this._request.json()) || {};
     PROTECTED_POST.filter(field => !!postData[field]).forEach(field => { postData[field] = '!secret'; });
 
     const status = this._response?.status;

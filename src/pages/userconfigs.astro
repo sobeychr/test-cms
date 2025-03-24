@@ -23,13 +23,13 @@ const isLight = Astro.cookies.get(COOKIE_DARK_NAME)?.value === '0';
 </DefaultLayout>
 
 <script>
-  import { COOKIE_DARK_DURATION, COOKIE_DARK_NAME } from '@utils/configs';
-  import { setCookie } from '@utils/cookie';
+  import { CCookie } from '@classes/CCookie';
+import { COOKIE_DARK_DURATION, COOKIE_DARK_NAME } from '@utils/configs';
 
   (function () {
     const onChangeDarkMode = ({ after }) => {
       const value = after ? 1 : 0;
-      setCookie(COOKIE_DARK_NAME, value, { maxAge: COOKIE_DARK_DURATION });
+      CCookie.setDocumentCookie(COOKIE_DARK_NAME, value, { maxAge: COOKIE_DARK_DURATION });
 
       const func = value ? 'remove' : 'add';
       document.querySelector('html')?.classList[func]('light');

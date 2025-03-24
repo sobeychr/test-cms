@@ -12,12 +12,12 @@ const DURATIONS = {
   y: DUR_YEAR,
 };
 
-export const getApiDateParam = (value: number | string | null) => {
+export const getApiDateParam = (value: number | string | null): number => {
   const now = parseInt(Date.now() * 0.001, 10);
 
   const nowValue = value === 'now' && now;
 
-  const regArr = /^(-)?(\d+)(h|d|w|m|y)$/.exec(value) || [];
+  const regArr = /^(\+|-)?(\d+)(h|d|w|m|y)$/.exec(value) || [];
   const [, regMulti = '+', regNum, regJump] = regArr;
   const multiplier = regMulti === '+' ? 1 : -1;
   const number = parseInt(regNum, 10) || 0;
@@ -29,15 +29,15 @@ export const getApiDateParam = (value: number | string | null) => {
   return nowValue || regValue || numValue;
 };
 
-export const dateToDateString = (date: Date) => [
+export const dateToDateString = (date: Date): string => [
   date.getFullYear(),
   (date.getMonth() + 1).toString().padStart(2, '0'),
   date.getDate().toString().padStart(2, '0'),
 ].join('-');
 
-export const dateToFullString = (date: Date) => dateToDateString(date) + ' ' + dateToTimeString(date);
+export const dateToFullString = (date: Date): string => dateToDateString(date) + ' ' + dateToTimeString(date);
 
-export const dateToTimeString = (date: Date) => [
+export const dateToTimeString = (date: Date): string => [
   date.getHours().toString().padStart(2, '0'),
   date.getMinutes().toString().padStart(2, '0'),
   date.getSeconds().toString().padStart(2, '0'),

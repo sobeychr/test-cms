@@ -1,6 +1,6 @@
 import { CID } from '@classes/CID';
 import { createSignal } from 'solid-js';
-import { iteratorToObj } from '@utils/data';
+import { iteratorToObj } from '@utils/object';
 import { useRequest } from '@utils/request';
 import styles from './styles.module.scss';
 

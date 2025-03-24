@@ -9,7 +9,7 @@ type useRequestParam = {
   url: string;
 };
 
-export const useRequest = async (params: useRequestParam) => {
+export const useRequest = async (params: useRequestParam): Promise<object | string | null> => {
   const {
     asJson = true,
     getData = {},

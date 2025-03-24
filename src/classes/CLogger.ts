@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';
 import { LOGS_DIR } from '@utils/configs';
-import { logStrToArray } from '@utils/data';
+import { isJson } from '@utils/string';
 
 const OPTS_READ = { encoding: 'utf-8', timeout: 250 };
 const OPTS_WRITE = { encoding: 'utf8', flag: 'a' } as ObjectEncodingOptions;
@@ -37,17 +37,17 @@ export class CLogger {
     }
   }
 
-  static getAllLogs(filename: string): Array<string> {
+  static getAllLogs(filename: string): Array<object> {
     const path = `${LOGS_DIR}${filename}.log`;
     if (!existsSync(path)) {
       return [];
     }
 
     const requestStr = readFileSync(path, OPTS_READ);
-    return logStrToArray(requestStr);
+    return this._logStringToArray(requestStr);
   }
 
-  static getLogs(filename: string, limit: number): Array<string> {
+  static getLogs(filename: string, limit: number): Array<object> {
     const path = `${LOGS_DIR}${filename}.log`;
     if (!existsSync(path)) {
       return [];
@@ -56,6 +56,10 @@ export class CLogger {
     const params = [`-n ${limit}`, '-f', path];
     const data = spawnSync('tail', params, OPTS_READ);
     const dataStr = (data?.stdout || '');
-    return logStrToArray(dataStr);
+    return this._logStringToArray(dataStr);
+  }
+
+  static _logStringToArray(filestring: string): Array<object> {
+    return filestring.split('\n').filter(isJson).map(line => JSON.parse(line));
   }
 }

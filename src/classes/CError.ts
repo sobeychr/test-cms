@@ -1,5 +1,5 @@
 import { IS_DEV } from '@utils/configs';
-import { STATUS_TEXT } from '@utils/status';
+import { STATUS_TEXT } from '@utils/configs';
 import { CResponse } from './CResponse';
 
 type CErrorParam = {
