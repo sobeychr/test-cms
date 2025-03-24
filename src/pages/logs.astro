@@ -117,8 +117,8 @@ import styles from '@styles/pages/logs.module.scss';
         <span data-size="{response.size}"></span>
       </p>
       <p class={styles.error}>
-        <span class={styles['error-code']}>{'{error.code}'}</span>
-        <span class={styles['error-details']}>{'{error.details}'}</span>
+        <span>{'{error.code}'}</span>
+        <span>{'{error.name}'}</span>
         <span>{'{error.message}'}</span>
       </p>
       <p class={styles.info}>{'{info}'}</p>
@@ -315,9 +315,9 @@ import styles from '@styles/pages/logs.module.scss';
         else if (delay > DELAY_MEDIUM) incrementObject(stats.delays, 'medium');
         else incrementObject(stats.delays, 'normal');
 
-        const errorMessage = entry.error?.message;
-        if (errorMessage) {
-          incrementObject(stats.errors, errorMessage);
+        const errorName = entry.error?.name;
+        if (errorName) {
+          incrementObject(stats.errors, errorName);
         }
 
         incrementObject(stats.formats, entry.response?.format);

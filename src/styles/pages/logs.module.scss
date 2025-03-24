@@ -14,7 +14,7 @@ section {
   margin: $SECTION_SPACE 0;
 
   &+section {
-    border-top: 1px solid var(--color-text);
+    border-top: 3px solid var(--color-text);
     padding-top: calc($SECTION_SPACE * 0.5);
   }
 }
@@ -85,6 +85,10 @@ section {
 
     &:global(.hidden) {
       display: none;
+    }
+
+    &:nth-child(3n + 1):not(:first-of-type) {
+      border-top: 1px solid var(--color-text);
     }
   }
 

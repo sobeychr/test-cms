@@ -13,5 +13,5 @@
 
 @mixin animationLoading {
   animation: animLoading 1.5s linear 0s infinite;
-  mask-image: url('./icons/spin.svg');
+  mask-image: url('/icons/spin.svg');
 }

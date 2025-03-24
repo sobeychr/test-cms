@@ -10,11 +10,11 @@ const isSameLink = CRequest.pathname === href;
 
 {
   isSameLink ? (
-    <span class={`${styles.span} ${classStr}`} {...rest}>
+    <span class={`link ${styles.span} ${classStr}`} {...rest}>
       <slot />
     </span>
   ) : (
-    <a class={`${styles.link} ${classStr}`} href={href} {...rest}>
+    <a class={`link ${styles.link} ${classStr}`} href={href} {...rest}>
       <slot />
     </a>
   )

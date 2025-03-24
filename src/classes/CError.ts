@@ -55,6 +55,7 @@ export class CError implements CErrorParam {
 
   static baseErrorToLog(error: Error, uuid: string): string {
     const data = {
+      code: 500,
       columnNumber: error.columnNumber,
       fileName: error.fileName,
       lineNumber: error.lineNumber,

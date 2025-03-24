@@ -32,7 +32,7 @@
   }
 
   &:not(.loading) .submit::after {
-    mask-image: url('./icons/rightArrow.svg');
+    mask-image: url('/icons/rightArrow.svg');
   }
 
   &.loading .submit::after {
