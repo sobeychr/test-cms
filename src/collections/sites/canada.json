@@ -1,11 +1,12 @@
 {
-  "id": 2,
-  "name": "canada only",
-  "country": [
+  "countries": [
     "CAN"
   ],
-  "lang": null,
-  "starttime": null,
-  "endtime": null,
-  "region": null
+  "end": null,
+  "id": 2,
+  "langs": null,
+  "name": "canada mock",
+  "region": null,
+  "slug": 2,
+  "start": null
 }

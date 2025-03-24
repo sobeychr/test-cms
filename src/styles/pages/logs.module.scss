@@ -7,16 +7,9 @@ $COLOR_MEDIUM: #ff0;
 $COLOR_NORMAL: #909090;
 $COLOR_HIGH: #f00;
 $COLORS: #2196f3, #8bc34a, #9c27b0, #009688, #2c387e, #e91e63;
-$SECTION_SPACE: 1.2rem;
 
 section {
   font-size: 0.8rem;
-  margin: $SECTION_SPACE 0;
-
-  &+section {
-    border-top: 3px solid var(--color-text);
-    padding-top: calc($SECTION_SPACE * 0.5);
-  }
 }
 
 :global {

@@ -1,0 +1,88 @@
+@use '@t-styles/mixins.scss' as tMixins;
+
+section {
+  font-size: 0.8rem;
+}
+
+:global(#filters) {
+  margin: 1.5rem;
+
+  .form-row {
+    align-items: center;
+    display: flex;
+    margin: 0.4em 0;
+
+    &>label {
+      margin-right: 0.6rem;
+    }
+
+    &>span,
+    &:not(:has(span)) label {
+      font-weight: bold;
+      margin-right: 1rem;
+    }
+
+    &>label:not(:first-of-type) {
+      margin-left: 0.6rem;
+    }
+
+    :global(.toggle-icon) {
+      margin: 0 0.6rem;
+    }
+  }
+}
+
+:global(#sites-body) {
+  font-size: 0.8rem;
+
+  .entry {
+    padding: 1em;
+
+    &:hover {
+      background-color: var(--color-bg-dark);
+    }
+
+    &:global(.hidden) {
+      display: none;
+    }
+
+    &:nth-child(3n + 1):not(:first-of-type) {
+      border-top: 1px solid var(--color-text);
+    }
+  }
+
+  .id {
+    color: #2196f3;
+    font-weight: bold;
+  }
+
+  .name {
+    color: #8bc34a;
+  }
+
+  .title {
+    font-size: 1.5em;
+  }
+}
+
+:global(#title) {
+  cursor: pointer;
+
+  /* stylelint-disable-next-line no-descending-specificity */
+  &::after {
+    --after-icon-height: 0.65em;
+
+    margin-left: 0.5em;
+    opacity: 0;
+
+    @include tMixins.animationLoading;
+  }
+
+  &:has(~section :global(#logs-body):empty) {
+    pointer-events: none;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}

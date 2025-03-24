@@ -1,0 +1,21 @@
+---
+import { CSite } from '@classes/CSite';
+import DefaultLayout from '@layouts/Default.astro';
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/404');
+}
+
+const site = await CSite.getEntryFromCollection(id);
+if (!site) {
+  return Astro.redirect('/404');
+}
+
+console.log('site entry', site);
+---
+
+<DefaultLayout>
+  <h1>{site.id} - {site.name}</h1>
+</DefaultLayout>;

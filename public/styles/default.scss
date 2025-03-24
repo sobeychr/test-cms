@@ -74,6 +74,17 @@ p {
   padding: 0;
 }
 
+section {
+  --section-space: 1.2rem;
+
+  margin: var(--section-space) 0;
+
+  &+section {
+    border-top: 3px solid var(--color-text);
+    padding-top: calc(var(--section-space) * 0.5);
+  }
+}
+
 .after-icon::after {
   aspect-ratio: 1;
   background: var(--color-text);

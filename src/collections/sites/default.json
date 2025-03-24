@@ -1,9 +1,10 @@
 {
+  "countries": null,
+  "end": null,
   "id": 1,
+  "langs": null,
   "name": "default",
-  "country": null,
-  "lang": null,
-  "starttime": null,
-  "endtime": null,
-  "region": null
+  "region": null,
+  "slug": 1,
+  "start": null
 }
