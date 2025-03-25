@@ -1,6 +1,6 @@
 import { listing } from '@scripts/listing';
 
-const filterFunc = (data, filters) => {
+const onFilter = (data, filters) => {
   let newData = data;
 
   const name = filters.get('name') || '';
@@ -11,14 +11,13 @@ const filterFunc = (data, filters) => {
   return newData;
 };
 
-const getShowIds = data => {
+const getShowSelector = data => {
   const showId = data.map((entry) => entry.id);
-  const showSelector = showId.map((entry) => `[data-id="${entry}"]`);
-
-  return {
-    showId,
-    showSelector,
-  };
+  return showId.map((entry) => `[data-id="${entry}"]`);
 };
 
-listing.init({ endpoint: 'v2/site', filterFunc, getShowIds });
+listing({
+  endpoint: 'v2/site',
+  getShowSelector,
+  onFilter,
+});

@@ -18,6 +18,8 @@ const { title } = Astro.props;
     </form>
   </section>
 
+  <slot name="stats" />
+
   <section>
     <h2>Entries<span id="stats-total"></span></h2>
     <div class={styles['content-body']} id="content-body"></div>

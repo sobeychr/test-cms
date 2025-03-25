@@ -1,19 +1,42 @@
 import { API_PREFIX } from '@utils/configs';
+import { dateToFullString } from '@utils/date';
 import { populateTemplate } from '@utils/dom';
 import { useRequest } from '@utils/request';
+import { byteToSizeString } from '@utils/string';
 
-export const listing = (function () {
-  const configs = { endpoint: null, filterFunc: null, getShowIds: null };
+interface listingParams {
+  endpoint: string;
+  getShowSelector: (data: Array<object>) => string;
+  onPostCallRequest?: (data: Array<object>) => void;
+  onPreCallRequest?: () => void;
+  onFilter: (data: Array<object>, filters: FormData) => Array<object>;
+  onPopulateContent?: (data: Array<object>) => void;
+  showTotal?: boolean;
+};
+
+export const listing = (params: listingParams) => {
+  const {
+    endpoint,
+    getShowSelector,
+    onFilter,
+    onPopulateContent,
+    onPostCallRequest,
+    onPreCallRequest,
+    showTotal = true,
+  } = params;
   const filterForm = document.querySelector('#filters');
 
   const callRequest = async () => {
     const resp = await useRequest({
-      url: API_PREFIX.concat(configs.endpoint),
+      url: API_PREFIX.concat(endpoint),
     });
 
     document.querySelector('#content-data').textContent = JSON.stringify(resp);
 
     populateContent(resp);
+    if (typeof onPostCallRequest === 'function') {
+      onPostCallRequest(resp);
+    }
   };
 
   const getData = () => JSON.parse(document.querySelector('#content-data')?.textContent || '{}');
@@ -21,20 +44,18 @@ export const listing = (function () {
   const getFilteredData = () => {
     const filters = new FormData(filterForm);
     const data = getData();
-    const filterFunc = configs.filterFunc;
-    const newData = typeof filterFunc === 'function' && filterFunc(data, filters) || data;
+    const newData = typeof onFilter === 'function' && onFilter(data, filters) || data;
     return newData;
   };
 
-  const init = props => {
-    configs.endpoint = props.endpoint;
-    configs.filterFunc = props.filterFunc;
-    configs.getShowIds = props.getShowIds;
-
+  const init = () => {
     document.querySelectorAll('#title, #update').forEach((entry) => {
       entry.addEventListener('click', () => {
         document.querySelector('#content-body').innerHTML = '';
         document.querySelector('#content-data').innerHTML = '';
+        if (typeof onPreCallRequest === 'function') {
+          onPreCallRequest();
+        }
         callRequest();
       });
     });
@@ -42,6 +63,9 @@ export const listing = (function () {
     filterForm?.addEventListener('change', () => {
       const newData = getFilteredData();
       updateFilter(newData);
+      if (typeof onPostCallRequest === 'function') {
+        onPostCallRequest(newData);
+      }
     });
 
     filterForm?.addEventListener('reset', () => {
@@ -65,11 +89,27 @@ export const listing = (function () {
       entries,
     );
 
-    document.querySelector('#stats-total').textContent = `(${entries.length})`;
+    if (showTotal) {
+      document.querySelector('#stats-total').textContent = `(${entries.length})`;
+    }
+
+    document.querySelectorAll('#content-body span[data-date]').forEach((entry) => {
+      const date = new Date(entry.getAttribute('data-date') || '');
+      entry.textContent = dateToFullString(date);
+    });
+
+    document.querySelectorAll('#content-body span[data-size]').forEach((entry) => {
+      const size = parseInt(entry.getAttribute('data-size'), 10) || 0;
+      entry.textContent = byteToSizeString(size);
+    });
+
+    if (typeof onPopulateContent === 'function') {
+      onPopulateContent(entries);
+    }
   };
 
   const updateFilter = (data) => {
-    const { showSelector } = configs.getShowIds(data);
+    const showSelector = getShowSelector(data);
 
     document
       .querySelectorAll(`#content-body .entry:where(${showSelector.join(', ')})`)
@@ -80,7 +120,5 @@ export const listing = (function () {
       .forEach((entry) => entry.classList.add('hidden'));
   };
 
-  return {
-    init,
-  };
-})();
+  init();
+};

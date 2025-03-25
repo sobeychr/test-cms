@@ -1,9 +1,14 @@
 ---
 import Listing from '@layouts/Listing.astro';
+import { getParsedCollection } from '@utils/collection';
 import styles from '@styles/pages/site-list.module.scss';
+
+const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
+const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);
+const dataRegions = await getParsedCollection('regions', ({ data }) => data.name);
 ---
 
-<Listing title="Logs">
+<Listing title="Sites">
   <slot slot="filters">
     <p>
       <label for="name">Name:</label>
@@ -11,16 +16,28 @@ import styles from '@styles/pages/site-list.module.scss';
     </p>
     <p>
       <label for="region">Region:</label>
-      <input type="text" id="region" name="region" />
+      <input type="text" id="region" list="data-region" name="region" />
     </p>
     <p>
       <label for="countries">Countries (split by comma ","):</label>
-      <input type="text" id="countries" name="countries" />
+      <input type="text" id="countries" list="data-country" name="countries" />
     </p>
     <p>
       <label for="languages">Languages (split by comma ","):</label>
-      <input type="text" id="languages" name="languages" />
+      <input type="text" id="languages" list="data-language" name="languages" />
     </p>
+
+    <datalist id="data-country">
+      {dataCountries.map((entry) => <option value={entry} />)}
+    </datalist>
+
+    <datalist id="data-language">
+      {dataLanguages.map((entry) => <option value={entry} />)}
+    </datalist>
+
+    <datalist id="data-region">
+      {dataRegions.map((entry) => <option value={entry} />)}
+    </datalist>
   </slot>
 
   <article slot="entry" class={`${styles.entry} entry`} data-id="{id}">

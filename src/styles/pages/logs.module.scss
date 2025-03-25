@@ -1,16 +1,10 @@
 @use 'sass:list' as list;
-@use 'sass:string' as string;
-@use '@t-styles/mixins.scss' as tMixins;
 
 $COLOR_LOW: #0f0;
 $COLOR_MEDIUM: #ff0;
 $COLOR_NORMAL: #909090;
 $COLOR_HIGH: #f00;
 $COLORS: #2196f3, #8bc34a, #9c27b0, #009688, #2c387e, #e91e63;
-
-section {
-  font-size: 0.8rem;
-}
 
 :global {
   .low {
@@ -38,51 +32,19 @@ section {
   }
 }
 
-:global(#filters) {
-  margin: 1.5rem;
+.entry {
+  padding: 1em;
 
-  .form-row {
-    align-items: center;
-    display: flex;
-    margin: 0.4em 0;
-
-    &>label {
-      margin-right: 0.6rem;
-    }
-
-    &>span,
-    &:not(:has(span)) label {
-      font-weight: bold;
-      margin-right: 1rem;
-    }
-
-    &>label:not(:first-of-type) {
-      margin-left: 0.6rem;
-    }
-
-    :global(.toggle-icon) {
-      margin: 0 0.6rem;
-    }
+  &:hover {
+    background-color: var(--color-bg-dark);
   }
-}
 
-:global(#logs-body) {
-  font-size: 0.7rem;
+  &:global(.hidden) {
+    display: none;
+  }
 
-  .entry {
-    padding: 1em;
-
-    &:hover {
-      background-color: var(--color-bg-dark);
-    }
-
-    &:global(.hidden) {
-      display: none;
-    }
-
-    &:nth-child(3n + 1):not(:first-of-type) {
-      border-top: 1px solid var(--color-text);
-    }
+  &:nth-child(3n + 1):not(:first-of-type) {
+    border-top: 1px solid var(--color-text);
   }
 
   .error {
@@ -119,12 +81,13 @@ section {
   }
 }
 
+
 :global(#stats) {
   display: flex;
   flex-flow: row nowrap;
 
   &>article {
-    margin: 0 $SECTION_SPACE;
+    margin: 0 1em;
   }
 
   :global(#stats-delay),
@@ -148,27 +111,5 @@ section {
     $index: list.index($COLORS, $color) - 1;
 
     --bg-color-#{$index}: #{$color};
-  }
-}
-
-:global(#title) {
-  cursor: pointer;
-
-  /* stylelint-disable-next-line no-descending-specificity */
-  &::after {
-    --after-icon-height: 0.65em;
-
-    margin-left: 0.5em;
-    opacity: 0;
-
-    @include tMixins.animationLoading;
-  }
-
-  &:has(~section :global(#logs-body):empty) {
-    pointer-events: none;
-
-    &::after {
-      opacity: 1;
-    }
   }
 }

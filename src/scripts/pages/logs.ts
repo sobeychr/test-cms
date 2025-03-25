@@ -1,29 +1,14 @@
-import { API_PREFIX } from '@utils/configs';
-import { dateToFullString, dateToTimeString } from '@utils/date';
-import { populateTemplate } from '@utils/dom';
+import { listing } from '@scripts/listing';
+import { dateToTimeString } from '@utils/date';
 import { KB } from '@utils/number';
 import { incrementObject, totalFromObjectValues } from '@utils/object';
-import { useRequest } from '@utils/request';
-import { byteToSizeString, maxLength } from '@utils/string';
+import { maxLength } from '@utils/string';
 
 const DELAY_LOW = 300;
 const DELAY_MEDIUM = 700;
 const DELAY_HIGH = 1200;
 
 const MAX_LABEL = 10;
-
-const filterForm = document.querySelector('#filters');
-
-const callRequest = async () => {
-  const resp = await useRequest({
-    url: `${API_PREFIX}v2/logs`,
-  });
-
-  document.querySelector('#logs-data').textContent = JSON.stringify(resp);
-
-  populateLogs(resp);
-  updateStats(resp);
-};
 
 const formatCircle = (stats, parentElement) => {
   const total = totalFromObjectValues(stats);
@@ -50,11 +35,12 @@ const formatCircle = (stats, parentElement) => {
   parentElement.style.setProperty('--conic-background', backgrounds.join(','));
 };
 
-const getData = () => JSON.parse(document.querySelector('#logs-data')?.textContent || '{}');
+const getShowSelector = (data) => {
+  const showUuid = data.map((entry) => entry.uuid);
+  return showUuid.map((entry) => `[data-uuid="${entry}"]`);
+};
 
-const getFilteredData = () => {
-  const filters = new FormData(filterForm);
-  const data = getData();
+const onFilter = (data, filters) => {
   let newData = data;
 
   const methods = filters.getAll('method') || [];
@@ -93,83 +79,7 @@ const getFilteredData = () => {
   return newData;
 };
 
-const init = () => {
-  document.querySelectorAll('#title, #update').forEach((entry) => {
-    entry.addEventListener('click', () => {
-      document.querySelector('#logs-body').innerHTML = '';
-      document.querySelector('#logs-data').innerHTML = '';
-
-      document.querySelector('#stats-delay').removeAttribute('style');
-      document.querySelector('#stats-method').removeAttribute('style');
-      document.querySelector('#stats-format').removeAttribute('style');
-      document.querySelectorAll('#stats p').forEach((entry) => (entry.textContent = ''));
-
-      callRequest();
-    });
-  });
-
-  filterForm?.addEventListener('change', () => {
-    const newData = getFilteredData();
-    updateFilter(newData);
-    updateStats(newData);
-  });
-
-  filterForm?.addEventListener('reset', () => {
-    document.querySelectorAll('#logs-body .entry.hidden').forEach((entry) => {
-      entry.classList.remove('hidden');
-    });
-  });
-
-  callRequest();
-};
-
-const populateLogs = (logs) => {
-  if (logs.length === 0) {
-    document.querySelector('#logs-body').textContent = 'no entries';
-    return;
-  }
-
-  populateTemplate(
-    document.querySelector('#entry') as HTMLTemplateElement,
-    document.querySelector('#logs-body') as HTMLElement,
-    logs,
-  );
-
-  document.querySelectorAll('#logs-body span[data-date]').forEach((entry) => {
-    const date = new Date(entry.getAttribute('data-date') || '');
-    entry.textContent = dateToFullString(date);
-  });
-
-  document.querySelectorAll('#logs-body span[data-size]').forEach((entry) => {
-    const size = parseInt(entry.getAttribute('data-size'), 10) || 0;
-    entry.textContent = byteToSizeString(size);
-  });
-
-  document.querySelectorAll('#logs-body span[data-time]').forEach((entry) => {
-    const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
-    const className =
-      (time < DELAY_LOW && 'low') ||
-      (time > DELAY_HIGH && 'high') ||
-      (time > DELAY_MEDIUM && 'medium') ||
-      'normal';
-
-    entry.classList.add(className);
-  });
-};
-
-const updateFilter = (data) => {
-  const showUuid = data.map((entry) => entry.uuid);
-  const showSelector = showUuid.map((entry) => `[data-uuid="${entry}"]`);
-  document
-    .querySelectorAll(`#logs-body .entry:where(${showSelector.join(', ')})`)
-    .forEach((entry) => entry.classList.remove('hidden'));
-
-  document
-    .querySelectorAll(`#logs-body .entry:not(:where(${showSelector.join(', ')}))`)
-    .forEach((entry) => entry.classList.add('hidden'));
-};
-
-const updateStats = (data) => {
+const onPostCallRequest = (data) => {
   const stats = {
     delays: {},
     errors: {},
@@ -210,4 +120,32 @@ const updateStats = (data) => {
   formatCircle(stats.statuses, document.querySelector('#stats-status'));
 };
 
-init();
+const onPreCallRequest = () => {
+  document.querySelector('#stats-delay').removeAttribute('style');
+  document.querySelector('#stats-method').removeAttribute('style');
+  document.querySelector('#stats-format').removeAttribute('style');
+  document.querySelectorAll('#stats p').forEach((entry) => (entry.textContent = ''));
+};
+
+const onPopulateContent = () => {
+  document.querySelectorAll('#content-body span[data-time]').forEach((entry) => {
+    const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
+    const className =
+      (time < DELAY_LOW && 'low') ||
+      (time > DELAY_HIGH && 'high') ||
+      (time > DELAY_MEDIUM && 'medium') ||
+      'normal';
+
+    entry.classList.add(className);
+  });
+};
+
+listing({
+  endpoint: 'v2/logs',
+  getShowSelector,
+  onFilter,
+  onPopulateContent,
+  onPostCallRequest,
+  onPreCallRequest,
+  showTotal: false,
+});
