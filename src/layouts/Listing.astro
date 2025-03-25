@@ -21,7 +21,7 @@ const { title } = Astro.props;
   <slot name="stats" />
 
   <section>
-    <h2>Entries<span id="stats-total"></span></h2>
+    <h2>Entries <span id="stats-total"></span></h2>
     <div class={styles['content-body']} id="content-body"></div>
   </section>
 
@@ -32,7 +32,4 @@ const { title } = Astro.props;
   </template>
 </DefaultLayout>
 
-<style src={styles}></style>
-<slot name="styles" />
 <script src="@scripts/listing.ts"></script>
-<slot name="scripts" />

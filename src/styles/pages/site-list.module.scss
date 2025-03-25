@@ -1,6 +1,10 @@
-.entry {
-  padding: 1em;
+:global(#content-body) {
+  display: flex;
+  flex-flow: column wrap;
+}
 
+.entry {
+  // width: 20%;
   .id {
     color: #2196f3;
     font-weight: bold;
@@ -13,4 +17,9 @@
   .title {
     font-size: 1.5em;
   }
+}
+
+.filter-add {
+  margin-left: 1em;
+  width: 4em;
 }

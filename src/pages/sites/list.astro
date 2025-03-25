@@ -20,23 +20,45 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data.name
     </p>
     <p>
       <label for="countries">Countries (split by comma ","):</label>
-      <input type="text" id="countries" list="data-country" name="countries" />
+      <input type="text" id="countries" name="countries" />
+      <input
+        type="text"
+        class={styles['filter-add']}
+        id="add-country"
+        list="data-country"
+        name="add-country"
+      />
     </p>
     <p>
       <label for="languages">Languages (split by comma ","):</label>
-      <input type="text" id="languages" list="data-language" name="languages" />
+      <input type="text" id="languages" name="languages" />
+      <input
+        type="text"
+        class={styles['filter-add']}
+        id="add-language"
+        list="data-language"
+        name="add-language"
+      />
+    </p>
+    <p>
+      <label for="start">Start:</label>
+      <input type="datetime-local" id="start" name="start" />
+    </p>
+    <p>
+      <label for="end">End:</label>
+      <input type="datetime-local" id="end" name="end" />
     </p>
 
     <datalist id="data-country">
-      {dataCountries.map((entry) => <option value={entry} />)}
+      {dataCountries.sort().map((entry) => <option value={entry} />)}
     </datalist>
 
     <datalist id="data-language">
-      {dataLanguages.map((entry) => <option value={entry} />)}
+      {dataLanguages.sort().map((entry) => <option value={entry} />)}
     </datalist>
 
     <datalist id="data-region">
-      {dataRegions.map((entry) => <option value={entry} />)}
+      {dataRegions.sort().map((entry) => <option value={entry} />)}
     </datalist>
   </slot>
 

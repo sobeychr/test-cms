@@ -33,8 +33,6 @@ $COLORS: #2196f3, #8bc34a, #9c27b0, #009688, #2c387e, #e91e63;
 }
 
 .entry {
-  padding: 1em;
-
   &:hover {
     background-color: var(--color-bg-dark);
   }

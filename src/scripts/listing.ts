@@ -11,7 +11,6 @@ interface listingParams {
   onPreCallRequest?: () => void;
   onFilter: (data: Array<object>, filters: FormData) => Array<object>;
   onPopulateContent?: (data: Array<object>) => void;
-  showTotal?: boolean;
 };
 
 export const listing = (params: listingParams) => {
@@ -22,7 +21,6 @@ export const listing = (params: listingParams) => {
     onPopulateContent,
     onPostCallRequest,
     onPreCallRequest,
-    showTotal = true,
   } = params;
   const filterForm = document.querySelector('#filters');
 
@@ -89,9 +87,7 @@ export const listing = (params: listingParams) => {
       entries,
     );
 
-    if (showTotal) {
-      document.querySelector('#stats-total').textContent = `(${entries.length})`;
-    }
+    document.querySelector('#stats-total').textContent = `(${entries.length})`;
 
     document.querySelectorAll('#content-body span[data-date]').forEach((entry) => {
       const date = new Date(entry.getAttribute('data-date') || '');
@@ -118,6 +114,8 @@ export const listing = (params: listingParams) => {
     document
       .querySelectorAll(`#content-body .entry:not(:where(${showSelector.join(', ')}))`)
       .forEach((entry) => entry.classList.add('hidden'));
+
+    document.querySelector('#stats-total').textContent = `(${data.length})`;
   };
 
   init();
