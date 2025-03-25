@@ -5,20 +5,20 @@ const onFilter = (data, filters) => {
   const addCountry = filters.get('add-country') || '';
   if (addCountry) {
     onUpdate({
-      fromInput: document.querySelector('#add-country'),
-      toInput: document.querySelector('#countries'),
       field: 'countries',
       filters,
+      fromInput: document.querySelector('#add-country'),
+      toInput: document.querySelector('#countries'),
     });
   }
 
   const addLanguage = filters.get('add-language') || '';
   if (addLanguage) {
     onUpdate({
-      fromInput: document.querySelector('#add-language'),
-      toInput: document.querySelector('#languages'),
       field: 'languages',
       filters,
+      fromInput: document.querySelector('#add-language'),
+      toInput: document.querySelector('#languages'),
     });
   }
 
@@ -56,12 +56,18 @@ const onFilter = (data, filters) => {
   return newData;
 };
 
+type onUpdateParam = {
+  field: string;
+  filters: FormData;
+  fromInput: HTMLInputElement;
+  toInput: HTMLInputElement;
+};
 const onUpdate = ({
   field,
   filters,
   fromInput,
   toInput,
-}) => {
+}: onUpdateParam): void => {
   const fromValue = fromInput.value;
   const toValue = toInput.value.toString();
   const newValue = [...toValue.split(','), fromValue].filter(String);
@@ -72,7 +78,7 @@ const onUpdate = ({
   filters.append(field, fromValue);
 };
 
-const getShowSelector = data => {
+const getShowSelector = (data: Array<object>): Array<string> => {
   const showId = data.map((entry) => entry.id);
   return showId.map((entry) => `[data-id="${entry}"]`);
 };

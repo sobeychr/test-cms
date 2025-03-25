@@ -8,6 +8,8 @@ node_modules/
 .env
 logs/**/*.log
 
+src/collections/**/mocks/**/*
+
 docker-compose.yaml
 
 npm-debug.log*

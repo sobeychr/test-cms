@@ -29,11 +29,11 @@ export class CSite implements CSiteParam {
     this.start = data.start || null;
   }
 
-  static async getEntryFromCollection(id: number) {
+  static async getEntryFromCollection(id: number): Promise<CSite> {
     return await getParsedEntry('sites', id, data => new CSite(data));
   }
 
-  static async getListFromCollection() {
+  static async getListFromCollection(): Promise<Array<CSite>> {
     return await getParsedCollection('sites', ({ data }) => new CSite(data));
   }
 }

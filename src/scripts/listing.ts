@@ -6,7 +6,7 @@ import { byteToSizeString } from '@utils/string';
 
 interface listingParams {
   endpoint: string;
-  getShowSelector: (data: Array<object>) => string;
+  getShowSelector: (data: Array<object>) => Array<string>;
   onPostCallRequest?: (data: Array<object>) => void;
   onPreCallRequest?: () => void;
   onFilter: (data: Array<object>, filters: FormData) => Array<object>;
@@ -105,14 +105,14 @@ export const listing = (params: listingParams) => {
   };
 
   const updateFilter = (data) => {
-    const showSelector = getShowSelector(data);
+    const showSelector = getShowSelector(data).join(', ');
 
     document
-      .querySelectorAll(`#content-body .entry:where(${showSelector.join(', ')})`)
+      .querySelectorAll(`#content-body .entry:where(${showSelector})`)
       .forEach((entry) => entry.classList.remove('hidden'));
 
     document
-      .querySelectorAll(`#content-body .entry:not(:where(${showSelector.join(', ')}))`)
+      .querySelectorAll(`#content-body .entry:not(:where(${showSelector}))`)
       .forEach((entry) => entry.classList.add('hidden'));
 
     document.querySelector('#stats-total').textContent = `(${data.length})`;
