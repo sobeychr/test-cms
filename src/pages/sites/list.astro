@@ -1,68 +1,51 @@
 ---
-import DefaultLayout from '@layouts/Default.astro';
+import Listing from '@layouts/Listing.astro';
 import styles from '@styles/pages/site-list.module.scss';
 ---
 
-<DefaultLayout>
-  <h1 class="after-icon" id="title">Logs</h1>
+<Listing title="Logs">
+  <slot slot="filters">
+    <p>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" />
+    </p>
+    <p>
+      <label for="region">Region:</label>
+      <input type="text" id="region" name="region" />
+    </p>
+    <p>
+      <label for="countries">Countries (split by comma ","):</label>
+      <input type="text" id="countries" name="countries" />
+    </p>
+    <p>
+      <label for="languages">Languages (split by comma ","):</label>
+      <input type="text" id="languages" name="languages" />
+    </p>
+  </slot>
 
-  <section>
-    <form autocomplete="off" id="filters">
-      <p>
-        <button type="button" id="update">Update logs</button>
-        <button type="reset">Reset filters</button>
-      </p>
-      <p class={styles['form-row']}>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" />
-      </p>
-      <p class={styles['form-row']}>
-        <label for="region">Region:</label>
-        <input type="text" id="region" name="region" />
-      </p>
-      <p class={styles['form-row']}>
-        <label for="countries">Countries (split by comma ","):</label>
-        <input type="text" id="countries" name="countries" />
-      </p>
-      <p class={styles['form-row']}>
-        <label for="languages">Languages (split by comma ","):</label>
-        <input type="text" id="languages" name="languages" />
-      </p>
-    </form>
-  </section>
-
-  <section>
-    <h2>Entries<span id="stats-total"></span></h2>
-    <div id="sites-body"></div>
-  </section>
-
-  <script id="sites-data" type="application/json"></script>
-
-  <template id="entry">
-    <article class={`${styles.entry} entry`} data-id="{id}">
-      <p class={styles.title}>
-        <span class={styles.id}>{'{id}'}</span>
-        <span class={styles.name}>{'{name}'}</span>
-      </p>
-      <p>
-        Dates:
-        <span class={styles.start}>{'{start}'}</span>
-        <span class={styles.end}>{'{end}'}</span>
-      </p>
-      <p>
-        Region:
-        <span class={styles.region}>{'{region}'}</span>
-      </p>
-      <p>
-        Countries:
-        <span class={styles.countries}>{'{countries}'}</span>
-      </p>
-      <p>
-        Languages:
-        <span class={styles.langs}>{'{langs}'}</span>
-      </p>
-    </article>
-  </template>
-</DefaultLayout>
+  <article slot="entry" class={`${styles.entry} entry`} data-id="{id}">
+    <p class={styles.title}>
+      <span class={styles.id}>{'{id}'}</span>
+      <span class={styles.name}>{'{name}'}</span>
+    </p>
+    <p>
+      Dates:
+      <span class={styles.start}>{'{start}'}</span>
+      <span class={styles.end}>{'{end}'}</span>
+    </p>
+    <p>
+      Region:
+      <span class={styles.region}>{'{region}'}</span>
+    </p>
+    <p>
+      Countries:
+      <span class={styles.countries}>{'{countries}'}</span>
+    </p>
+    <p>
+      Languages:
+      <span class={styles.langs}>{'{langs}'}</span>
+    </p>
+  </article>
+</Listing>
 
 <script src="@scripts/pages/site-list.ts"></script>
