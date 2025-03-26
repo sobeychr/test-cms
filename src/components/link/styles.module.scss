@@ -11,20 +11,6 @@
 
     text-decoration: underline;
   }
-
-  &:global(.after-icon),
-  &:global(.before-icon) {
-    align-items: center;
-    display: flex;
-  }
-
-  &:global(.after-icon)::after {
-    background: var(--color);
-  }
-
-  &:global(.before-icon)::before {
-    background: var(--color);
-  }
 }
 
 .span {
@@ -38,5 +24,14 @@
 
   &:global(.before-icon)::before {
     opacity: 0;
+  }
+}
+
+.link,
+.span {
+  &:global(.after-icon),
+  &:global(.before-icon) {
+    align-items: center;
+    display: flex;
   }
 }

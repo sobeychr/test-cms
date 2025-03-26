@@ -1,0 +1,8 @@
+.back {
+  margin-bottom: 2em;
+
+  &::before {
+    mask-image: url('/icons/rightArrow.svg');
+    rotate: 180deg;
+  }
+}

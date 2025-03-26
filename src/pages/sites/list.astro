@@ -1,7 +1,9 @@
 ---
 import Listing from '@layouts/Listing.astro';
 import { getParsedCollection } from '@utils/collection';
-import styles from '@styles/pages/site-list.module.scss';
+import stylesList from '@styles/pages/site-list.module.scss';
+import stylesSite from '@styles/sites.module.scss';
+import Link from '@components/link/Link.astro';
 
 const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
 const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);
@@ -23,7 +25,7 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data);
       <input type="text" id="countries" name="countries" />
       <input
         type="text"
-        class={styles['filter-add']}
+        class={stylesList['filter-add']}
         id="add-country"
         list="data-country"
         name="add-country"
@@ -34,7 +36,7 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data);
       <input type="text" id="languages" name="languages" />
       <input
         type="text"
-        class={styles['filter-add']}
+        class={stylesList['filter-add']}
         id="add-language"
         list="data-language"
         name="add-language"
@@ -68,30 +70,30 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data);
     </datalist>
   </slot>
 
-  <article slot="entry" class={`${styles.entry} entry`} data-id="{id}">
-    <p class={styles.title}>
-      <a class={`${styles.link} after-icon`} href="{slug}">
-        <span class={styles.id}>{'{id}'}</span>
-        <span class={styles.name}>{'{name}'}</span>
-      </a>
+  <article slot="entry" class="entry" data-id="{id}">
+    <p class={stylesSite.title}>
+      <Link class={`${stylesSite.link} after-icon`} href="{slug}">
+        <span class={stylesSite.id}>{'{id}'}</span>
+        <span class={stylesSite.name}>{'{name}'}</span>
+      </Link>
     </p>
     <p>
-      Start time: <span class={styles.start} data-time="{start}">{'{start}'}</span>
+      Start time: <span class={stylesSite.start} data-time="{start}">{'{start}'}</span>
     </p>
     <p>
-      End time: <span class={styles.end} data-time="{end}">{'{end}'}</span>
+      End time: <span class={stylesSite.end} data-time="{end}">{'{end}'}</span>
     </p>
     <p>
       Region:
-      <span class={styles.region}>{'{region}'}</span>
+      <span class={stylesSite.region}>{'{region}'}</span>
     </p>
     <p>
       Countries:
-      <span class={styles.countries}>{'{countries}'}</span>
+      <span class={stylesSite.countries}>{'{countries}'}</span>
     </p>
     <p>
       Languages:
-      <span class={styles.langs}>{'{langs}'}</span>
+      <span class={stylesSite.langs}>{'{langs}'}</span>
     </p>
   </article>
 </Listing>

@@ -1,6 +1,12 @@
 ---
 import { CSite } from '@classes/collection/CSite';
+import { API_PREFIX } from '@utils/configs';
 import DefaultLayout from '@layouts/Default.astro';
+import styleEntry from '@styles/pages/site-entry.module.scss';
+import stylesSite from '@styles/sites.module.scss';
+import { Form } from '@components/form/Form';
+// import { getParsedCollection } from '@utils/collection';
+import Link from '@components/link/Link.astro';
 
 const { id } = Astro.params;
 
@@ -12,9 +18,50 @@ const site = await CSite.getEntryFromCollection(id);
 if (!site) {
   return Astro.redirect('/404');
 }
+
+/*
+const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
+const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);
+const dataRegions = await getParsedCollection('regions', ({ data }) => data);
+*/
+
+const formUrl = `${API_PREFIX}v2/site`;
 ---
 
 <DefaultLayout>
-  <h1>{site.id} - {site.name}</h1>
-  <p>!incomplete</p>
-</DefaultLayout>;
+  <Link class={`${styleEntry.back} before-icon`} href="/sites/list">back</Link>
+  <h1 class={stylesSite.title}>
+    <span class={stylesSite.id}>{site.id}</span>
+    <span class={stylesSite.name}>{site.name}</span>
+  </h1>
+  <Form action={formUrl} class={styleEntry.form} client:only="solid-js" defaultRequest>
+    <input type="hidden" name="id" value={site.id} />
+
+    <p>
+      <label for="name">Name:</label>
+      <input type="text" name="name" value={site.name} />
+    </p>
+    <p>
+      <label for="region">Region:</label>
+      <input type="text" name="region" value={site.region} />
+    </p>
+    <p>
+      <label for="countries">Countries:</label>
+      <input type="text" name="countries" value={site.countries} />
+    </p>
+    <p>
+      <label for="languages">Languages:</label>
+      <input type="text" id="languages" name="languages" value={site.languages} />
+    </p>
+    <p>
+      <label for="start">Start:</label>
+      <input type="datetime-local" id="start" name="start" value={site.start} />
+    </p>
+    <p>
+      <label for="end">End:</label>
+      <input type="datetime-local" id="end" name="end" value={site.end} />
+    </p>
+
+    <button type="submit">Send</button>
+  </Form>
+</DefaultLayout>

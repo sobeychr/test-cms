@@ -22,7 +22,7 @@ export class CLogger {
   async writeLogs(response: Response, error: CError | Error): Promise<void> {
     this._request.setEnd(response?.clone?.());
 
-    const requestLog = await this._request.toJson();
+    const requestLog = await this._request.toJson(error);
     this._writeLog('request', requestLog);
 
     const infoLog = this._request.toDetails();

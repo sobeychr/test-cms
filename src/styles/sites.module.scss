@@ -1,0 +1,29 @@
+.id {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.link {
+  flex-flow: row nowrap;
+  gap: 0.3em;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &::after {
+    mask-image: url('/icons/rightArrow.svg');
+  }
+}
+
+.name {
+  color: #8bc34a;
+  max-width: calc(100% - 2em);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title {
+  font-size: 1.5em;
+}

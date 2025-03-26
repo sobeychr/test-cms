@@ -86,9 +86,10 @@ section {
   }
 }
 
-.after-icon::after {
+.after-icon::after,
+.before-icon::before {
   aspect-ratio: 1;
-  background: var(--color-text);
+  background: var(--color, var(--color-text));
   content: '';
   display: inline-block;
   height: var(--after-icon-height, 1em);
@@ -96,12 +97,10 @@ section {
   mask-size: cover;
 }
 
-.before-icon::before {
-  aspect-ratio: 1;
-  background: var(--color-text);
-  content: '';
-  display: inline-block;
-  height: var(--before-icon-height, 1em);
-  mask: no-repeat top left;
-  mask-size: cover;
+span {
+  &.after-icon,
+  &.before-icon {
+    align-items: center;
+    display: flex;
+  }
 }

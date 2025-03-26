@@ -32,12 +32,18 @@ export class CSite implements CSiteParam {
     this.start = data.start || null;
   }
 
+  isDifferent(compare: CSite): boolean {
+    const before = JSON.stringify(this);
+    const after = JSON.stringify(compare);
+    return before !== after;
+  }
+
   static async getEntryFromCollection(id: number): Promise<CSite> {
-    return await getParsedEntry('sites', id, data => new CSite(data));
+    return await getParsedEntry('sites', id, data => new CSite(data)).catch(() => null);
   }
 
   static async getListFromCollection(): Promise<Array<CSite>> {
-    return await getParsedCollection('sites', ({ data }) => new CSite(data));
+    return await getParsedCollection('sites', ({ data }) => new CSite(data)).catch(() => []);
   }
 
   static sortById(a: CSite, b: CSite): number {

@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 type FormParam = {
   action: string;
   children: HTMLElement;
-  class: string;
+  class?: string;
   defaultRequest?: boolean;
   id?: string;
   loadingClass?: string;

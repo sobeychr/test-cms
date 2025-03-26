@@ -3,6 +3,8 @@ import { CID } from '@classes/CID';
 import { API_PREFIX, PAGE_LOGIN } from '@utils/configs';
 import { isHtml, isJson } from '@utils/string';
 
+import type { CError } from './CError';
+
 const PROTECTED_POST = ['password'];
 
 export class CRequest {
@@ -56,17 +58,19 @@ export class CRequest {
     return this._logs.length > 0 ? JSON.stringify(data) : '';
   };
 
-  public async toJson(): Promise<string> {
+  public async toJson(error: CError | Error): Promise<string> {
     const responseText = (await this._response?.text().catch(() => '')) || '';
+    const responseError = (await error?.toResponse?.().text().catch(() => '')) || '';
+    const resp = responseText || responseError;
 
-    const format = isHtml(responseText) && 'html'
-      || isJson(responseText) && 'json'
+    const format = isHtml(resp) && 'html'
+      || isJson(resp) && 'json'
       || '!undefined';
 
     const postData = (this.isPost && await this._request.json()) || {};
     PROTECTED_POST.filter(field => !!postData[field]).forEach(field => { postData[field] = '!secret'; });
 
-    const status = this._response?.status;
+    const status = this._response?.status || error?.status;
 
     const data = {
       delay: this._end - this._start,
@@ -77,7 +81,7 @@ export class CRequest {
       postData,
       response: {
         format,
-        size: responseText.toString().length,
+        size: resp.toString().length,
         status,
       },
       search: this._url?.search || '',
