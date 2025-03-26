@@ -17,10 +17,6 @@ section {
     &:global(.hidden) {
       display: none;
     }
-
-    &:nth-child(3n + 1):not(:first-of-type) {
-      border-top: 1px solid var(--color-text);
-    }
   }
 }
 

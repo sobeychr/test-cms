@@ -39,4 +39,12 @@ export class CSite implements CSiteParam {
   static async getListFromCollection(): Promise<Array<CSite>> {
     return await getParsedCollection('sites', ({ data }) => new CSite(data));
   }
+
+  static sortById(a: CSite, b: CSite) {
+    return a.id > b.id ? 1 : -1;
+  }
+
+  static sortByName(a: CSite, b: CSite) {
+    return a.name.localeCompare(b.name);
+  }
 }

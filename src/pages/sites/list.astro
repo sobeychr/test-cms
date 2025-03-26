@@ -5,7 +5,7 @@ import styles from '@styles/pages/site-list.module.scss';
 
 const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
 const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);
-const dataRegions = await getParsedCollection('regions', ({ data }) => data.name);
+const dataRegions = await getParsedCollection('regions', ({ data }) => data);
 ---
 
 <Listing title="Sites">
@@ -58,7 +58,13 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data.name
     </datalist>
 
     <datalist id="data-region">
-      {dataRegions.sort().map((entry) => <option value={entry} />)}
+      {
+        dataRegions.sort().map((entry) => (
+          <option data-id={entry.id} data-name={entry.name}>
+            {entry.name}
+          </option>
+        ))
+      }
     </datalist>
   </slot>
 

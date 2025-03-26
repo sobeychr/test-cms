@@ -22,8 +22,8 @@ export const regions = defineCollection({
   loader: () => {
     const regionNames = allCountries.map(entry => entry.region);
     const regionUnique = new Set(regionNames);
-    return Array.from(regionUnique).sort().map((name, key) => ({
-      id: (key + 1).toString(),
+    return Array.from(regionUnique).sort().map((name) => ({
+      id: name,
       name,
     }));
   },

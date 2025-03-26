@@ -24,17 +24,19 @@ const onFilter = (data, filters) => {
 
   let newData = data;
 
-  const name = filters.get('name') || '';
+  const name = (filters.get('name') || '').toLowerCase();
   if (name) {
-    newData = newData.filter(entry => entry.name.includes(name));
+    newData = newData.filter(entry => entry.name.toLowerCase().includes(name));
   }
 
-  const region = filters.get('region') || '';
-  if (region.length > 0) {
-    newData = newData.filter(entry => !!entry.region && entry.region.includes(region));
+  const regionName = filters.get('region') || '';
+  const regionOption = document.querySelector(`#data-region option[data-name="${regionName}"]`);
+  const regionId = regionOption?.getAttribute('data-id');
+  if (regionId) {
+    newData = newData.filter(entry => !!entry.region && entry.region.includes(regionId));
   }
 
-  const countries = (filters.getAll('countries') || []).filter(String).map(entry => entry.toUpperCase());
+  const countries = (filters.get('countries') || '').split(',').map(entry => entry.trim().toUpperCase()).filter(String);
   if (countries.length > 0) {
     newData = newData.filter(({ countries: entryCountries }) =>
       Array.isArray(entryCountries)
@@ -42,11 +44,11 @@ const onFilter = (data, filters) => {
     );
   }
 
-  const languages = (filters.getAll('languages') || []).filter(String).map(entry => entry.toUpperCase());
-  if (languages.length > 0) {
+  const langs = (filters.get('languages') || '').split(',').map(entry => entry.trim().toLowerCase()).filter(String);
+  if (langs.length > 0) {
     newData = newData.filter(({ langs: entryLangs }) =>
       Array.isArray(entryLangs)
-      && hasIntersection(entryLangs, countries)
+      && hasIntersection(entryLangs, langs)
     );
   }
 
@@ -75,7 +77,7 @@ const onUpdate = ({
   fromInput.value = '';
   toInput.value = newValue.join(', ');
 
-  filters.append(field, fromValue);
+  filters.set(field, newValue.join(', '));
 };
 
 const getShowSelector = (data: Array<object>): Array<string> => {
@@ -84,7 +86,7 @@ const getShowSelector = (data: Array<object>): Array<string> => {
 };
 
 listing({
-  endpoint: 'v2/site',
+  endpoint: 'v2/site?sort=id',
   getShowSelector,
   onFilter,
 });

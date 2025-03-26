@@ -32,7 +32,7 @@ export const GET: APIRoute = async () => {
   for (let i = ID_START; i <= ID_END; i += ID_INCREMENT) {
     const countries = generateRandomArray(countryList, 4, entry => entry.id);
     const langs = generateRandomArray(langList, 2, entry => entry.iso);
-    const region = generateRandomArray(regionList, 2, entry => entry.id);
+    const region = generateRandomArray(regionList, 2, entry => entry.name);
 
     const hasStart = Math.random() > TIME_PERC;
     const start = !hasStart ? null : getRandomInt(TIME_START, TIME_END);
