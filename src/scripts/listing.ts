@@ -90,13 +90,27 @@ export const listing = (params: listingParams) => {
     document.querySelector('#stats-total').textContent = `(${entries.length})`;
 
     document.querySelectorAll('#content-body span[data-date]').forEach((entry) => {
-      const date = new Date(entry.getAttribute('data-date') || '');
-      entry.textContent = dateToFullString(date);
+      const dateStr = entry.getAttribute('data-date') || '';
+      if (dateStr && dateStr !== 'null') {
+        const date = new Date(dateStr);
+        entry.textContent = dateToFullString(date);
+        entry.setAttribute('title', date.toISOString());
+      }
     });
 
     document.querySelectorAll('#content-body span[data-size]').forEach((entry) => {
       const size = parseInt(entry.getAttribute('data-size'), 10) || 0;
       entry.textContent = byteToSizeString(size);
+      entry.setAttribute('title', `${size} bytes`);
+    });
+
+    document.querySelectorAll('#content-body span[data-time]').forEach((entry) => {
+      const timestamp = entry.getAttribute('data-time') || 0;
+      if (timestamp && timestamp > 0) {
+        const date = new Date(timestamp * 1000);
+        entry.textContent = dateToFullString(date);
+        entry.setAttribute('title', date.toISOString());
+      }
     });
 
     if (typeof onPopulateContent === 'function') {

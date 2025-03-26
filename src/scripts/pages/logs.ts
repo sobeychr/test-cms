@@ -128,8 +128,8 @@ const onPreCallRequest = () => {
 };
 
 const onPopulateContent = () => {
-  document.querySelectorAll('#content-body span[data-time]').forEach((entry) => {
-    const time = parseInt(entry.getAttribute('data-time'), 10) || 0;
+  document.querySelectorAll('#content-body span[data-delay]').forEach((entry) => {
+    const time = parseInt(entry.getAttribute('data-delay'), 10) || 0;
     const className =
       (time < DELAY_LOW && 'low') ||
       (time > DELAY_HIGH && 'high') ||

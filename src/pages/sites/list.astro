@@ -41,11 +41,11 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data);
       />
     </p>
     <p>
-      <label for="start">Start:</label>
+      <label for="start">Start after:</label>
       <input type="datetime-local" id="start" name="start" />
     </p>
     <p>
-      <label for="end">End:</label>
+      <label for="end">End before:</label>
       <input type="datetime-local" id="end" name="end" />
     </p>
 
@@ -70,13 +70,16 @@ const dataRegions = await getParsedCollection('regions', ({ data }) => data);
 
   <article slot="entry" class={`${styles.entry} entry`} data-id="{id}">
     <p class={styles.title}>
-      <span class={styles.id}>{'{id}'}</span>
-      <span class={styles.name}>{'{name}'}</span>
+      <a class={`${styles.link} after-icon`} href="{slug}">
+        <span class={styles.id}>{'{id}'}</span>
+        <span class={styles.name}>{'{name}'}</span>
+      </a>
     </p>
     <p>
-      Dates:
-      <span class={styles.start}>{'{start}'}</span>
-      <span class={styles.end}>{'{end}'}</span>
+      Start time: <span class={styles.start} data-time="{start}">{'{start}'}</span>
+    </p>
+    <p>
+      End time: <span class={styles.end} data-time="{end}">{'{end}'}</span>
     </p>
     <p>
       Region:

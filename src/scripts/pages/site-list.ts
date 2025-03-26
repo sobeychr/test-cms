@@ -1,5 +1,6 @@
 import { listing } from '@scripts/listing';
 import { hasIntersection } from '@utils/array';
+import { isValid } from '@utils/date';
 
 const onFilter = (data, filters) => {
   const addCountry = filters.get('add-country') || '';
@@ -44,16 +45,29 @@ const onFilter = (data, filters) => {
     );
   }
 
-  const langs = (filters.get('languages') || '').split(',').map(entry => entry.trim().toLowerCase()).filter(String);
-  if (langs.length > 0) {
+  const languages = (filters.get('languages') || '').split(',').map(entry => entry.trim().toLowerCase()).filter(String);
+  if (languages.length > 0) {
     newData = newData.filter(({ langs: entryLangs }) =>
       Array.isArray(entryLangs)
-      && hasIntersection(entryLangs, langs)
+      && hasIntersection(entryLangs, languages)
     );
   }
 
-  // TODO: start
-  // TODO: end
+  const start = filters.get('start') || '';
+  if (start) {
+    const startDate = new Date(start);
+    if (isValid(startDate)) {
+      newData = newData.filter(entry => !!entry.start && entry.start >= startDate.getTime() * .001);
+    }
+  }
+
+  const end = filters.get('end') || '';
+  if (end) {
+    const endDate = new Date(end);
+    if (isValid(endDate)) {
+      newData = newData.filter(entry => !!entry.end && entry.end <= endDate.getTime() * .001);
+    }
+  }
 
   return newData;
 };
