@@ -29,9 +29,10 @@ export const getRandomEntry = (arr: Array<number | object | string>): number | o
   return arr[rand];
 };
 
+const PERC_SHUFFLE = 0.8; // shuffle only 80% of array
 export const shuffle = (arr: Array<number | object | string>): Array<number | object | string> => {
   const newArr = [...arr];
-  let index = newArr.length;
+  let index = newArr.length * PERC_SHUFFLE;
   while (index > 0) {
     const rand = Math.floor(Math.random() * index);
     index--;

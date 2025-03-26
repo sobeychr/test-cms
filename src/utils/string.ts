@@ -1,5 +1,5 @@
 import { lodashGet } from '@utils/data';
-import { parseSize } from '@utils/number';
+import { getRandomInt, parseSize } from '@utils/number';
 
 export const autoReplace = (str: string, entries: object): string => str.replace(/\{[\w\.]+}/g, replaceStr => {
   const key = replaceStr.substring(1, replaceStr.length - 1);
@@ -31,3 +31,12 @@ export const isJson = (text: string): boolean => /^(\[|\{)/.test(text) && /(\]|\
 export const maxLength = (str: string, maxLength: number): string => str.substring(0, Math.min(maxLength, str.length));
 
 export const multiReplace = (str: string, entries: object): string => Object.keys(entries).reduce((_acc, key) => str.replace(key, entries[key]), str);
+
+const RANDOM_STR = 'Lorem ipsum odor amet consectetuer adipiscing elit Habitasse tortor justo ex imperdiet nostra rutrum Fringilla tellus class suspendisse finibus pretium Varius aliquet ultricies rhoncus tempus suscipit turpis iaculis magna Volutpat morbi sapien pulvinar turpis scelerisque lectus et venenatis Ipsum ornare nostra vestibulum potenti diam pellentesque Magna id posuere conubia cubilia sodales ornare ullamcorper Dui ad varius viverra pretium eros iaculis urna ut facilisi';
+const RANDOM_LENGTH = RANDOM_STR.length;
+export const randomString = (minLength: number = 1, maxLength: number = 10) => {
+  const length = getRandomInt(minLength, maxLength);
+  const end = getRandomInt(length, RANDOM_LENGTH);
+  const start = end - length;
+  return RANDOM_STR.substring(start, end);
+};

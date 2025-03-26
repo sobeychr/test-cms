@@ -4,7 +4,7 @@ import { defineCollection, z } from 'astro:content';
 export const sites = defineCollection({
   loader: glob({
     base: './src/collections/sites',
-    pattern: '*.json',
+    pattern: '**/*.json',
   }),
   schema: z.object({
     countries: z.nullable(z.array(z.string())),

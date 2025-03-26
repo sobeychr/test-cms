@@ -7,6 +7,7 @@ type CSiteParam = {
   langs: Array<string> | null;
   name: string;
   region: Array<string> | null;
+  slug: string;
   start: number | null;
 };
 
@@ -17,6 +18,7 @@ export class CSite implements CSiteParam {
   langs;
   name;
   region;
+  slug;
   start;
 
   constructor(data: CSiteParam) {
@@ -26,6 +28,7 @@ export class CSite implements CSiteParam {
     this.langs = data.langs || null;
     this.name = data.name;
     this.region = data.region || null;
+    this.slug = data.slug || data.id || null;
     this.start = data.start || null;
   }
 
