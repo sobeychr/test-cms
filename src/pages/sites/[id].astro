@@ -12,10 +12,9 @@ const site = await CSite.getEntryFromCollection(id);
 if (!site) {
   return Astro.redirect('/404');
 }
-
-console.log('site entry', site);
 ---
 
 <DefaultLayout>
   <h1>{site.id} - {site.name}</h1>
+  <p>!incomplete</p>
 </DefaultLayout>;

@@ -40,11 +40,11 @@ export class CSite implements CSiteParam {
     return await getParsedCollection('sites', ({ data }) => new CSite(data));
   }
 
-  static sortById(a: CSite, b: CSite) {
+  static sortById(a: CSite, b: CSite): number {
     return a.id > b.id ? 1 : -1;
   }
 
-  static sortByName(a: CSite, b: CSite) {
+  static sortByName(a: CSite, b: CSite): number {
     return a.name.localeCompare(b.name);
   }
 }
