@@ -40,3 +40,7 @@ export const randomString = (minLength: number = 1, maxLength: number = 10) => {
   const start = end - length;
   return RANDOM_STR.substring(start, end);
 };
+
+export const printCleanArray = (str: string, splitPrint: string = ', ', splitValue: string = ',') => toCleanArray(str, splitValue).join(splitPrint);
+
+export const toCleanArray = (str: string, split: string = ',') => str.split(split).map(entry => entry.trim()).filter(String);

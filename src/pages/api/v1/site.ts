@@ -2,19 +2,18 @@ import type { APIRoute } from 'astro';
 import { CResponse } from '@classes/CResponse';
 import { getParsedCollection } from '@utils/collection';
 import { getApiDateParam } from '@utils/date';
+import { toCleanArray } from '@utils/string';
 
 export const GET: APIRoute = async ({ url }) => {
   const sites = await getParsedCollection('sites', ({ data }) => data);
 
-  const country = (url.searchParams?.get('country') || '').toUpperCase();
-  const countries = new Set(country.split(',').filter(String));
+  const countries = toCleanArray((url.searchParams?.get('country') || '').toUpperCase());
   const filterByCountries = countries.size === 0 ? sites : sites.filter(entry =>
     entry.country === null
     || new Set(entry.country).intersection(countries).size > 0
   );
 
-  const lang = (url.searchParams?.get('lang') || '').toLowerCase();
-  const langs = new Set(lang.split(',').filter(String));
+  const langs = toCleanArray((url.searchParams?.get('lang') || '').toLowerCase());
   const filterByLangs = langs.size === 0 ? filterByCountries : filterByCountries.filter(entry =>
     entry.lang === null
     || new Set(entry.lang).intersection(langs).size > 0

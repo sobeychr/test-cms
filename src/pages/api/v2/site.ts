@@ -3,6 +3,7 @@ import { CError } from '@classes/CError';
 import { CSite } from '@classes/collection/CSite';
 import { CResponse } from '@classes/CResponse';
 import { ERRORS } from '@utils/configs';
+import { toCleanArray } from '@utils/string';
 
 const SORT_NAME = 'name';
 const SORT_ID = 'id';
@@ -20,8 +21,8 @@ export const GET: APIRoute = async ({ url }) => {
   return CResponse.quickJson(sites);
 };
 
-export const POST: APIRoute = async ({ request }) => {
-  const data = await request.json();
+export const PATCH: APIRoute = async ({ request }) => {
+  const data = await request.json().catch(() => ({})) || {};
 
   const id = parseInt(data.id, 10);
   if (!id) {
@@ -35,25 +36,26 @@ export const POST: APIRoute = async ({ request }) => {
     throw error;
   }
 
-   
-  const { id, countries = '', languages = '', ...restData } = data;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id: _id, countries, languages, ...restData } = data;
+  const country = countries && toCleanArray(countries);
+  const langs = languages && toCleanArray(languages);
 
-  const country = countries.split(',').map(entry => entry.trim()).filter(String);
-  const langs = languages.split(',').map(entry => entry.trim()).filter(String);
-  const newEntry = new CSite({
-    ...prevEntry,
-    ...restData,
-    countries: country.length === 0 ? null : country,
-    langs: langs.length === 0 ? null : langs,
-  });
+  const newData = { ...restData };
+  if (country) newData.countries = country.length === 0 ? null : country;
+  if (langs) newData.languages = langs.length === 0 ? null : langs;
 
-  if (!prevEntry.isDifferent(newEntry)) {
+  if (Object.keys(newData).length === 0) {
     const error = new CError(ERRORS.siteNoChange);
     throw error;
   }
 
+  const newEntry = new CSite({
+    ...prevEntry,
+    ...newData
+  });
   return CResponse.quickJson({
-    newEntry,
+    ...newEntry,
   });
 };
 

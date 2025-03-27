@@ -1,28 +1,9 @@
 import { listing } from '@scripts/listing';
 import { hasIntersection } from '@utils/array';
 import { isValid } from '@utils/date';
+import { toCleanArray } from '@utils/string';
 
 const onFilter = (data, filters) => {
-  const addCountry = filters.get('add-country') || '';
-  if (addCountry) {
-    onUpdate({
-      field: 'countries',
-      filters,
-      fromInput: document.querySelector('#add-country'),
-      toInput: document.querySelector('#countries'),
-    });
-  }
-
-  const addLanguage = filters.get('add-language') || '';
-  if (addLanguage) {
-    onUpdate({
-      field: 'languages',
-      filters,
-      fromInput: document.querySelector('#add-language'),
-      toInput: document.querySelector('#languages'),
-    });
-  }
-
   let newData = data;
 
   const name = (filters.get('name') || '').toLowerCase();
@@ -37,7 +18,7 @@ const onFilter = (data, filters) => {
     newData = newData.filter(entry => !!entry.region && entry.region.includes(regionId));
   }
 
-  const countries = (filters.get('countries') || '').split(',').map(entry => entry.trim().toUpperCase()).filter(String);
+  const countries = toCleanArray((filters.get('countries') || '').toUpperCase());
   if (countries.length > 0) {
     newData = newData.filter(({ countries: entryCountries }) =>
       Array.isArray(entryCountries)
@@ -45,7 +26,7 @@ const onFilter = (data, filters) => {
     );
   }
 
-  const languages = (filters.get('languages') || '').split(',').map(entry => entry.trim().toLowerCase()).filter(String);
+  const languages = toCleanArray((filters.get('languages') || '').toLowerCase());
   if (languages.length > 0) {
     newData = newData.filter(({ langs: entryLangs }) =>
       Array.isArray(entryLangs)
@@ -70,28 +51,6 @@ const onFilter = (data, filters) => {
   }
 
   return newData;
-};
-
-type onUpdateParam = {
-  field: string;
-  filters: FormData;
-  fromInput: HTMLInputElement;
-  toInput: HTMLInputElement;
-};
-const onUpdate = ({
-  field,
-  filters,
-  fromInput,
-  toInput,
-}: onUpdateParam): void => {
-  const fromValue = fromInput.value;
-  const toValue = toInput.value.toString();
-  const newValue = [...toValue.split(','), fromValue].filter(String);
-
-  fromInput.value = '';
-  toInput.value = newValue.join(', ');
-
-  filters.set(field, newValue.join(', '));
 };
 
 const getShowSelector = (data: Array<object>): Array<string> => {

@@ -11,7 +11,9 @@ type FormParam = {
   defaultRequest?: boolean;
   id?: string;
   loadingClass?: string;
-  method?: 'get' | 'post';
+  method?: 'GET' | 'PATCH' | 'POST' | 'PUT';
+  onDataConvertName?: string;
+  onResetName?: string;
 };
 
 type ActionResponse = {
@@ -32,7 +34,9 @@ export const Form = (props: FormParam) => {
     defaultRequest = true,
     id = `form-${CID.shortHash()}`,
     loadingClass = 'loading',
-    method = 'post',
+    method = 'POST',
+    onDataConvertName,
+    onResetName,
     ...rest
   } = props;
 
@@ -44,15 +48,26 @@ export const Form = (props: FormParam) => {
     [loadingClass]: isLoading(),
   });
 
+  const onReset = (event: Event) => {
+    const func = window?.[onResetName];
+    if (typeof func === 'function') {
+      func(event);
+    }
+    else {
+      console.log('[Form.tsx] error in onReset()', `window.${onResetName}() does not exist`);
+    }
+  };
+
   const onSubmit = async (event: Event) => {
     event.preventDefault();
     setIsLoading(true);
 
     const formData = new FormData(event?.target);
     const postData = iteratorToObj(formData);
+    const convertFunc = window?.[onDataConvertName];
 
     const result = defaultRequest && await useRequest({
-      postData,
+      postData: typeof convertFunc === 'function' ? convertFunc(postData) : postData,
       method,
       url: action,
     }) as DefaultRequestResponse;
@@ -73,7 +88,7 @@ export const Form = (props: FormParam) => {
     }
   };
 
-  return <form action={action} classList={classList()} id={id} method={method} {...rest} onSubmit={onSubmit}>
+  return <form action={action} classList={classList()} id={id} method={method} {...rest} onReset={onResetName && onReset} onSubmit={onSubmit}>
     {children}
   </form>;
 };

@@ -1,7 +1,7 @@
 type useRequestParam = {
   asJson?: boolean;
   getData?: object;
-  method: 'get' | 'post';
+  method?: 'GET' | 'PATCH' | 'POST' | 'PUT';
   postData?: object;
   postDelay?: number;
   preDelay?: number;
@@ -9,6 +9,7 @@ type useRequestParam = {
   url: string;
 };
 
+const POST_DATA_METHODS = ['PATCH', 'POST', 'PUT'];
 export const useRequest = async (params: useRequestParam): Promise<Array<object> | object | string | null> => {
   const {
     asJson = true,
@@ -36,7 +37,7 @@ export const useRequest = async (params: useRequestParam): Promise<Array<object>
     method,
     signal: control.signal,
   };
-  if (method === 'post') {
+  if (POST_DATA_METHODS.includes(method)) {
     options.body = JSON.stringify(postData);
   }
 
@@ -52,6 +53,7 @@ export const useRequest = async (params: useRequestParam): Promise<Array<object>
   if (!response.ok || !resp) {
     console.error(
       '[useRequest] unable to return proper value',
+      method,
       newUrl,
       respJson,
       respText,
