@@ -1,7 +1,7 @@
 import type { APIContext } from 'astro';
 import { CError } from '@classes/CError';
 import { COOKIE_AUTH_NAME, PAGE_HOME, PAGE_LOGIN } from '@utils/configs';
-import { ERRORS } from '@utils/configs';
+import { ERRORS } from '@utils/errors';
 
 const PATH_TO_INVALID = [
   '/api/v1/logs',

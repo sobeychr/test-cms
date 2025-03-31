@@ -23,6 +23,8 @@ type ActionResponse = {
 
 type DefaultRequestResponse = {
   actions: Array<ActionResponse>;
+  code?: number;
+  message?: string;
   success: boolean;
 };
 
@@ -41,6 +43,7 @@ export const Form = (props: FormParam) => {
   } = props;
 
   const [isLoading, setIsLoading] = createSignal(false);
+  const [error, setError] = createSignal(false);
 
   const classList = () => ({
     [classStr]: true,
@@ -49,6 +52,7 @@ export const Form = (props: FormParam) => {
   });
 
   const onReset = (event: Event) => {
+    setError(false);
     if (typeof onResetProp === 'function') {
       onResetProp(event);
     }
@@ -57,6 +61,7 @@ export const Form = (props: FormParam) => {
   const onSubmit = async (event: Event) => {
     event.preventDefault();
     setIsLoading(true);
+    setError(false);
 
     const formData = new FormData(event?.target);
     const postData = iteratorToObj(formData);
@@ -68,10 +73,11 @@ export const Form = (props: FormParam) => {
     }) as DefaultRequestResponse;
 
     setIsLoading(false);
-    const { actions, success = false } = result || {};
+    const { actions, message, success = false } = result || {};
 
     if (!success) {
       console.log(`[Form.tsx] error in result`, result);
+      setError(message);
     } else {
       actions.forEach(({ command, param }) => {
         if (command === 'redirect') {
@@ -84,6 +90,7 @@ export const Form = (props: FormParam) => {
   };
 
   return <form action={action} classList={classList()} id={id} method={method} {...rest} onReset={onReset} onSubmit={onSubmit}>
+    <p class='error'>{error()}</p>
     {children}
   </form>;
 };

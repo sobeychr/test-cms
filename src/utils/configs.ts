@@ -15,29 +15,6 @@ export const COOKIE_DARK_DURATION = DUR_MONTH;
 export const PAGE_HOME = '/';
 export const PAGE_LOGIN = '/login';
 
-export const ERRORS = {
-  cookieAuth: {
-    code: 1001,
-    message: 'Invalid cookie auth',
-    status: 401,
-  },
-  siteId: {
-    code: 1101,
-    message: 'Invalid site id',
-    status: 400,
-  },
-  siteInvalid: {
-    code: 1102,
-    message: 'Invalid selected site',
-    status: 400,
-  },
-  siteNoChange: {
-    code: 1103,
-    message: 'No changes found',
-    status: 400,
-  },
-};
-
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
 export const STATUS_TEXT = {
   200: 'Ok',

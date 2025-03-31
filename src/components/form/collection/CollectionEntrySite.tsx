@@ -20,18 +20,22 @@ export const CollectionEntrySite = (props: CollectionEntrySiteParam) => {
     ? printCleanArray(entry?.langs.join(','))
     : null;
 
+  const remainEdit = !entry?.id;
+
   return <>
-    <InputEdit label="Name:" name="name" value={entry?.name} />
+    <InputEdit label="Name:" name="name" autofocus={remainEdit} remainEdit={remainEdit} required={remainEdit} value={entry?.name} />
     <InputEdit
       datalist={datalistRegions}
       label="Region:"
       name="region"
+      remainEdit={remainEdit}
       value={entry?.region}
     />
     <InputEdit
       datalist={datalistCountries}
       label="Countries:"
       name="countries"
+      remainEdit={remainEdit}
       multiEntries
       value={cleanCountries}
     />
@@ -39,18 +43,21 @@ export const CollectionEntrySite = (props: CollectionEntrySiteParam) => {
       datalist={datalistLanguages}
       label="Languages:"
       name="languages"
+      remainEdit={remainEdit}
       multiEntries
       value={cleanLanguages}
     />
     <InputEdit
       label="Start:"
       name="start"
+      remainEdit={remainEdit}
       value={entry?.start}
       type="datetime-local"
     />
     <InputEdit
       label="End:"
       name="end"
+      remainEdit={remainEdit}
       value={entry?.end}
       type="datetime-local"
     />
@@ -67,6 +74,10 @@ export const SITE_ON_DATA_CONVERT = (data: object) => {
   const preEnd = data.end;
   const newEnd = preEnd && new Date(preEnd);
   if (newEnd) data.end = newEnd.getTime() * 0.001;
+
+  delete data['add-countries'];
+  delete data['add-languages'];
+  delete data['add-region'];
 
   return data;
 };

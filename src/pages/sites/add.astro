@@ -1,9 +1,26 @@
 ---
+import { CollectionEntryForm } from '@components/form/CollectionEntryForm';
+import CollectionDataLists from '@components/form-element/CollectionDataLists.astro';
+import Link from '@components/link/Link.astro';
 import DefaultLayout from '@layouts/Default.astro';
-// import stylesSite from '@styles/pages/sites.module.scss';
+import styleEntry from '@styles/pages/site-entry.module.scss';
+import stylesSite from '@styles/sites.module.scss';
+
+const contentProps = {
+  datalistCountries: 'data-countries',
+  datalistLanguages: 'data-languages',
+  datalistRegions: 'data-regions',
+};
 ---
 
 <DefaultLayout>
-  <h1>Add site</h1>
-  <p>!incomplete</p>
-</DefaultLayout>;
+  <Link class={`${styleEntry.back} before-icon`} href="/sites/list">back</Link>
+  <h1 class={stylesSite.title}>Add site</h1>
+  <CollectionEntryForm
+    client:only="solid-js"
+    class={styleEntry.form}
+    contentProps={contentProps}
+    preset="site"
+  />
+  <CollectionDataLists />
+</DefaultLayout>

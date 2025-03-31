@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { CError } from '@classes/CError';
 import { CSite } from '@classes/collection/CSite';
 import { CResponse } from '@classes/CResponse';
-import { ERRORS } from '@utils/configs';
+import { ERRORS } from '@utils/errors';
 import { toCleanArray } from '@utils/string';
 
 const SORT_NAME = 'name';
@@ -66,3 +66,48 @@ export const PATCH: APIRoute = async ({ request }) => {
   });
 };
 
+export const PUT: APIRoute = async ({ request }) => {
+  const data = await request.json().catch(() => ({})) || {};
+
+  const { name, region, countries, languages, start, end } = data;
+
+  if (!name) {
+    const error = new CError(ERRORS.siteNoName);
+    throw error;
+  }
+
+  const list = await CSite.getListFromCollection();
+  const sorted = list.sort(CSite.sortById);
+
+  const prevName = sorted.find(entry => entry.name === name);
+  if (prevName) {
+    const error = new CError(ERRORS.sitePreexistName);
+    throw error;
+  }
+
+  const lastEntry = sorted[sorted.length - 1];
+  const id = lastEntry.id += 1;
+  const country = countries && toCleanArray(countries);
+  const langs = languages && toCleanArray(languages);
+
+  const newEntry = new CSite({
+    countries: country,
+    end,
+    id,
+    langs,
+    name,
+    region,
+    slug: id,
+    start,
+  });
+
+  newEntry.writeFile();
+
+  return CResponse.quickJson({
+    actions: [{
+      command: 'reload',
+    }],
+    data: newEntry,
+    success: true,
+  });
+};
