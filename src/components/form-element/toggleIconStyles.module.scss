@@ -1,0 +1,33 @@
+$RADIAL_SPLIT: 40%;
+
+.toggle-icon {
+  --background-color: #e02a2d;
+  --border-color: hsl(from var(--background-color) h s l / 40%);
+
+  display: flex;
+
+  &::after {
+    align-items: center;
+    aspect-ratio: 1;
+    background: radial-gradient(var(--background-color) $RADIAL_SPLIT, var(--border-color) ($RADIAL_SPLIT + 5%));
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 1em;
+    justify-content: center;
+    margin-left: 0.3em;
+  }
+
+  &:has(input:checked)::after {
+    --background-color: #52e02a;
+    --border-color: hsl(from var(--background-color) h s l / 40%);
+  }
+
+  input[type='checkbox'] {
+    display: none;
+  }
+
+  label {
+    user-select: none;
+  }
+}

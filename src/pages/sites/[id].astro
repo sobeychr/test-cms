@@ -1,0 +1,137 @@
+---
+import { CSite } from '@classes/collection/CSite';
+import { API_PREFIX } from '@utils/configs';
+import DefaultLayout from '@layouts/Default.astro';
+import styleEntry from '@styles/pages/site-entry.module.scss';
+import stylesSite from '@styles/sites.module.scss';
+import { Form } from '@components/form/Form';
+import { InputEdit } from '@components/form-element/InputEdit';
+import { getParsedCollection } from '@utils/collection';
+import Link from '@components/link/Link.astro';
+import { printCleanArray } from '@utils/string';
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/404');
+}
+
+const site = await CSite.getEntryFromCollection(id);
+if (!site) {
+  return Astro.redirect('/404');
+}
+
+const cleanCountries = Array.isArray(site.countries)
+  ? printCleanArray(site.countries.join(','))
+  : null;
+const cleanLanguages = Array.isArray(site.languages)
+  ? printCleanArray(site.languages.join(','))
+  : null;
+
+const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
+const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);
+const dataRegions = await getParsedCollection('regions', ({ data }) => data);
+
+const formUrl = `${API_PREFIX}v2/site`;
+---
+
+<DefaultLayout>
+  <Link class={`${styleEntry.back} before-icon`} href="/sites/list">back</Link>
+  <h1 class={stylesSite.title}>
+    <span class={stylesSite.id}>{site.id}</span>
+    <span class={stylesSite.name}>{site.name}</span>
+  </h1>
+  <Form
+    action={formUrl}
+    class={styleEntry.form}
+    client:only="solid-js"
+    defaultRequest
+    id="edit-site"
+    method="PATCH"
+    onDataConvertName="onDataConvert"
+    onResetName="onReset"
+  >
+    <input type="hidden" name="id" value={site.id} />
+    <InputEdit client:only="solid-js" label="Name:" name="name" value={site.name} />
+    <InputEdit
+      client:only="solid-js"
+      label="Region:"
+      list="data-region"
+      name="region"
+      value={site.region}
+    />
+    <InputEdit
+      client:only="solid-js"
+      label="Countries:"
+      name="countries"
+      value={cleanCountries}
+      dataList={dataCountries.sort()}
+    />
+    <InputEdit
+      client:only="solid-js"
+      label="Languages:"
+      name="languages"
+      value={cleanLanguages}
+      dataList={dataLanguages.sort()}
+    />
+    <InputEdit
+      client:only="solid-js"
+      label="Start:"
+      name="start"
+      value={site.start}
+      type="datetime-local"
+    />
+    <InputEdit
+      client:only="solid-js"
+      label="End:"
+      name="end"
+      value={site.end}
+      type="datetime-local"
+    />
+
+    <p>
+      <button type="reset">Reset</button>
+      <button type="submit">Send</button>
+    </p>
+  </Form>
+
+  <datalist id="data-region">
+    {
+      dataRegions.sort().map((entry) => (
+        <option data-id={entry.id} data-name={entry.name}>
+          {entry.name}
+        </option>
+      ))
+    }
+  </datalist>
+
+  <script>
+    (function () {
+      const onDataConvert = (data) => {
+        const preStart = data.start;
+        const newStart = preStart && new Date(preStart);
+        if (newStart) data.start = newStart.getTime() * 0.001;
+
+        const preEnd = data.end;
+        const newEnd = preEnd && new Date(preEnd);
+        if (newEnd) data.end = newEnd.getTime() * 0.001;
+
+        return data;
+      };
+
+      const onReset = (event: Event) => {
+        const form = event?.target;
+        if (form) {
+          form.querySelectorAll('label input[type="hidden"]').forEach((entry) => entry.remove());
+          form.querySelectorAll('label span').forEach((entry) => {
+            const value = entry.getAttribute('data-value') || 'null';
+            entry.textContent = value;
+          });
+        }
+      };
+
+      window.onDataConvert = onDataConvert;
+      window.onReset = onReset;
+    })();
+  </script>
+</DefaultLayout>

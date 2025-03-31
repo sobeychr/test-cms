@@ -1,0 +1,90 @@
+---
+import Listing from '@layouts/Listing.astro';
+import { getParsedCollection } from '@utils/collection';
+import stylesList from '@styles/pages/site-list.module.scss';
+import stylesSite from '@styles/sites.module.scss';
+import Link from '@components/link/Link.astro';
+import { InputDatalist } from '@components/form-element/InputDatalist';
+
+const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
+const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);
+const dataRegions = await getParsedCollection('regions', ({ data }) => data);
+---
+
+<Listing title="Sites">
+  <slot slot="filters">
+    <p>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" />
+    </p>
+    <p>
+      <label for="region">Region:</label>
+      <input type="text" id="region" list="data-region" name="region" />
+    </p>
+    <p>
+      <label for="countries">Countries (split by comma ","):</label>
+      <InputDatalist
+        classAdd={stylesList['filter-add']}
+        client:only="solid-js"
+        dataList={dataCountries.sort()}
+        name="countries"
+      />
+    </p>
+    <p>
+      <label for="languages">Languages (split by comma ","):</label>
+      <InputDatalist
+        classAdd={stylesList['filter-add']}
+        client:only="solid-js"
+        dataList={dataLanguages.sort()}
+        name="languages"
+      />
+    </p>
+    <p>
+      <label for="start">Start after:</label>
+      <input type="datetime-local" id="start" name="start" />
+    </p>
+    <p>
+      <label for="end">End before:</label>
+      <input type="datetime-local" id="end" name="end" />
+    </p>
+
+    <datalist id="data-region">
+      {
+        dataRegions.sort().map((entry) => (
+          <option data-id={entry.id} data-name={entry.name}>
+            {entry.name}
+          </option>
+        ))
+      }
+    </datalist>
+  </slot>
+
+  <article slot="entry" class="entry" data-id="{id}">
+    <p class={stylesSite.title}>
+      <Link class={`${stylesSite.link} after-icon`} href="{slug}">
+        <span class={stylesSite.id}>{'{id}'}</span>
+        <span class={stylesSite.name}>{'{name}'}</span>
+      </Link>
+    </p>
+    <p>
+      Start time: <span class={stylesSite.start} data-time="{start}">{'{start}'}</span>
+    </p>
+    <p>
+      End time: <span class={stylesSite.end} data-time="{end}">{'{end}'}</span>
+    </p>
+    <p>
+      Region:
+      <span class={stylesSite.region}>{'{region}'}</span>
+    </p>
+    <p>
+      Countries:
+      <span class={stylesSite.countries}>{'{countries}'}</span>
+    </p>
+    <p>
+      Languages:
+      <span class={stylesSite.langs}>{'{langs}'}</span>
+    </p>
+  </article>
+</Listing>
+
+<script src="@scripts/pages/site-list.ts"></script>

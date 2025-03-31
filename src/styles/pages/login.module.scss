@@ -1,0 +1,41 @@
+@use '@t-styles/mixins.scss' as tMixins;
+
+.form {
+  border-radius: 1em;
+  box-shadow: 0 0 0 2px var(--color-shadow);
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 10rem auto 0;
+  max-width: 350px;
+  padding: 0.85rem;
+  width: 80vw;
+
+  .submit {
+    flex-flow: row nowrap;
+    justify-content: center;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.2em;
+  }
+
+  &:not(.loading) .submit::after {
+    mask-image: url('/icons/rightArrow.svg');
+  }
+
+  &.loading .submit::after {
+    margin-left: 0.5em;
+
+    @include tMixins.animationLoading;
+  }
+}

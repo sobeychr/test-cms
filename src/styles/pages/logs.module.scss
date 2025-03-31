@@ -1,0 +1,113 @@
+@use 'sass:list' as list;
+
+$COLOR_LOW: #0f0;
+$COLOR_MEDIUM: #ff0;
+$COLOR_NORMAL: #909090;
+$COLOR_HIGH: #f00;
+$COLORS: #2196f3, #8bc34a, #9c27b0, #009688, #2c387e, #e91e63;
+
+:global {
+  .low {
+    color: $COLOR_LOW;
+  }
+
+  .medium {
+    color: $COLOR_MEDIUM;
+  }
+
+  .normal {
+    color: $COLOR_NORMAL;
+  }
+
+  .high {
+    color: $COLOR_HIGH;
+  }
+
+  @each $color in $COLORS {
+    $index: list.index($COLORS, $color) - 1;
+
+    .color-#{$index} {
+      color: $color;
+    }
+  }
+}
+
+.entry {
+  &:hover {
+    background-color: var(--color-bg-dark);
+  }
+
+  &:global(.hidden) {
+    display: none;
+  }
+
+  &:nth-child(3n + 1):not(:first-of-type) {
+    border-top: 1px solid var(--color-text);
+  }
+
+  .error {
+    color: #f00;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .info {
+    font-style: italic;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .meta {
+    display: grid;
+    grid-template: 1fr / 50px 150px 1fr;
+  }
+
+  .method {
+    font-weight: bold;
+  }
+
+  .pathname {
+    color: #476fd3;
+  }
+
+  .uuid {
+    color: #a947d3;
+  }
+}
+
+
+:global(#stats) {
+  display: flex;
+  flex-flow: row nowrap;
+
+  &>article {
+    margin: 0 1em;
+  }
+
+  :global(#stats-delay),
+  :global(#stats-error),
+  :global(#stats-format),
+  :global(#stats-method),
+  :global(#stats-status) {
+    display: inline-flex;
+    flex-flow: column nowrap;
+
+    &::after {
+      aspect-ratio: 1;
+      background: conic-gradient(var(--conic-background, ''));
+      border-radius: 50%;
+      content: '';
+      display: block;
+    }
+  }
+
+  @each $color in $COLORS {
+    $index: list.index($COLORS, $color) - 1;
+
+    --bg-color-#{$index}: #{$color};
+  }
+}

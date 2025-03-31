@@ -1,0 +1,37 @@
+---
+import Header from '@components/header/Header.astro';
+import Navigation from '@components/navigation/Navigation.astro';
+import { COOKIE_DARK_NAME } from '@utils/configs';
+
+const { isLoggedIn } = Astro.locals.user;
+
+const isLight = Astro.cookies.get(COOKIE_DARK_NAME)?.value === '0';
+
+const htmlClasses = {
+  light: isLight,
+};
+---
+
+<html class:list={htmlClasses} lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <!-- <link rel='icon' type='image/svg+xml' href='/favicon.svg' /> -->
+    <meta name="generator" content={Astro.generator} />
+    <link rel="stylesheet" href="/styles/normalize.min.css" />
+    <link rel="stylesheet" href="/styles/default.scss" />
+    <link rel="stylesheet" href="/styles/themes.scss" />
+    <title>Test-CMS</title>
+    <style>
+      /* https://fonts.google.com/selection/embed */
+      @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    </style>
+  </head>
+  <body>
+    <Header />
+    {isLoggedIn && <Navigation />}
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+---
+import { Form } from '@components/form/Form.tsx';
+import { API_PREFIX, GIT, VERSION } from '@utils/configs';
+import styles from './styles.module.scss';
+
+const user = Astro.locals.user;
+const { displayName, email, isLoggedIn } = user;
+const avatarUrl =
+  isLoggedIn && `https://api.dicebear.com/9.x/lorelei/svg?flip=false&seed=${displayName}&size=64`;
+
+const date = new Date(GIT.timestamp * 1000);
+const formUrl = `${API_PREFIX}v1/logout`;
+---
+
+<header class={styles.wrapper}>
+  <h1 class={styles.title}>Test-CMS</h1>
+  <div class={styles.details}>
+    <p><span>Version</span>{VERSION}</p>
+    <p><span>Hash</span>{GIT.shortHash}</p>
+    <p><span>Tag</span>{GIT.tag}</p>
+    <p><span>Committed</span>{date.toISOString()}</p>
+  </div>
+
+  {
+    isLoggedIn && (
+      <div class={styles.loggedin}>
+        <img alt="avatar" class={styles.avatar} src={avatarUrl} />
+        <p class={styles.name} title={email}>
+          {displayName}
+        </p>
+        <Form action={formUrl} client:only="solid-js" defaultRequest>
+          <input type="hidden" name="logout" value="1" />
+          <button type="submit">log out</button>
+        </Form>
+      </div>
+    )
+  }
+</header>

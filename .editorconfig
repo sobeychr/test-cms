@@ -1,0 +1,22 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+max_line_length = 100
+trim_trailing_whitespace = true
+quote_type = single
+
+[*.json]
+insert_final_newline = false
+quote_type = double
+
+[*.md]
+max_line_length = off
+quote_type = double
+
+[*.php]
+insert_final_newline = false

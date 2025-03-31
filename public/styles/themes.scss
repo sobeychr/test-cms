@@ -1,0 +1,14 @@
+:root {
+  --color-bg: light-dark(#ddd, #262626);
+  --color-bg-dark: light-dark(#ddd, #212121);
+  --color-text: light-dark(#000, #ddd);
+  --color-shadow: light-dark(#000, rgb(255 255 255 / 50%));
+  --color-highlight: light-dark(#34a6db, #34a6db);
+  --input-bg: light-dark(#131313, #131313);
+  --input-color: light-dark(#131313, #ddd);
+  --input-focus: light-dark(#131313, #56bed3);
+  --header-height: 64px;
+  --height-padding: 0.85rem;
+  --link-color: light-dark(#ddd, #19adb5);
+  --link-hover: light-dark(#ddd, #31d0d8);
+}

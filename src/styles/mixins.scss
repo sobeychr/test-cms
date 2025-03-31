@@ -1,0 +1,17 @@
+@use 'sass:map' as map;
+@use 'sass:list' as list;
+
+@keyframes animLoading {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
+}
+
+@mixin animationLoading {
+  animation: animLoading 1.5s linear 0s infinite;
+  mask-image: url('/icons/spin.svg');
+}

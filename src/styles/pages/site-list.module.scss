@@ -1,0 +1,11 @@
+:global(#content-body) {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: repeat(auto-fit, 13em);
+  grid-template-rows: auto;
+}
+
+.filter-add {
+  margin-left: 1em;
+  width: 4em;
+}

@@ -1,0 +1,80 @@
+---
+import Toggle from '@components/form-element/Toggle.astro';
+import styles from './styles.module.scss';
+
+import Link from '@components/link/Link.astro';
+---
+
+<nav class={styles.wrapper}>
+  <header class={styles.header}>
+    <Toggle
+      class=`${styles['nav-toggle']} after-icon`
+      name="nav-toggle"
+      id="nav-toggle"
+      label="Navigation"
+    />
+  </header>
+
+  <div class={styles.body}>
+    <Toggle
+      class=`${styles['body-toggle']} ${styles.sites} after-icon before-icon`
+      name="site-toggle"
+      id="site-toggle"
+      label="Sites"
+    />
+    <div>
+      <ul>
+        <li><Link class="before-icon" href="/sites/list">List</Link></li>
+        <li><Link class="before-icon" href="/sites/add">Add</Link></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class={styles.body}>
+    <Toggle
+      class=`${styles['body-toggle']} ${styles.pages} after-icon before-icon`
+      name="page-toggle"
+      id="page-toggle"
+      label="Pages"
+    />
+    <div>
+      <ul>
+        <li>aaa</li>
+        <li>bbb</li>
+        <li>ccc</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class={styles.body}>
+    <Toggle
+      class=`${styles['body-toggle']} ${styles.contents} after-icon before-icon`
+      name="content-toggle"
+      id="content-toggle"
+      label="Contents"
+    />
+    <div>
+      <ul>
+        <li>aaa</li>
+        <li>bbb</li>
+        <li>ccc</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class={styles.body}>
+    <Toggle
+      class=`${styles['body-toggle']} ${styles['dev-tools']} after-icon before-icon`
+      name="dev-tools-toggle"
+      id="dev-tools-toggle"
+      label="Dev Tools"
+    />
+    <div>
+      <ul>
+        <li><Link class="before-icon" href="/introduction">Introduction</Link></li>
+        <li><Link class="before-icon" href="/userconfigs">User Configs</Link></li>
+        <li><Link class="before-icon" href="/logs">Logs</Link></li>
+      </ul>
+    </div>
+  </div>
+</nav>

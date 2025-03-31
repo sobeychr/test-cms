@@ -1,0 +1,113 @@
+---
+import { ToggleIcon } from '@components/form-element/ToggleIcon';
+import Listing from '@layouts/Listing.astro';
+import styles from '@styles/pages/logs.module.scss';
+---
+
+<Listing title="Logs">
+  <slot slot="filters">
+    <div>
+      <span>Method:</span>
+      <ToggleIcon label="Get" name="method" id="get" value="GET" />
+      <ToggleIcon label="Post" name="method" id="post" value="POST" />
+    </div>
+    <p>
+      <span>Delays (ms):</span>
+      <label for="delay-min">min</label>
+      <input
+        type="number"
+        id="delay-min"
+        name="delay-min"
+        min="0"
+        max="9999"
+        maxlength="4"
+        size="4"
+        step="1"
+      />
+      <label for="delay-max">max</label>
+      <input
+        type="number"
+        id="delay-max"
+        name="delay-max"
+        min="0"
+        max="9999"
+        maxlength="4"
+        size="4"
+        step="1"
+      />
+    </p>
+    <p>
+      <label for="path">Path:</label>
+      <input type="text" id="path" name="path" />
+    </p>
+    <div>
+      <span>Response size (KB):</span>
+      <label for="response-min">min</label>
+      <input
+        type="number"
+        id="response-min"
+        min="0"
+        max="9999"
+        maxlength="4"
+        name="response-min"
+        size="4"
+        step="1"
+      />
+      <label for="response-max">max</label>
+      <input
+        type="number"
+        id="response-max"
+        min="0"
+        max="9999"
+        maxlength="4"
+        name="response-max"
+        size="4"
+        step="1"
+      />
+    </div>
+    <div>
+      <span>Response format:</span>
+      <ToggleIcon label="JSON" name="format" id="json" value="json" />
+      <ToggleIcon label="HTML" name="format" id="html" value="html" />
+      <ToggleIcon label="Undefined" name="format" id="undefined" value="!undefined" />
+    </div>
+  </slot>
+
+  <section slot="stats">
+    <h2>Stats</h2>
+    <div id="stats">
+      <article id="stats-number">
+        <p class="total"></p>
+        <p class="error"></p>
+        <p class="time"></p>
+      </article>
+      <article id="stats-error"></article>
+      <article id="stats-method"></article>
+      <article id="stats-delay"></article>
+      <article id="stats-format"></article>
+      <article id="stats-status"></article>
+    </div>
+  </section>
+
+  <article slot="entry" class={`${styles.entry} entry`} data-uuid="{uuid}">
+    <p class={styles.meta}>
+      <span class={styles.method} data-method="{method}">{'{method}'}</span>
+      <span class={styles.pathname}>{'{pathname}'}</span>
+      <span class={styles.uuid}>{'{uuid}'}</span>
+      <span data-delay="{delay}">{'{delay}'}ms</span>
+      <span data-date="{start}" title="{start}"></span>
+      <span data-date="{end}" title="{end}"></span>
+      <span>{'{response.status}'}</span>
+      <span>{'{response.format}'}</span>
+      <span data-size="{response.size}"></span>
+    </p>
+    <p class={styles.error}>
+      <span>{'{error.code}'}</span>
+      <span>{'{error.name}'}</span>
+      <span>{'{error.message}'}</span>
+    </p>
+    <p class={styles.info}>{'{info}'}</p>
+  </article>
+</Listing>
+
+<script src="@scripts/pages/logs.ts"></script>

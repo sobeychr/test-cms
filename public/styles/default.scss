@@ -1,0 +1,106 @@
+:root {
+  --transition-duration: 0.2s;
+  --transition-function: ease-out;
+}
+
+html {
+  color-scheme: dark;
+
+  &.light {
+    color-scheme: light;
+  }
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: Ubuntu, Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-width: 700px;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+textarea {
+  background: var(--input-bg);
+  border: none;
+  border-radius: 0.5em;
+  color: var(--input-color);
+  outline: none;
+  padding: 0.4em;
+
+  &:focus {
+    border: none;
+    box-shadow: 0 0 0 2px rgba(var(--input-focus) / 50%);
+    color: var(--input-focus);
+    outline: 2px solid var(--input-focus);
+  }
+
+  label:has(+&:focus) {
+    color: var(--input-focus);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+label[for] {
+  cursor: pointer;
+}
+
+main {
+  flex: 1 0;
+  padding: 0.85rem;
+}
+
+p {
+  margin: 0 0 0.5em;
+  padding: 0;
+}
+
+section {
+  --section-space: 1.2rem;
+
+  margin: var(--section-space) 0;
+
+  &+section {
+    border-top: 3px solid var(--color-text);
+    padding-top: calc(var(--section-space) * 0.5);
+  }
+}
+
+.after-icon::after,
+.before-icon::before {
+  aspect-ratio: 1;
+  background: var(--color, var(--color-text));
+  content: '';
+  display: inline-block;
+  height: var(--after-icon-height, 1em);
+  mask: no-repeat top left;
+  mask-size: cover;
+}
+
+span {
+  &.after-icon,
+  &.before-icon {
+    align-items: center;
+    display: flex;
+  }
+}

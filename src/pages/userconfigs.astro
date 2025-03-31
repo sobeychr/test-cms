@@ -1,0 +1,40 @@
+---
+import DefaultLayout from '@layouts/Default.astro';
+import { ToggleIcon } from '@components/form-element/ToggleIcon';
+import { COOKIE_DARK_NAME } from '@utils/configs';
+
+const isLight = Astro.cookies.get(COOKIE_DARK_NAME)?.value === '0';
+---
+
+<DefaultLayout>
+  <h1>User configs</h1>
+  <form>
+    <fieldset>
+      <legend>Display</legend>
+      <ToggleIcon
+        client:visible="solid-js"
+        defaultChecked={!isLight}
+        name="darkmode"
+        label="Dark Mode"
+        onChange="onChangeDarkMode"
+      />
+    </fieldset>
+  </form>
+</DefaultLayout>
+
+<script>
+  import { CCookie } from '@classes/CCookie';
+import { COOKIE_DARK_DURATION, COOKIE_DARK_NAME } from '@utils/configs';
+
+  (function () {
+    const onChangeDarkMode = ({ after }) => {
+      const value = after ? 1 : 0;
+      CCookie.setDocumentCookie(COOKIE_DARK_NAME, value, { maxAge: COOKIE_DARK_DURATION });
+
+      const func = value ? 'remove' : 'add';
+      document.querySelector('html')?.classList[func]('light');
+    };
+
+    window.onChangeDarkMode = onChangeDarkMode;
+  })();
+</script>

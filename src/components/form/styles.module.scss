@@ -1,0 +1,12 @@
+.loading {
+  cursor: progress;
+  user-select: none;
+
+  button,
+  input,
+  label,
+  select,
+  textarea {
+    pointer-events: none;
+  }
+}

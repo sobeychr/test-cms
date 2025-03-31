@@ -1,0 +1,64 @@
+.avatar {
+  grid-area: avatar;
+}
+
+.details {
+  background: var(--color-bg);
+  border-radius: 1em;
+  box-shadow: 0 0 0 2px var(--color-shadow);
+  display: none;
+  font-size: 0.8rem;
+  left: 10rem;
+  padding: 0.5em;
+  position: absolute;
+  top: 2.5rem;
+
+  span {
+    color: var(--color-highlight);
+    font-weight: bold;
+    margin-right: 0.2em;
+
+    &::after {
+      content: ': ';
+    }
+  }
+}
+
+.loggedin {
+  display: grid;
+  grid-template-areas:
+    "avatar name"
+    "avatar logout"
+  ;
+}
+
+.logout {
+  grid-area: logout;
+}
+
+.name {
+  grid-area: name;
+  max-width: 5.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title {
+  &:hover {
+    &+.details {
+      display: block;
+    }
+  }
+}
+
+.wrapper {
+  background: var(--color-bg-dark);
+  box-shadow: 0 0 0 2px var(--color-shadow);
+  display: flex;
+  flex-flow: row nowrap;
+  height: var(--header-height);
+  justify-content: space-between;
+  padding: var(--height-padding);
+  width: 100%;
+}

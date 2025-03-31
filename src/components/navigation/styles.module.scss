@@ -1,0 +1,136 @@
+@property --nav-width-close {
+  inherits: false;
+  initial-value: 40px;
+  syntax: "<length>";
+}
+
+@property --nav-width-open {
+  inherits: false;
+  initial-value: 180px;
+  syntax: "<length>";
+}
+
+@keyframes slideUp {
+  from {
+    display: block
+  }
+
+  to {
+    translate: 0 -100%;
+  }
+}
+
+.body {
+  margin: 1rem 0;
+
+  div {
+    overflow: hidden;
+  }
+
+  label {
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: font-size var(--transition-duration) var(--transition-function);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    max-height: 100%;
+    overflow: hidden;
+    padding: 0;
+    transition: line-height var(--transition-duration) var(--transition-function), translate var(--transition-duration) var(--transition-function);
+
+    a,
+    span {
+      &::before {
+        mask-image: url('/icons/rightArrow.svg');
+      }
+    }
+  }
+}
+
+.body-toggle {
+  --before-icon-height: 1em;
+
+  &::after {
+    --after-icon-height: 1.5em;
+
+    mask-image: url('/icons/rightArrow.svg');
+    rotate: -90deg;
+    transition: scale var(--transition-duration) var(--transition-function);
+  }
+
+  &::before {
+    margin-right: 0.25em;
+  }
+
+  &:has(input:checked)::after {
+    scale: -1;
+  }
+
+  &:has(input:checked)+div ul {
+    line-height: 0;
+    transition: line-height var(--transition-duration) var(--transition-function) var(--transition-duration), translate var(--transition-duration) var(--transition-function);
+    translate: 0 -100%;
+  }
+}
+
+.nav-toggle {
+  justify-content: center;
+
+  &::after {
+    --after-icon-height: 1.5em;
+
+    mask-image: url('/icons/rightArrow.svg');
+    transition: scale var(--transition-duration) var(--transition-function);
+  }
+}
+
+.contents::before {
+  mask-image: url('/icons/cart.svg');
+}
+
+.dev-tools::before {
+  mask-image: url('/icons/gear.svg');
+}
+
+.pages::before {
+  mask-image: url('/icons/page.svg');
+}
+
+.sites::before {
+  mask-image: url('/icons/site.svg');
+}
+
+.wrapper {
+  box-shadow: 0 2px 0 2px var(--color-shadow);
+  font-size: 1em;
+  height: calc(100vh - var(--header-height) - 2 * var(--height-padding));
+  padding: 0.5rem;
+  transition: width var(--transition-duration) var(--transition-function);
+  white-space: nowrap;
+  width: var(--nav-width-open);
+
+  .body-toggle span,
+  .nav-toggle span {
+    max-width: 100%;
+    transition: max-width var(--transition-duration) var(--transition-function), opacity 0s var(--transition-duration);
+  }
+
+  &:has(input[name='nav-toggle']:checked) {
+    font-size: 0.8em;
+    width: var(--nav-width-close);
+
+    .body-toggle span,
+    .nav-toggle span {
+      max-width: 0;
+      opacity: 0;
+      transition-property: max-width;
+    }
+
+    .nav-toggle::after {
+      scale: -1;
+    }
+  }
+}

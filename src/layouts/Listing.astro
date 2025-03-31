@@ -1,0 +1,35 @@
+---
+import DefaultLayout from '@layouts/Default.astro';
+import styles from './listingStyles.module.scss';
+
+const { title } = Astro.props;
+---
+
+<DefaultLayout>
+  <h1 class={`${styles.title} after-icon`} id="title">{title}</h1>
+
+  <section>
+    <form autocomplete="off" class={styles.filters} id="filters">
+      <p>
+        <button type="button" id="update">Update list</button>
+        <button type="reset">Reset filters</button>
+      </p>
+      <slot name="filters" />
+    </form>
+  </section>
+
+  <slot name="stats" />
+
+  <section>
+    <h2>Entries <span id="stats-total"></span></h2>
+    <div class={styles['content-body']} id="content-body"></div>
+  </section>
+
+  <script id="content-data" type="application/json"></script>
+
+  <template id="entry">
+    <slot name="entry" />
+  </template>
+</DefaultLayout>
+
+<script src="@scripts/listing.ts"></script>
