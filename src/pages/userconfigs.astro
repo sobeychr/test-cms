@@ -1,6 +1,6 @@
 ---
-import DefaultLayout from '@layouts/Default.astro';
 import { ToggleIcon } from '@components/form-element/ToggleIcon';
+import DefaultLayout from '@layouts/Default.astro';
 import { COOKIE_DARK_NAME } from '@utils/configs';
 
 const isLight = Astro.cookies.get(COOKIE_DARK_NAME)?.value === '0';

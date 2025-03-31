@@ -1,0 +1,25 @@
+---
+import { getParsedCollection } from '@utils/collection';
+
+const countries = await getParsedCollection('countries', ({ data }) => data.id);
+const languages = await getParsedCollection('languages', ({ data }) => data.iso);
+const regions = await getParsedCollection('regions', ({ data }) => data);
+---
+
+<datalist id="data-countries">
+  {countries.sort().map((entry) => <option value={entry} />)}
+</datalist>
+
+<datalist id="data-languages">
+  {languages.sort().map((entry) => <option value={entry} />)}
+</datalist>
+
+<datalist id="data-regions">
+  {
+    regions.sort().map((entry) => (
+      <option data-id={entry.id} data-name={entry.name}>
+        {entry.name}
+      </option>
+    ))
+  }
+</datalist>

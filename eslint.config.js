@@ -16,8 +16,8 @@ const ignoredRecommended = tseslint.configs.recommended.map(entry => ({
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ['src/**/*.{js,ts}'],
-    ignores: ['src/**/*.min.{js,ts}'],
+    files: ['src/**/*.{astro,js,ts,jsx,tsx}'],
+    ignores: ['src/**/*.min.{js,jsx,ts,tsx}'],
     plugins: {
       'simple-import-sort': simpleImportSort,
     },

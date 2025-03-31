@@ -1,5 +1,5 @@
-import { CID } from '@classes/CID';
 import { createSignal } from 'solid-js';
+import { CID } from '@classes/CID';
 import { iteratorToObj } from '@utils/object';
 import { useRequest } from '@utils/request';
 import styles from './styles.module.scss';
@@ -12,8 +12,8 @@ type FormParam = {
   id?: string;
   loadingClass?: string;
   method?: 'GET' | 'PATCH' | 'POST' | 'PUT';
-  onDataConvertName?: string;
-  onResetName?: string;
+  onDataConvert?: (data: object) => object;
+  onReset?: (event: Event) => void;
 };
 
 type ActionResponse = {
@@ -35,8 +35,8 @@ export const Form = (props: FormParam) => {
     id = `form-${CID.shortHash()}`,
     loadingClass = 'loading',
     method = 'POST',
-    onDataConvertName,
-    onResetName,
+    onDataConvert,
+    onReset: onResetProp,
     ...rest
   } = props;
 
@@ -49,12 +49,8 @@ export const Form = (props: FormParam) => {
   });
 
   const onReset = (event: Event) => {
-    const func = window?.[onResetName];
-    if (typeof func === 'function') {
-      func(event);
-    }
-    else {
-      console.log('[Form.tsx] error in onReset()', `window.${onResetName}() does not exist`);
+    if (typeof onResetProp === 'function') {
+      onResetProp(event);
     }
   };
 
@@ -64,11 +60,10 @@ export const Form = (props: FormParam) => {
 
     const formData = new FormData(event?.target);
     const postData = iteratorToObj(formData);
-    const convertFunc = window?.[onDataConvertName];
 
     const result = defaultRequest && await useRequest({
-      postData: typeof convertFunc === 'function' ? convertFunc(postData) : postData,
       method,
+      postData: typeof onDataConvert === 'function' ? onDataConvert(postData) : postData,
       url: action,
     }) as DefaultRequestResponse;
 
@@ -88,7 +83,7 @@ export const Form = (props: FormParam) => {
     }
   };
 
-  return <form action={action} classList={classList()} id={id} method={method} {...rest} onReset={onResetName && onReset} onSubmit={onSubmit}>
+  return <form action={action} classList={classList()} id={id} method={method} {...rest} onReset={onReset} onSubmit={onSubmit}>
     {children}
   </form>;
 };

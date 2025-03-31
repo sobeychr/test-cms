@@ -1,10 +1,10 @@
 ---
+import { InputDatalist } from '@components/form-element/InputDatalist';
+import Link from '@components/link/Link.astro';
 import Listing from '@layouts/Listing.astro';
 import { getParsedCollection } from '@utils/collection';
 import stylesList from '@styles/pages/site-list.module.scss';
 import stylesSite from '@styles/sites.module.scss';
-import Link from '@components/link/Link.astro';
-import { InputDatalist } from '@components/form-element/InputDatalist';
 
 const dataCountries = await getParsedCollection('countries', ({ data }) => data.id);
 const dataLanguages = await getParsedCollection('languages', ({ data }) => data.iso);

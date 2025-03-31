@@ -2,8 +2,7 @@ import { createSignal, Show } from 'solid-js';
 import { InputDatalist } from '@components/form-element/InputDatalist';
 
 type InputEditParam = {
-  dataList?: Array<string>;
-  list?: string;
+  datalist?: string;
   id?: string;
   label: string;
   name: string;
@@ -13,8 +12,7 @@ type InputEditParam = {
 
 export const InputEdit = (props: InputEditParam) => {
   const {
-    dataList,
-    list = '',
+    datalist,
     id: idProp,
     label,
     name,
@@ -28,7 +26,7 @@ export const InputEdit = (props: InputEditParam) => {
   const [value, setValue] = createSignal(valueProp);
 
   const isChanged = () => value() !== valueProp;
-  const hasList = Array.isArray(dataList) && dataList.length > 0;
+  const hasList = !!datalist;
 
   const onClick = () => setIsEdit(true);
 
@@ -44,10 +42,10 @@ export const InputEdit = (props: InputEditParam) => {
       </Show>
       <Show when={isEdit()}>
         <Show when={hasList}>
-          <InputDatalist id={id} name={name} value={value()} dataList={dataList} onChange={onChange} onFocusOut={onOut} />
+          <InputDatalist id={id} name={name} value={value()} datalist={datalist} onChange={onChange} onFocusOut={onOut} />
         </Show>
         <Show when={!hasList}>
-          <input type={type} list={list} name={name} id={id} value={value()} onChange={onChange} onFocusOut={onOut} />
+          <input type={type} name={name} id={id} value={value()} onChange={onChange} onFocusOut={onOut} />
         </Show>
       </Show>
       <Show when={isChanged()}>

@@ -55,7 +55,11 @@ export const PATCH: APIRoute = async ({ request }) => {
     ...newData
   });
   return CResponse.quickJson({
-    ...newEntry,
+    actions: [{
+      // command: 'reload',
+    }],
+    data: newEntry,
+    success: true,
   });
 };
 

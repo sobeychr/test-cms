@@ -1,11 +1,10 @@
-import { For } from 'solid-js';
 import { CID } from '@classes/CID';
 import { toCleanArray } from '@utils/string';
 
 type InputDatalistParam = {
   classAdd?: string;
   classInput?: string;
-  dataList: Array<string>;
+  datalist: string;
   id?: string;
   name: string;
   onChange?: (event: Event) => void;
@@ -19,7 +18,7 @@ export const InputDatalist = (props: InputDatalistParam) => {
   const {
     classAdd = '',
     classInput = '',
-    dataList,
+    datalist,
     id: idProp,
     name,
     onChange,
@@ -68,17 +67,12 @@ export const InputDatalist = (props: InputDatalistParam) => {
     <input
       class={classAdd}
       id={`add-${id}`}
-      list={`data-${id}`}
+      list={datalist}
       name={`add-${name}`}
       onChange={onAddEntry}
       onFocusOut={onFocusOut && onOut}
       ref={addRef}
       type='text'
     />
-    <datalist id={`data-${id}`}>
-      <For each={dataList}>
-        {entry => <option value={entry} />}
-      </For>
-    </datalist>
   </>);
 };
