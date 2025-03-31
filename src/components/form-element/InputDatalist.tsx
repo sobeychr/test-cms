@@ -6,6 +6,7 @@ type InputDatalistParam = {
   classInput?: string;
   datalist: string;
   id?: string;
+  multiEntries?: boolean;
   name: string;
   onChange?: (event: Event) => void;
   onFocusOut?: (event: Event) => void;
@@ -20,6 +21,7 @@ export const InputDatalist = (props: InputDatalistParam) => {
     classInput = '',
     datalist,
     id: idProp,
+    multiEntries = false,
     name,
     onChange,
     onFocusOut,
@@ -34,12 +36,16 @@ export const InputDatalist = (props: InputDatalistParam) => {
 
   const onAddEntry = () => {
     if (addRef && inputRef) {
-      const prevParsed = toCleanArray(inputRef.value || '', splitValue);
-      const newValue = [...prevParsed, addRef.value];
-      const newParsed = Array.from(new Set(newValue.sort()));
-      inputRef.value = newParsed.join(splitPrint);
-      addRef.value = '';
+      if (multiEntries) {
+        const prevParsed = toCleanArray(inputRef.value || '', splitValue);
+        const newValue = [...prevParsed, addRef.value];
+        const newParsed = Array.from(new Set(newValue.sort()));
+        inputRef.value = newParsed.join(splitPrint);
+      } else {
+        inputRef.value = addRef.value;
+      }
 
+      addRef.value = '';
       inputRef.dispatchEvent(new Event('change'));
     }
   };

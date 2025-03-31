@@ -32,12 +32,14 @@ export const CollectionEntrySite = (props: CollectionEntrySiteParam) => {
       datalist={datalistCountries}
       label="Countries:"
       name="countries"
+      multiEntries
       value={cleanCountries}
     />
     <InputEdit
       datalist={datalistLanguages}
       label="Languages:"
       name="languages"
+      multiEntries
       value={cleanLanguages}
     />
     <InputEdit

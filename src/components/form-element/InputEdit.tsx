@@ -5,6 +5,7 @@ type InputEditParam = {
   datalist?: string;
   id?: string;
   label: string;
+  multiEntries?: boolean;
   name: string;
   type?: string;
   value: number | string | null;
@@ -15,6 +16,7 @@ export const InputEdit = (props: InputEditParam) => {
     datalist,
     id: idProp,
     label,
+    multiEntries = false,
     name,
     type = 'text',
     value: valueProp,
@@ -42,7 +44,7 @@ export const InputEdit = (props: InputEditParam) => {
       </Show>
       <Show when={isEdit()}>
         <Show when={hasList}>
-          <InputDatalist id={id} name={name} value={value()} datalist={datalist} onChange={onChange} onFocusOut={onOut} />
+          <InputDatalist id={id} name={name} value={value()} datalist={datalist} multiEntries={multiEntries} onChange={onChange} onFocusOut={onOut} />
         </Show>
         <Show when={!hasList}>
           <input type={type} name={name} id={id} value={value()} onChange={onChange} onFocusOut={onOut} />

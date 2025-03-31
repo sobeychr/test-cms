@@ -1,4 +1,6 @@
 import { getParsedCollection, getParsedEntry } from '@utils/collection';
+import { writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 type CSiteParam = {
   countries: Array<string> | null;
@@ -30,6 +32,12 @@ export class CSite implements CSiteParam {
     this.region = data.region || null;
     this.slug = data.slug || data.id || null;
     this.start = data.start || null;
+  }
+
+  writeFile() {
+    const filepath = resolve('./src/collections/sites/', `mocks/${this.id}.json`);
+    const data = JSON.stringify(this);
+    writeFileSync(filepath, data);
   }
 
   static async getEntryFromCollection(id: number): Promise<CSite> {
