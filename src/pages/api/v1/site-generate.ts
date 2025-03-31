@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 import { resolve } from 'path';
 import { CCountry } from '@classes/collection/CCountry';
 import { CLanguage } from '@classes/collection/CLanguage';

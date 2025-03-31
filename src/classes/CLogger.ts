@@ -1,4 +1,4 @@
-import { existsSync, type ObjectEncodingOptions, readFileSync, writeFileSync } from 'fs';
+import { existsSync, type ObjectEncodingOptions, readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { CError } from '@classes/CError';
 import type { CRequest } from '@classes/CRequest';

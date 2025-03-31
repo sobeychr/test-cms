@@ -5,11 +5,13 @@ import solidJs from '@astrojs/solid-js';
 import { getDetails, getGitLog } from './script/astroConfigHelpers';
 import packageJson from './package.json';
 import { resolve } from 'path';
+import { existsSync, mkdirSync } from 'fs';
 
 const envConfigs = loadEnv('', process.cwd(), '');
 
 const {
   npm_config_user_agent: userAgent = '',
+  LOGS_DIR,
   SERVER_HOST = 'localhost.local',
   SERVER_PORT = '3000',
 } = envConfigs;
@@ -19,6 +21,13 @@ const gitLog = getGitLog();
 const { version = '0.0.1' } = packageJson;
 
 const SRC_DIR = resolve(process.cwd(), './src/') + '/';
+
+if (LOGS_DIR) {
+  const logDir = resolve(process.cwd(), LOGS_DIR) + '/';
+  if (!existsSync(logDir)) {
+    mkdirSync(logDir);
+  }
+}
 
 const details = [
   `on ${osName}`,
